@@ -1,0 +1,77 @@
+安装git
+sudo apt-get -y install git
+git --version  查看版本号/检查是否安装成功
+
+准备工作
+git init  初始化
+(第一次初始化windows下需要git add   git commit之后才能用git branch 看到分支)
+只在本地工作的话到这里就可以了
+
+如果需要配合github使用，还要做下面的配置
+git config --global user.name "zjy"
+git config --global user.email "zjy@qq.com"
+
+
+如果主目录没有.ssh目录就新建一个，然后在.ssh目录下执行以下命令  （主目录在windows下是C盘 Users/yourUserName/）
+ssh-keygen -t rsa -C "zjy@qq.com"
+
+（三次回车，最好不要设置密码，不然提交代码等操作都要输入这个密码，用的时候麻烦）
+
+登录github网站新建一个仓库并把 id_rsa.pub文件的内容 配置到SSH Key中去，title随意填写  (id_rsa.pub在.ssh目录下)
+github上面有三种方式，一种如下
+-----------------------------------------
+echo "# azx" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin git@github.com:developerzjy/azx.git
+git push -u origin master
+-------------------------------------------
+然后就可以把本地库的内容推送到远程库上
+git push -u origin master
+(或者强制推送 git push origin +master)
+把github上面已经更新的内容同步下来
+git pull
+
+提交
+git add
+git commit -m "描述"     或者 git commit -a -s
+同一个分支二次提交
+git commit --amend
+
+
+---------------------------------------------------------------------------------------------------------
+其他有用的命令
+---------------------------------------------------------------------------------------------------------
+git config -l  查看所有配置项
+git config gui.encoding  查看某个配置项
+
+git remote -v   查看远程库地址
+git remote show origin   查看remote地址，远程分支，还有本地分支与之相对应关系等一系列信息
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

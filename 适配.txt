@@ -1,0 +1,4 @@
+800x1280   mdpi   values-mdpi-1280x720      1
+
+1920x1080  xhdpi  values-xhdpi-1920x1080    2/3
+

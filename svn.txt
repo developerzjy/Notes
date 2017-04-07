@@ -1,0 +1,61 @@
+svn co ....下载代码
+
+svn st   ?表示新加的  M表示修改的
+
+svn revert  撤销修改
+    # svn revert [-R] something
+    其中something可以是（目录或文件的）相对路径也可以是绝对路径。
+    当something为单个文件时，直接svn revert something就行了；当something为目录时，需要加上参数-R(Recursive,递归)，否则只会将something这个目录的改动。
+svn revert -R *
+
+
+
+svn commit -m "Revert revision from r28 to r25,because of ..." packages/apps/Browser
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

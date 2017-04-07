@@ -1,0 +1,71 @@
+android 下载源码
+git clone https://android.googlesource.com/platform/manifest.git
+
+http://jingyan.baidu.com/article/6d704a1329bf6a28da51ca6a.html
+
+https://android.googlesource.com/platform/packages/apps/Browser
+-------------------------------------------------------------------------------------------------------
+
+编译命令
+source build/envsetup.sh 
+lunch                    -------------------------------选择一个版本
+make update-api -j16;make -j32
+
+---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+Linux内核的基础知识
+
+Android官方API文档：http://developer.android.com/index.html
+
+ubuntu官方下载地址：http://www.ubuntu.com/
+
+ubuntu安装git：sudo apt-get install git-core gnupg
+
+git工具的使用方法官网：https://git-scm.com/
+
+编译android源码需要的其他工具包安装：
+sudo apt-get install flex bison gperf libsdl-dev libesd0-dev libwxgtk2.6-dev build-essential zip curl valgrind
+
+-------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------
+横竖屏切换  G-Sensor
+frameworks\base\services/core/java/com/android/server/wm/WindowManagerService.java
+PhoneWindowManager.java
+
+
+相册缩放相关
+package/apps/camera2
+find .|xargs grep -ri "config_minScalingSpan" -l
+frameworks/base/core/res/res/values-sw600dp/config.xml
+
+
+蓝牙
+收到的文件列表打开文件  BluetoothOppUtility.java类
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

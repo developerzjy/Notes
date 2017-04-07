@@ -1,0 +1,32 @@
+DDMS截屏可以找到当前显示的界面布局或某个view的id，快速定位view相关的代码
+
+查看当前显示的activity
+adb shell dumpsys activity | grep "mFocusedActivity"
+
+
+
+看调用的类名和方法名(两种方法)
+Slog.d("",":::::类名:"+(new Throwable()).getStackTrace()[1].getClassName()+"  方法名:"+(new Throwable()).getStackTrace()[1].getMethodName());
+Thread.currentThread().getStackTrace()[3].getMethodName();
+
+
+
+搜索文件名
+find -name 文件名
+
+搜索包含某字符串的所有文件
+find .|xargs grep -ri "要搜索的字符串" -l
+
+
+grep -rn "PRODUCT_POLICY := android.policy_phone | PRODUCT_POLICY:=android.policy_phone | PRODUCT_POLICY:=android.mid | PRODUCT_POLICY := android.mid" *
+
+
+创建文件
+touch 文件名
+
+
+
+
+
+ 
+

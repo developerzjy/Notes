@@ -1,0 +1,51 @@
+﻿端口问题有用的(Windows)
+netstat -aon|findstr "要查的端口号"
+tasklist|findstr "要查询的PID"
+
+
+
+
+入门教程：http://reactnative.cn/docs/0.31/tutorial.html#content
+
+编写index.android.js文件实现hello world，
+----------------------------------------------------------------------------
+import React, { Component } from 'react';
+import { AppRegistry, Text } from 'react-native';
+
+class HelloWorldApp extends Component {
+  render() {
+    return (
+      <Text>Hello world!</Text>
+    );
+  }
+}
+
+// 注意，这里用引号括起来的'HelloWorldApp'必须和你init创建的项目名一致
+AppRegistry.registerComponent('HelloWorldApp', () => HelloWorldApp);
+-------------------------------------------------------------------------------
+
+首先需要了解ES2015 （也叫作ES6）——这是一套对JavaScript的语法改进的官方标准。但是这套标准目前还没有在所有的浏览器上完整实现，所以目前而言web开发中还很少使用。React Native内置了对ES2015标准的支持，你可以放心使用而无需担心兼容性问题。hello world的示例代码中的import、from、class、extends、以及() =>箭头函数等新语法都是ES2015中的特性。
+
+ES2015入门：http://es6.ruanyifeng.com/
+      ES5和ES6的写法对照：http://bbs.reactnative.cn/topic/15/react-react-native-%E7%9A%84es5-es6%E5%86%99%E6%B3%95%E5%AF%B9%E7%85%A7%E8%A1%A8
+
+
+
+http://t12.baidu.com/it/u=1483638295,2914570561&fm=72
+
+
+
+
+
+
+跳转页面如何传递参数
+声明函数（需要export default class ??? constructor(props)的作用？？？)
+
+export default class 和普通class的区别
+
+
+
+
+
+
+
