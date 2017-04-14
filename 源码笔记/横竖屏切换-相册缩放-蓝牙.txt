@@ -1,0 +1,19 @@
+------------------------------------------------------------------------------------------------------------
+横竖屏切换  G-Sensor
+frameworks\base\services/core/java/com/android/server/wm/WindowManagerService.java
+PhoneWindowManager.java
+
+
+相册缩放相关
+package/apps/camera2
+find .|xargs grep -ri "config_minScalingSpan" -l
+frameworks/base/core/res/res/values-sw600dp/config.xml
+
+
+蓝牙
+收到的文件列表打开文件  BluetoothOppUtility.java类
+蓝牙名称 
+网上说在  \device\generic\common\bluetooth\bdroid_buildcfg.h 里面修改 #define BTM_DEF_LOCAL_NAME   "Android Bluedroid" 的值
+我这在    \device\qcom\common\bdroid_buildcfg.h 修改这个值 (利用grep命令搜索当前蓝牙显示的名字找到的这个文件)
+
+

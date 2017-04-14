@@ -1,0 +1,93 @@
+问题： 拍照后查看照片的详细信息，制造商显示 unknow
+
+解决过程记录:
+------------------------------------------------------------------
+    eclipse 导入 package/apps/Camera2代码
+
+1.选个入口点先看看碰碰运气
+    搜索字符串 "制造商" 找到string.xml中的id (id=maker)  eclipse搜索字符串快捷键 ctrl + H
+    一路追踪 + 看代码 ......
+    注：一些搜索技巧，主要利用语法规则什么的
+                比如找到制造商的id=maker了，搜索哪里用了这个id，避免搜索出一堆乱七八糟不相关的东西可以在maker前面加个 "." 搜索 .maker 或者 string.maker 等等
+                                 比如搜索某个方法可以加个 "(" ， 例如 methodName(
+    搜索.maker后找到了 DetailsDialog.Java 这个类的getDetailsName方法，看名字就知道是显示详细信息dialog的
+一路追踪 + 看代码  -> getDetailsName() -> setDetails() -> value -> detail -> （参数）details  ->.....->参数 最终是从 CameraActivity.java的showDetailsDialog方法里面传来的（这里标记1） -> ...一大堆数据处理而且根本没提到make(这条路线是不通的，最后发现这个unknown是从图片里面读出来的)
+上面说的  一大堆数据处理  按路线的顺序往下看很困难看的很乱，因为从这开始有各种数据的处理传递和各种接口的各种实现等，看的云里雾里，这里反过来看，从MediaDetails.java类 开始(其实看到getDetailsName方法的时候已经看到过这个类了)，MediaDetails里面的extractExifInfo(params)方法就是封装 exif数据 的，里面调用了setExifData方法(到这里可以把制造商改成我们想要的东西了，但是治标不治本，因为相当于把从图片里读出来的 unknown给覆盖了)，继续， 双击 extractExifInfo方法名选中，然后 Ctrl+shift+G 快捷键查看 哪里调用的这个方法 在PhotoItem.java 的 getMediaDetails方法调用的，继续双击快捷键很容易就找到了 标记1 那里说的showDetailsDialog方法
+exif信息的显示大概就是这样了，整个过程就是从图片读数据+处理+显示，解决不了这个问题，那就看看图片是怎么保存的，从拍照开始吧
+      2.拍照的部分过程
+我这里用的是平板，首先平板打开拍照界面，eclipse打开DDMS，点击Dump View Hierarchy for UI Automator就可以截取平板当前显示的界面并且可以查看界面布局中view的id了，拍照按钮的id是 shutter_button，搜索，按钮是 CameraAppUI.java 里面的 mShutterButton，这是个继承ImageView的自定义view，分析代码发现里面的OnShutterButtonListener接口，点击的处理就是通过onShutterButtonClick完成的，这个接口有很多实现，最终找到了CaptureModule.java里面的实现(这个别问我怎么找到的，忘了，反正就是各种手段稀里糊涂的就找到了，打个log验证一下就是这里)，里面onShutterButtonClick方法的实现里调用了takePictureNow()这个方法，看一下
+private void takePictureNow() {
+        if (mCamera == null) {
+            Log.i(TAG, "Not taking picture since Camera is closed.");
+            return;
+        }
+
+
+        CaptureSession session = createAndStartCaptureSession();
+        int orientation = mAppController.getOrientationManager().getDeviceOrientation()
+                .getDegrees();
+
+
+        // TODO: This should really not use getExternalCacheDir and instead use
+        // the SessionStorage API. Need to sync with gcam if that's OK.
+        PhotoCaptureParameters params = new PhotoCaptureParameters(
+                session.getTitle(), orientation, session.getLocation(),
+                mContext.getExternalCacheDir(), this, mPictureSaverCallback,
+                mHeadingSensor.getCurrentHeading(), mZoomValue, 0);
+        decorateSessionAtCaptureTime(session);
+        mCamera.takePicture(params, session);
+    }
+虽然代码不多但是看着很懵逼，session 是什么，params 是什么，decorateSessionAtCaptureTime又是干什么的，mCamera看名字和定义感觉像是一个相机，好像每个东西都有可能涉及到我要找的制造商信息，往下看了一些发现完全看不到 制造商或者make的踪影，拍照先看到这吧，好像也没看出什么东西来.........
+
+   3.  解决
+看了上面的1和2 数据读取显示和拍照的部分过程，虽然没解决问题但还是有一些收获的，比如知道了图片有 exif 这样的一个信息，百度了解一下这个是什么，不难发现很多有用的东西，比如 ExifInterface.java，用这个类可以设置图片的 exif信息(里面包含 make 制造商)，又是一个解决问题的入口
+ctrl + shift + R 搜索ExifInterface发现Camera2的代码里有这么一个类，里面代码很多，ctrl + O 输入set发现一些set方法，输入wirte发现一些write方法，这两个方法有可能是设置图片exif信息的，每个怀疑的方法加个log编译push看看，最后发现拍照的时候public void writeExif(byte[] jpeg, String exifOutFileName)被调用了(注意这个方法的参数区分其他write方法)，ctrl+shift+G一路往下看发现一个新的类Storage，看这个名字感觉看到了希望，过程不多说了Storage.writeFile() -> Storage.updateImage() -> PlaceholderManager.finishPlaceholder() -> CaptureSessionImpl.saveAndFinish() -> TaskCompressImageToJpeg.run()  这里面需要详细看一下，有这样一行代码
+final ExifInterface exif = createExif(Optional.fromNullable(exifData), resultImage, img.metadata);  
+createExif()就是创建exif信息的地方了，继续可以找到ExifUtil.populateExif()，代码如下
+/**
+     * Populate the EXIF object with info pulled from a given capture result.
+     *
+     * @param image A {@link TaskImageContainer.TaskImage} from which to extract info from.
+     * @param captureResult A {@link CaptureResultProxy} from which to extract info from.
+     * @param location optionally a location that should be added to the EXIF.
+     */
+    public void populateExif(Optional<TaskImageContainer.TaskImage> image,
+                             Optional<CaptureResultProxy> captureResult,
+                             Optional<Location> location) {
+        addExifVersionToExif();
+        addTimestampToExif();
+        addMakeAndModelToExif();
+        if (image.isPresent()) {
+            addImageDataToExif(image.get());
+        }
+        if (captureResult.isPresent()) {
+            addCaptureResultToExif(captureResult.get());
+        }
+        if (location.isPresent()) {
+            addLocationToExif(location.get());
+        }
+    }
+
+private void addMakeAndModelToExif() {
+        addExifTag(ExifInterface.TAG_MAKE, Build.MANUFACTURER);
+        addExifTag(ExifInterface.TAG_MODEL, Build.MODEL);
+    }
+然后源码搜索 Build.java
+./frameworks/base/core/java/Android/os/Build.java
+Build.java里面搜 MANUFACTURER
+/** The manufacturer of the product/hardware. */
+public static final String MANUFACTURER = getString("ro.product.manufacturer");
+...........
+...........
+...........
+
+build\core\product_config.mk  里面修改 MANUFACTURER 的值
+
+
+
+
+
+
+
+
+

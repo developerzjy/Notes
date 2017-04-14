@@ -29,6 +29,7 @@ sudo apt-get install flex bison gperf libsdl-dev libesd0-dev libwxgtk2.6-dev bui
 -------------------------------------------------------------------------------------------------------------------
 
 
+adb pull system/etc/permissions/handheld_core_hardware.xml handheld_core_hardware.xml
 
 
 
@@ -36,24 +37,6 @@ sudo apt-get install flex bison gperf libsdl-dev libesd0-dev libwxgtk2.6-dev bui
 
 
 
-
-
-
-
-------------------------------------------------------------------------------------------------------------
-横竖屏切换  G-Sensor
-frameworks\base\services/core/java/com/android/server/wm/WindowManagerService.java
-PhoneWindowManager.java
-
-
-相册缩放相关
-package/apps/camera2
-find .|xargs grep -ri "config_minScalingSpan" -l
-frameworks/base/core/res/res/values-sw600dp/config.xml
-
-
-蓝牙
-收到的文件列表打开文件  BluetoothOppUtility.java类
 
 
 

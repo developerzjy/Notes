@@ -17,14 +17,14 @@ find -name 文件名
 搜索包含某字符串的所有文件
 find .|xargs grep -ri "要搜索的字符串" -l
 
+grep命令搜索包含 字符串QCOM-BTD的文件，过滤 */.git
+grep -rn --exclude-dir=*/.git 'QCOM-BTD' ./*
 
 grep -rn "PRODUCT_POLICY := android.policy_phone | PRODUCT_POLICY:=android.policy_phone | PRODUCT_POLICY:=android.mid | PRODUCT_POLICY := android.mid" *
 
 
 创建文件
 touch 文件名
-
-
 
 
 
