@@ -1,19 +1,19 @@
-------------------------------------------------------------------------------------------------------------
-ºáÊúÆÁÇĞ»»  G-Sensor
+ï»¿------------------------------------------------------------------------------------------------------------
+æ¨ªç«–å±åˆ‡æ¢  G-Sensor
 frameworks\base\services/core/java/com/android/server/wm/WindowManagerService.java
 PhoneWindowManager.java
 
 
-Ïà²áËõ·ÅÏà¹Ø
+ç›¸å†Œç¼©æ”¾ç›¸å…³
 package/apps/camera2
 find .|xargs grep -ri "config_minScalingSpan" -l
 frameworks/base/core/res/res/values-sw600dp/config.xml
 
 
-À¶ÑÀ
-ÊÕµ½µÄÎÄ¼şÁĞ±í´ò¿ªÎÄ¼ş  BluetoothOppUtility.javaÀà
-À¶ÑÀÃû³Æ 
-ÍøÉÏËµÔÚ  \device\generic\common\bluetooth\bdroid_buildcfg.h ÀïÃæĞŞ¸Ä #define BTM_DEF_LOCAL_NAME   "Android Bluedroid" µÄÖµ
-ÎÒÕâÔÚ    \device\qcom\common\bdroid_buildcfg.h ĞŞ¸ÄÕâ¸öÖµ (ÀûÓÃgrepÃüÁîËÑË÷µ±Ç°À¶ÑÀÏÔÊ¾µÄÃû×ÖÕÒµ½µÄÕâ¸öÎÄ¼ş)
+è“ç‰™
+æ”¶åˆ°çš„æ–‡ä»¶åˆ—è¡¨æ‰“å¼€æ–‡ä»¶  BluetoothOppUtility.javaç±»
+è“ç‰™åç§° 
+ç½‘ä¸Šè¯´åœ¨  \device\generic\common\bluetooth\bdroid_buildcfg.h é‡Œé¢ä¿®æ”¹ #define BTM_DEF_LOCAL_NAME   "Android Bluedroid" çš„å€¼
+æˆ‘è¿™åœ¨    \device\qcom\common\bdroid_buildcfg.h ä¿®æ”¹è¿™ä¸ªå€¼ (åˆ©ç”¨grepå‘½ä»¤æœç´¢å½“å‰è“ç‰™æ˜¾ç¤ºçš„åå­—æ‰¾åˆ°çš„è¿™ä¸ªæ–‡ä»¶)
 
 

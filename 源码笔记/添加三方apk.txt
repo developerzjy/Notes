@@ -1,8 +1,8 @@
-ÀıÈçÌí¼ÓËÑ¹·ÊäÈë·¨
+ï»¿ä¾‹å¦‚æ·»åŠ æœç‹—è¾“å…¥æ³•
 
-1.vendor/thirdpart/  Ä¿Â¼ĞÂ½¨ sougou/Ä¿Â¼  È»ºó¼ÓÈësougou.apk
+1.vendor/thirdpart/  ç›®å½•æ–°å»º sougou/ç›®å½•  ç„¶ååŠ å…¥sougou.apk
 
-2.ÔÚvendor/thirdpart/sougou/Ä¿Â¼ĞÂ½¨²¢±àĞ´android.mkÎÄ¼ş£¬ÄÚÈİÈçÏÂ
+2.åœ¨vendor/thirdpart/sougou/ç›®å½•æ–°å»ºå¹¶ç¼–å†™android.mkæ–‡ä»¶ï¼Œå†…å®¹å¦‚ä¸‹
 ----------------------------------------------------------------------------------------
 LOCAL_PATH := $(call my-dir)
 
@@ -28,4 +28,4 @@ LOCAL_CERTIFICATE := PRESIGNED
 include $(BUILD_PREBUILT)
 -----------------------------------------------------------------------------------------
 
-3.ĞŞ¸Äbuild/target/product/core.kmÎÄ¼ş¼ÓÈë   sougou /
+3.ä¿®æ”¹build/target/product/core.kmæ–‡ä»¶åŠ å…¥   sougou /

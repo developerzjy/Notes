@@ -1,23 +1,23 @@
-DDMS½ØÆÁ¿ÉÒÔÕÒµ½µ±Ç°ÏÔÊ¾µÄ½çÃæ²¼¾Ö»òÄ³¸öviewµÄid£¬¿ìËÙ¶¨Î»viewÏà¹ØµÄ´úÂë
+ï»¿DDMSæˆªå±å¯ä»¥æ‰¾åˆ°å½“å‰æ˜¾ç¤ºçš„ç•Œé¢å¸ƒå±€æˆ–æŸä¸ªviewçš„idï¼Œå¿«é€Ÿå®šä½viewç›¸å…³çš„ä»£ç 
 
-²é¿´µ±Ç°ÏÔÊ¾µÄactivity
+æŸ¥çœ‹å½“å‰æ˜¾ç¤ºçš„activity
 adb shell dumpsys activity | grep "mFocusedActivity"
 
 
 
-¿´µ÷ÓÃµÄÀàÃûºÍ·½·¨Ãû(Á½ÖÖ·½·¨)
-Slog.d("",":::::ÀàÃû:"+(new Throwable()).getStackTrace()[1].getClassName()+"  ·½·¨Ãû:"+(new Throwable()).getStackTrace()[1].getMethodName());
+çœ‹è°ƒç”¨çš„ç±»åå’Œæ–¹æ³•å(ä¸¤ç§æ–¹æ³•)
+Slog.d("",":::::ç±»å:"+(new Throwable()).getStackTrace()[1].getClassName()+"  æ–¹æ³•å:"+(new Throwable()).getStackTrace()[1].getMethodName());
 Thread.currentThread().getStackTrace()[3].getMethodName();
 
 
 
-ËÑË÷ÎÄ¼şÃû
-find -name ÎÄ¼şÃû
+æœç´¢æ–‡ä»¶å
+find -name æ–‡ä»¶å
 
-ËÑË÷°üº¬Ä³×Ö·û´®µÄËùÓĞÎÄ¼ş
-find .|xargs grep -ri "ÒªËÑË÷µÄ×Ö·û´®" -l
+æœç´¢åŒ…å«æŸå­—ç¬¦ä¸²çš„æ‰€æœ‰æ–‡ä»¶
+find .|xargs grep -ri "è¦æœç´¢çš„å­—ç¬¦ä¸²" -l
 
-grepÃüÁîËÑË÷°üº¬ ×Ö·û´®QCOM-BTDµÄÎÄ¼ş£¬¹ıÂË */.git
+grepå‘½ä»¤æœç´¢åŒ…å« å­—ç¬¦ä¸²QCOM-BTDçš„æ–‡ä»¶ï¼Œè¿‡æ»¤ */.git
 grep -rn --exclude-dir=*/.git 'QCOM-BTD' ./*
 grep -lr 'keyword' ./* | grep -v '.git'
 
@@ -26,8 +26,8 @@ grep -lr 'keyword' ./* | grep -v '.git'
 grep -rn "PRODUCT_POLICY := android.policy_phone | PRODUCT_POLICY:=android.policy_phone | PRODUCT_POLICY:=android.mid | PRODUCT_POLICY := android.mid" *
 
 
-´´½¨ÎÄ¼ş
-touch ÎÄ¼şÃû
+åˆ›å»ºæ–‡ä»¶
+touch æ–‡ä»¶å
 
 
 

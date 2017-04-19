@@ -1,17 +1,17 @@
-frameworks\base\core\res\res\drawable-mdpi
-ÉÏÃæµÄÂ·¾¶ÏÂÌí¼Ó¶ú»úÍ¼±ê  stat_sys_headset.png   (ÓĞÕâ¸öÍ¼Æ¬£¬Ã»ÓĞÌæ»»)
+ï»¿frameworks\base\core\res\res\drawable-mdpi
+ä¸Šé¢çš„è·¯å¾„ä¸‹æ·»åŠ è€³æœºå›¾æ ‡  stat_sys_headset.png   (æœ‰è¿™ä¸ªå›¾ç‰‡ï¼Œæ²¡æœ‰æ›¿æ¢)
 
-frameworks\base\core\res\res\values\config.xml ÖĞÌí¼ÓÏÂÃæÒ»ĞĞ
+frameworks\base\core\res\res\values\config.xml ä¸­æ·»åŠ ä¸‹é¢ä¸€è¡Œ
 <item><xliff:g id="id">headset</xliff:g></item>
 
 
-ĞŞ¸Ä frameworks\base\packages\SystemUI\src\com\android\systemui\statusbar\phone\PhoneStatusBarPolicy.java
+ä¿®æ”¹ frameworks\base\packages\SystemUI\src\com\android\systemui\statusbar\phone\PhoneStatusBarPolicy.java
 
 
 *****************************************************************************************************************************
-ĞŞ¸ÄÉæ¼°Èı¸öµØ·½
-1.fameworks/base/core/res/res/values/config.xml  (Õı³£ÊÇÕâ¸öÂ·¾¶)
-2.frameworks\base\packages\SystemUI\res\drawable-mdpi  ¼ÓÍ¼Æ¬
+ä¿®æ”¹æ¶‰åŠä¸‰ä¸ªåœ°æ–¹
+1.fameworks/base/core/res/res/values/config.xml  (æ­£å¸¸æ˜¯è¿™ä¸ªè·¯å¾„)
+2.frameworks\base\packages\SystemUI\res\drawable-mdpi  åŠ å›¾ç‰‡
 3.frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarPolicy.java
 
 
@@ -19,32 +19,32 @@ frameworks\base\core\res\res\values\config.xml ÖĞÌí¼ÓÏÂÃæÒ»ĞĞ
 
 1.fameworks/base/core/res/res/values/config.xml 
 
-   ÔÚ<string-array name="config_statusBarIcons">ÀïÃæ¼ÓÈë×Ö¶Î <item><xliff:g id="id">headset</xliff:g></item> 
+   åœ¨<string-array name="config_statusBarIcons">é‡Œé¢åŠ å…¥å­—æ®µ <item><xliff:g id="id">headset</xliff:g></item> 
    ------------------------------------------------------------------------------------------------------------
-   ×¢(¿Ó)£ºÈç¹ûÉÏÃæ¼ÓÁË×Ö¶Îºó±¨Òì³£ java.lang.SecurityException: invalid status bar icon slot: headset£¬¿ÉÒÔ¼ì²éÒ»ÏÂdeviceÄ¿Â¼ÏÂÓĞÃ»ÓĞconfig_statusBarIconsÊı×é
-           ÏÂÃæÊÇÎÒµÄdeviceÄ¿Â¼ÏÂµÄconfig.xmlÂ·¾¶
+   æ³¨(å‘)ï¼šå¦‚æœä¸Šé¢åŠ äº†å­—æ®µåæŠ¥å¼‚å¸¸ java.lang.SecurityException: invalid status bar icon slot: headsetï¼Œå¯ä»¥æ£€æŸ¥ä¸€ä¸‹deviceç›®å½•ä¸‹æœ‰æ²¡æœ‰config_statusBarIconsæ•°ç»„
+           ä¸‹é¢æ˜¯æˆ‘çš„deviceç›®å½•ä¸‹çš„config.xmlè·¯å¾„
           ./device/qcom/common/device/overlay/frameworks/base/core/res/res/values/config.xml
    ------------------------------------------------------------------------------------------------------------
 
 2.frameworks\base\packages\SystemUI\res\drawable-mdpi
 
-   ÔÚÕâ¸öÂ·¾¶ÏÂ¼ÓÈë¶ú»úÍ¼Æ¬ stat_sys_headset.png£¨¿ÉÒÔÓÃ frameworks\base\core\res\res\drawable-mdpi Õâ¸öÂ·¾¶ÏÂµÄÍ¼Æ¬stat_sys_headset.png£©
+   åœ¨è¿™ä¸ªè·¯å¾„ä¸‹åŠ å…¥è€³æœºå›¾ç‰‡ stat_sys_headset.pngï¼ˆå¯ä»¥ç”¨ frameworks\base\core\res\res\drawable-mdpi è¿™ä¸ªè·¯å¾„ä¸‹çš„å›¾ç‰‡stat_sys_headset.pngï¼‰
 
 3. frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarPolicy.java
 
-   Ò»¡¢
+   ä¸€ã€
    else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {  
             updateHeadsetState(intent);  
    }
 
-   ¶ş¡¢
+   äºŒã€
    filter.addAction(Intent.ACTION_HEADSET_PLUG);
 
-   Èı¡¢
+   ä¸‰ã€
    mService.setIcon("headset", R.drawable.stat_sys_headset, 0, null);  
    mService.setIconVisibility("headset", false);
 
-   ËÄ¡¢
+   å››ã€
    private final void updateHeadsetState(Intent intent) {  
        boolean mIsHeadsetOn = (intent.getIntExtra("state", 0) == 1);  
        Slog.v(TAG, "updateHeadsetState: HeadsetState: " + mIsHeadsetOn);  

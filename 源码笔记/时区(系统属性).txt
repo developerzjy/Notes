@@ -1,11 +1,11 @@
-�鿴ϵͳ���Եķ��� 
+﻿查看系统属性的方法 
 adb shell
 getprop
 
-Device/���豸��ƽ̨���ƣ�/��������ܻ���һ���Ǳ���Ĵ���֮��İɣ�/system.prop 
-���������ӣ����Ѵ������޸�Ϊ persist.sys.timezone=Asia/Shanghai
+Device/（设备或平台名称）/（这里可能还有一层是编译的代号之类的吧）/system.prop 
+在其中添加，若已存在则修改为 persist.sys.timezone=Asia/Shanghai
 
-�޸���֮����Ҫ���±�������ϵͳ�������Ľ����/out/target/product/�����豸ƽ̨���Ʊ���汾�������ļ��У�/system/build.prop�п��Կ���
+修改完之后需要重新编译整个系统，编译后的结果在/out/target/product/（以设备平台名称编译版本命名的文件夹）/system/build.prop中可以看到
 
 
-�޸ĺ���Ҫ���outĿ¼���±��룬����ɾ����ǰĿ¼�µ�system�ļ����ٱ���
+修改后需要清掉out目录重新编译，或者删除当前目录下的system文件夹再编译

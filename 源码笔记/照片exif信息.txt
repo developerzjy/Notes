@@ -1,21 +1,21 @@
-ÎÊÌâ£º ÅÄÕÕºó²é¿´ÕÕÆ¬µÄÏêÏ¸ĞÅÏ¢£¬ÖÆÔìÉÌÏÔÊ¾ unknow
+ï»¿é—®é¢˜ï¼š æ‹ç…§åæŸ¥çœ‹ç…§ç‰‡çš„è¯¦ç»†ä¿¡æ¯ï¼Œåˆ¶é€ å•†æ˜¾ç¤º unknow
 
-½â¾ö¹ı³Ì¼ÇÂ¼:
+è§£å†³è¿‡ç¨‹è®°å½•:
 ------------------------------------------------------------------
-    eclipse µ¼Èë package/apps/Camera2´úÂë
+    eclipse å¯¼å…¥ package/apps/Camera2ä»£ç 
 
-1.Ñ¡¸öÈë¿ÚµãÏÈ¿´¿´ÅöÅöÔËÆø
-    ËÑË÷×Ö·û´® "ÖÆÔìÉÌ" ÕÒµ½string.xmlÖĞµÄid (id=maker)  eclipseËÑË÷×Ö·û´®¿ì½İ¼ü ctrl + H
-    Ò»Â·×·×Ù + ¿´´úÂë ......
-    ×¢£ºÒ»Ğ©ËÑË÷¼¼ÇÉ£¬Ö÷ÒªÀûÓÃÓï·¨¹æÔòÊ²Ã´µÄ
-                ±ÈÈçÕÒµ½ÖÆÔìÉÌµÄid=makerÁË£¬ËÑË÷ÄÄÀïÓÃÁËÕâ¸öid£¬±ÜÃâËÑË÷³öÒ»¶ÑÂÒÆß°ËÔã²»Ïà¹ØµÄ¶«Î÷¿ÉÒÔÔÚmakerÇ°Ãæ¼Ó¸ö "." ËÑË÷ .maker »òÕß string.maker µÈµÈ
-                                 ±ÈÈçËÑË÷Ä³¸ö·½·¨¿ÉÒÔ¼Ó¸ö "(" £¬ ÀıÈç methodName(
-    ËÑË÷.makerºóÕÒµ½ÁË DetailsDialog.Java Õâ¸öÀàµÄgetDetailsName·½·¨£¬¿´Ãû×Ö¾ÍÖªµÀÊÇÏÔÊ¾ÏêÏ¸ĞÅÏ¢dialogµÄ
-Ò»Â·×·×Ù + ¿´´úÂë  -> getDetailsName() -> setDetails() -> value -> detail -> £¨²ÎÊı£©details  ->.....->²ÎÊı ×îÖÕÊÇ´Ó CameraActivity.javaµÄshowDetailsDialog·½·¨ÀïÃæ´«À´µÄ£¨ÕâÀï±ê¼Ç1£© -> ...Ò»´ó¶ÑÊı¾İ´¦Àí¶øÇÒ¸ù±¾Ã»Ìáµ½make(ÕâÌõÂ·ÏßÊÇ²»Í¨µÄ£¬×îºó·¢ÏÖÕâ¸öunknownÊÇ´ÓÍ¼Æ¬ÀïÃæ¶Á³öÀ´µÄ)
-ÉÏÃæËµµÄ  Ò»´ó¶ÑÊı¾İ´¦Àí  °´Â·ÏßµÄË³ĞòÍùÏÂ¿´ºÜÀ§ÄÑ¿´µÄºÜÂÒ£¬ÒòÎª´ÓÕâ¿ªÊ¼ÓĞ¸÷ÖÖÊı¾İµÄ´¦Àí´«µİºÍ¸÷ÖÖ½Ó¿ÚµÄ¸÷ÖÖÊµÏÖµÈ£¬¿´µÄÔÆÀïÎíÀï£¬ÕâÀï·´¹ıÀ´¿´£¬´ÓMediaDetails.javaÀà ¿ªÊ¼(ÆäÊµ¿´µ½getDetailsName·½·¨µÄÊ±ºòÒÑ¾­¿´µ½¹ıÕâ¸öÀàÁË)£¬MediaDetailsÀïÃæµÄextractExifInfo(params)·½·¨¾ÍÊÇ·â×° exifÊı¾İ µÄ£¬ÀïÃæµ÷ÓÃÁËsetExifData·½·¨(µ½ÕâÀï¿ÉÒÔ°ÑÖÆÔìÉÌ¸Ä³ÉÎÒÃÇÏëÒªµÄ¶«Î÷ÁË£¬µ«ÊÇÖÎ±ê²»ÖÎ±¾£¬ÒòÎªÏàµ±ÓÚ°Ñ´ÓÍ¼Æ¬Àï¶Á³öÀ´µÄ unknown¸ø¸²¸ÇÁË)£¬¼ÌĞø£¬ Ë«»÷ extractExifInfo·½·¨ÃûÑ¡ÖĞ£¬È»ºó Ctrl+shift+G ¿ì½İ¼ü²é¿´ ÄÄÀïµ÷ÓÃµÄÕâ¸ö·½·¨ ÔÚPhotoItem.java µÄ getMediaDetails·½·¨µ÷ÓÃµÄ£¬¼ÌĞøË«»÷¿ì½İ¼üºÜÈİÒ×¾ÍÕÒµ½ÁË ±ê¼Ç1 ÄÇÀïËµµÄshowDetailsDialog·½·¨
-exifĞÅÏ¢µÄÏÔÊ¾´ó¸Å¾ÍÊÇÕâÑùÁË£¬Õû¸ö¹ı³Ì¾ÍÊÇ´ÓÍ¼Æ¬¶ÁÊı¾İ+´¦Àí+ÏÔÊ¾£¬½â¾ö²»ÁËÕâ¸öÎÊÌâ£¬ÄÇ¾Í¿´¿´Í¼Æ¬ÊÇÔõÃ´±£´æµÄ£¬´ÓÅÄÕÕ¿ªÊ¼°É
-      2.ÅÄÕÕµÄ²¿·Ö¹ı³Ì
-ÎÒÕâÀïÓÃµÄÊÇÆ½°å£¬Ê×ÏÈÆ½°å´ò¿ªÅÄÕÕ½çÃæ£¬eclipse´ò¿ªDDMS£¬µã»÷Dump View Hierarchy for UI Automator¾Í¿ÉÒÔ½ØÈ¡Æ½°åµ±Ç°ÏÔÊ¾µÄ½çÃæ²¢ÇÒ¿ÉÒÔ²é¿´½çÃæ²¼¾ÖÖĞviewµÄidÁË£¬ÅÄÕÕ°´Å¥µÄidÊÇ shutter_button£¬ËÑË÷£¬°´Å¥ÊÇ CameraAppUI.java ÀïÃæµÄ mShutterButton£¬ÕâÊÇ¸ö¼Ì³ĞImageViewµÄ×Ô¶¨Òåview£¬·ÖÎö´úÂë·¢ÏÖÀïÃæµÄOnShutterButtonListener½Ó¿Ú£¬µã»÷µÄ´¦Àí¾ÍÊÇÍ¨¹ıonShutterButtonClickÍê³ÉµÄ£¬Õâ¸ö½Ó¿ÚÓĞºÜ¶àÊµÏÖ£¬×îÖÕÕÒµ½ÁËCaptureModule.javaÀïÃæµÄÊµÏÖ(Õâ¸ö±ğÎÊÎÒÔõÃ´ÕÒµ½µÄ£¬ÍüÁË£¬·´Õı¾ÍÊÇ¸÷ÖÖÊÖ¶ÎÏ¡ÀïºıÍ¿µÄ¾ÍÕÒµ½ÁË£¬´ò¸ölogÑéÖ¤Ò»ÏÂ¾ÍÊÇÕâÀï)£¬ÀïÃæonShutterButtonClick·½·¨µÄÊµÏÖÀïµ÷ÓÃÁËtakePictureNow()Õâ¸ö·½·¨£¬¿´Ò»ÏÂ
+1.é€‰ä¸ªå…¥å£ç‚¹å…ˆçœ‹çœ‹ç¢°ç¢°è¿æ°”
+    æœç´¢å­—ç¬¦ä¸² "åˆ¶é€ å•†" æ‰¾åˆ°string.xmlä¸­çš„id (id=maker)  eclipseæœç´¢å­—ç¬¦ä¸²å¿«æ·é”® ctrl + H
+    ä¸€è·¯è¿½è¸ª + çœ‹ä»£ç  ......
+    æ³¨ï¼šä¸€äº›æœç´¢æŠ€å·§ï¼Œä¸»è¦åˆ©ç”¨è¯­æ³•è§„åˆ™ä»€ä¹ˆçš„
+                æ¯”å¦‚æ‰¾åˆ°åˆ¶é€ å•†çš„id=makeräº†ï¼Œæœç´¢å“ªé‡Œç”¨äº†è¿™ä¸ªidï¼Œé¿å…æœç´¢å‡ºä¸€å †ä¹±ä¸ƒå…«ç³Ÿä¸ç›¸å…³çš„ä¸œè¥¿å¯ä»¥åœ¨makerå‰é¢åŠ ä¸ª "." æœç´¢ .maker æˆ–è€… string.maker ç­‰ç­‰
+                                 æ¯”å¦‚æœç´¢æŸä¸ªæ–¹æ³•å¯ä»¥åŠ ä¸ª "(" ï¼Œ ä¾‹å¦‚ methodName(
+    æœç´¢.makeråæ‰¾åˆ°äº† DetailsDialog.Java è¿™ä¸ªç±»çš„getDetailsNameæ–¹æ³•ï¼Œçœ‹åå­—å°±çŸ¥é“æ˜¯æ˜¾ç¤ºè¯¦ç»†ä¿¡æ¯dialogçš„
+ä¸€è·¯è¿½è¸ª + çœ‹ä»£ç   -> getDetailsName() -> setDetails() -> value -> detail -> ï¼ˆå‚æ•°ï¼‰details  ->.....->å‚æ•° æœ€ç»ˆæ˜¯ä» CameraActivity.javaçš„showDetailsDialogæ–¹æ³•é‡Œé¢ä¼ æ¥çš„ï¼ˆè¿™é‡Œæ ‡è®°1ï¼‰ -> ...ä¸€å¤§å †æ•°æ®å¤„ç†è€Œä¸”æ ¹æœ¬æ²¡æåˆ°make(è¿™æ¡è·¯çº¿æ˜¯ä¸é€šçš„ï¼Œæœ€åå‘ç°è¿™ä¸ªunknownæ˜¯ä»å›¾ç‰‡é‡Œé¢è¯»å‡ºæ¥çš„)
+ä¸Šé¢è¯´çš„  ä¸€å¤§å †æ•°æ®å¤„ç†  æŒ‰è·¯çº¿çš„é¡ºåºå¾€ä¸‹çœ‹å¾ˆå›°éš¾çœ‹çš„å¾ˆä¹±ï¼Œå› ä¸ºä»è¿™å¼€å§‹æœ‰å„ç§æ•°æ®çš„å¤„ç†ä¼ é€’å’Œå„ç§æ¥å£çš„å„ç§å®ç°ç­‰ï¼Œçœ‹çš„äº‘é‡Œé›¾é‡Œï¼Œè¿™é‡Œåè¿‡æ¥çœ‹ï¼Œä»MediaDetails.javaç±» å¼€å§‹(å…¶å®çœ‹åˆ°getDetailsNameæ–¹æ³•çš„æ—¶å€™å·²ç»çœ‹åˆ°è¿‡è¿™ä¸ªç±»äº†)ï¼ŒMediaDetailsé‡Œé¢çš„extractExifInfo(params)æ–¹æ³•å°±æ˜¯å°è£… exifæ•°æ® çš„ï¼Œé‡Œé¢è°ƒç”¨äº†setExifDataæ–¹æ³•(åˆ°è¿™é‡Œå¯ä»¥æŠŠåˆ¶é€ å•†æ”¹æˆæˆ‘ä»¬æƒ³è¦çš„ä¸œè¥¿äº†ï¼Œä½†æ˜¯æ²»æ ‡ä¸æ²»æœ¬ï¼Œå› ä¸ºç›¸å½“äºæŠŠä»å›¾ç‰‡é‡Œè¯»å‡ºæ¥çš„ unknownç»™è¦†ç›–äº†)ï¼Œç»§ç»­ï¼Œ åŒå‡» extractExifInfoæ–¹æ³•åé€‰ä¸­ï¼Œç„¶å Ctrl+shift+G å¿«æ·é”®æŸ¥çœ‹ å“ªé‡Œè°ƒç”¨çš„è¿™ä¸ªæ–¹æ³• åœ¨PhotoItem.java çš„ getMediaDetailsæ–¹æ³•è°ƒç”¨çš„ï¼Œç»§ç»­åŒå‡»å¿«æ·é”®å¾ˆå®¹æ˜“å°±æ‰¾åˆ°äº† æ ‡è®°1 é‚£é‡Œè¯´çš„showDetailsDialogæ–¹æ³•
+exifä¿¡æ¯çš„æ˜¾ç¤ºå¤§æ¦‚å°±æ˜¯è¿™æ ·äº†ï¼Œæ•´ä¸ªè¿‡ç¨‹å°±æ˜¯ä»å›¾ç‰‡è¯»æ•°æ®+å¤„ç†+æ˜¾ç¤ºï¼Œè§£å†³ä¸äº†è¿™ä¸ªé—®é¢˜ï¼Œé‚£å°±çœ‹çœ‹å›¾ç‰‡æ˜¯æ€ä¹ˆä¿å­˜çš„ï¼Œä»æ‹ç…§å¼€å§‹å§
+      2.æ‹ç…§çš„éƒ¨åˆ†è¿‡ç¨‹
+æˆ‘è¿™é‡Œç”¨çš„æ˜¯å¹³æ¿ï¼Œé¦–å…ˆå¹³æ¿æ‰“å¼€æ‹ç…§ç•Œé¢ï¼Œeclipseæ‰“å¼€DDMSï¼Œç‚¹å‡»Dump View Hierarchy for UI Automatorå°±å¯ä»¥æˆªå–å¹³æ¿å½“å‰æ˜¾ç¤ºçš„ç•Œé¢å¹¶ä¸”å¯ä»¥æŸ¥çœ‹ç•Œé¢å¸ƒå±€ä¸­viewçš„idäº†ï¼Œæ‹ç…§æŒ‰é’®çš„idæ˜¯ shutter_buttonï¼Œæœç´¢ï¼ŒæŒ‰é’®æ˜¯ CameraAppUI.java é‡Œé¢çš„ mShutterButtonï¼Œè¿™æ˜¯ä¸ªç»§æ‰¿ImageViewçš„è‡ªå®šä¹‰viewï¼Œåˆ†æä»£ç å‘ç°é‡Œé¢çš„OnShutterButtonListeneræ¥å£ï¼Œç‚¹å‡»çš„å¤„ç†å°±æ˜¯é€šè¿‡onShutterButtonClickå®Œæˆçš„ï¼Œè¿™ä¸ªæ¥å£æœ‰å¾ˆå¤šå®ç°ï¼Œæœ€ç»ˆæ‰¾åˆ°äº†CaptureModule.javaé‡Œé¢çš„å®ç°(è¿™ä¸ªåˆ«é—®æˆ‘æ€ä¹ˆæ‰¾åˆ°çš„ï¼Œå¿˜äº†ï¼Œåæ­£å°±æ˜¯å„ç§æ‰‹æ®µç¨€é‡Œç³Šæ¶‚çš„å°±æ‰¾åˆ°äº†ï¼Œæ‰“ä¸ªlogéªŒè¯ä¸€ä¸‹å°±æ˜¯è¿™é‡Œ)ï¼Œé‡Œé¢onShutterButtonClickæ–¹æ³•çš„å®ç°é‡Œè°ƒç”¨äº†takePictureNow()è¿™ä¸ªæ–¹æ³•ï¼Œçœ‹ä¸€ä¸‹
 private void takePictureNow() {
         if (mCamera == null) {
             Log.i(TAG, "Not taking picture since Camera is closed.");
@@ -37,13 +37,13 @@ private void takePictureNow() {
         decorateSessionAtCaptureTime(session);
         mCamera.takePicture(params, session);
     }
-ËäÈ»´úÂë²»¶àµ«ÊÇ¿´×ÅºÜãÂ±Æ£¬session ÊÇÊ²Ã´£¬params ÊÇÊ²Ã´£¬decorateSessionAtCaptureTimeÓÖÊÇ¸ÉÊ²Ã´µÄ£¬mCamera¿´Ãû×ÖºÍ¶¨Òå¸Ğ¾õÏñÊÇÒ»¸öÏà»ú£¬ºÃÏñÃ¿¸ö¶«Î÷¶¼ÓĞ¿ÉÄÜÉæ¼°µ½ÎÒÒªÕÒµÄÖÆÔìÉÌĞÅÏ¢£¬ÍùÏÂ¿´ÁËÒ»Ğ©·¢ÏÖÍêÈ«¿´²»µ½ ÖÆÔìÉÌ»òÕßmakeµÄ×ÙÓ°£¬ÅÄÕÕÏÈ¿´µ½Õâ°É£¬ºÃÏñÒ²Ã»¿´³öÊ²Ã´¶«Î÷À´.........
+è™½ç„¶ä»£ç ä¸å¤šä½†æ˜¯çœ‹ç€å¾ˆæ‡µé€¼ï¼Œsession æ˜¯ä»€ä¹ˆï¼Œparams æ˜¯ä»€ä¹ˆï¼ŒdecorateSessionAtCaptureTimeåˆæ˜¯å¹²ä»€ä¹ˆçš„ï¼ŒmCameraçœ‹åå­—å’Œå®šä¹‰æ„Ÿè§‰åƒæ˜¯ä¸€ä¸ªç›¸æœºï¼Œå¥½åƒæ¯ä¸ªä¸œè¥¿éƒ½æœ‰å¯èƒ½æ¶‰åŠåˆ°æˆ‘è¦æ‰¾çš„åˆ¶é€ å•†ä¿¡æ¯ï¼Œå¾€ä¸‹çœ‹äº†ä¸€äº›å‘ç°å®Œå…¨çœ‹ä¸åˆ° åˆ¶é€ å•†æˆ–è€…makeçš„è¸ªå½±ï¼Œæ‹ç…§å…ˆçœ‹åˆ°è¿™å§ï¼Œå¥½åƒä¹Ÿæ²¡çœ‹å‡ºä»€ä¹ˆä¸œè¥¿æ¥.........
 
-   3.  ½â¾ö
-¿´ÁËÉÏÃæµÄ1ºÍ2 Êı¾İ¶ÁÈ¡ÏÔÊ¾ºÍÅÄÕÕµÄ²¿·Ö¹ı³Ì£¬ËäÈ»Ã»½â¾öÎÊÌâµ«»¹ÊÇÓĞÒ»Ğ©ÊÕ»ñµÄ£¬±ÈÈçÖªµÀÁËÍ¼Æ¬ÓĞ exif ÕâÑùµÄÒ»¸öĞÅÏ¢£¬°Ù¶ÈÁË½âÒ»ÏÂÕâ¸öÊÇÊ²Ã´£¬²»ÄÑ·¢ÏÖºÜ¶àÓĞÓÃµÄ¶«Î÷£¬±ÈÈç ExifInterface.java£¬ÓÃÕâ¸öÀà¿ÉÒÔÉèÖÃÍ¼Æ¬µÄ exifĞÅÏ¢(ÀïÃæ°üº¬ make ÖÆÔìÉÌ)£¬ÓÖÊÇÒ»¸ö½â¾öÎÊÌâµÄÈë¿Ú
-ctrl + shift + R ËÑË÷ExifInterface·¢ÏÖCamera2µÄ´úÂëÀïÓĞÕâÃ´Ò»¸öÀà£¬ÀïÃæ´úÂëºÜ¶à£¬ctrl + O ÊäÈëset·¢ÏÖÒ»Ğ©set·½·¨£¬ÊäÈëwirte·¢ÏÖÒ»Ğ©write·½·¨£¬ÕâÁ½¸ö·½·¨ÓĞ¿ÉÄÜÊÇÉèÖÃÍ¼Æ¬exifĞÅÏ¢µÄ£¬Ã¿¸ö»³ÒÉµÄ·½·¨¼Ó¸ölog±àÒëpush¿´¿´£¬×îºó·¢ÏÖÅÄÕÕµÄÊ±ºòpublic void writeExif(byte[] jpeg, String exifOutFileName)±»µ÷ÓÃÁË(×¢ÒâÕâ¸ö·½·¨µÄ²ÎÊıÇø·ÖÆäËûwrite·½·¨)£¬ctrl+shift+GÒ»Â·ÍùÏÂ¿´·¢ÏÖÒ»¸öĞÂµÄÀàStorage£¬¿´Õâ¸öÃû×Ö¸Ğ¾õ¿´µ½ÁËÏ£Íû£¬¹ı³Ì²»¶àËµÁËStorage.writeFile() -> Storage.updateImage() -> PlaceholderManager.finishPlaceholder() -> CaptureSessionImpl.saveAndFinish() -> TaskCompressImageToJpeg.run()  ÕâÀïÃæĞèÒªÏêÏ¸¿´Ò»ÏÂ£¬ÓĞÕâÑùÒ»ĞĞ´úÂë
+   3.  è§£å†³
+çœ‹äº†ä¸Šé¢çš„1å’Œ2 æ•°æ®è¯»å–æ˜¾ç¤ºå’Œæ‹ç…§çš„éƒ¨åˆ†è¿‡ç¨‹ï¼Œè™½ç„¶æ²¡è§£å†³é—®é¢˜ä½†è¿˜æ˜¯æœ‰ä¸€äº›æ”¶è·çš„ï¼Œæ¯”å¦‚çŸ¥é“äº†å›¾ç‰‡æœ‰ exif è¿™æ ·çš„ä¸€ä¸ªä¿¡æ¯ï¼Œç™¾åº¦äº†è§£ä¸€ä¸‹è¿™ä¸ªæ˜¯ä»€ä¹ˆï¼Œä¸éš¾å‘ç°å¾ˆå¤šæœ‰ç”¨çš„ä¸œè¥¿ï¼Œæ¯”å¦‚ ExifInterface.javaï¼Œç”¨è¿™ä¸ªç±»å¯ä»¥è®¾ç½®å›¾ç‰‡çš„ exifä¿¡æ¯(é‡Œé¢åŒ…å« make åˆ¶é€ å•†)ï¼Œåˆæ˜¯ä¸€ä¸ªè§£å†³é—®é¢˜çš„å…¥å£
+ctrl + shift + R æœç´¢ExifInterfaceå‘ç°Camera2çš„ä»£ç é‡Œæœ‰è¿™ä¹ˆä¸€ä¸ªç±»ï¼Œé‡Œé¢ä»£ç å¾ˆå¤šï¼Œctrl + O è¾“å…¥setå‘ç°ä¸€äº›setæ–¹æ³•ï¼Œè¾“å…¥wirteå‘ç°ä¸€äº›writeæ–¹æ³•ï¼Œè¿™ä¸¤ä¸ªæ–¹æ³•æœ‰å¯èƒ½æ˜¯è®¾ç½®å›¾ç‰‡exifä¿¡æ¯çš„ï¼Œæ¯ä¸ªæ€€ç–‘çš„æ–¹æ³•åŠ ä¸ªlogç¼–è¯‘pushçœ‹çœ‹ï¼Œæœ€åå‘ç°æ‹ç…§çš„æ—¶å€™public void writeExif(byte[] jpeg, String exifOutFileName)è¢«è°ƒç”¨äº†(æ³¨æ„è¿™ä¸ªæ–¹æ³•çš„å‚æ•°åŒºåˆ†å…¶ä»–writeæ–¹æ³•)ï¼Œctrl+shift+Gä¸€è·¯å¾€ä¸‹çœ‹å‘ç°ä¸€ä¸ªæ–°çš„ç±»Storageï¼Œçœ‹è¿™ä¸ªåå­—æ„Ÿè§‰çœ‹åˆ°äº†å¸Œæœ›ï¼Œè¿‡ç¨‹ä¸å¤šè¯´äº†Storage.writeFile() -> Storage.updateImage() -> PlaceholderManager.finishPlaceholder() -> CaptureSessionImpl.saveAndFinish() -> TaskCompressImageToJpeg.run()  è¿™é‡Œé¢éœ€è¦è¯¦ç»†çœ‹ä¸€ä¸‹ï¼Œæœ‰è¿™æ ·ä¸€è¡Œä»£ç 
 final ExifInterface exif = createExif(Optional.fromNullable(exifData), resultImage, img.metadata);  
-createExif()¾ÍÊÇ´´½¨exifĞÅÏ¢µÄµØ·½ÁË£¬¼ÌĞø¿ÉÒÔÕÒµ½ExifUtil.populateExif()£¬´úÂëÈçÏÂ
+createExif()å°±æ˜¯åˆ›å»ºexifä¿¡æ¯çš„åœ°æ–¹äº†ï¼Œç»§ç»­å¯ä»¥æ‰¾åˆ°ExifUtil.populateExif()ï¼Œä»£ç å¦‚ä¸‹
 /**
      * Populate the EXIF object with info pulled from a given capture result.
      *
@@ -72,16 +72,16 @@ private void addMakeAndModelToExif() {
         addExifTag(ExifInterface.TAG_MAKE, Build.MANUFACTURER);
         addExifTag(ExifInterface.TAG_MODEL, Build.MODEL);
     }
-È»ºóÔ´ÂëËÑË÷ Build.java
+ç„¶åæºç æœç´¢ Build.java
 ./frameworks/base/core/java/Android/os/Build.java
-Build.javaÀïÃæËÑ MANUFACTURER
+Build.javaé‡Œé¢æœ MANUFACTURER
 /** The manufacturer of the product/hardware. */
 public static final String MANUFACTURER = getString("ro.product.manufacturer");
 ...........
 ...........
 ...........
 
-build\core\product_config.mk  ÀïÃæĞŞ¸Ä MANUFACTURER µÄÖµ
+build\core\product_config.mk  é‡Œé¢ä¿®æ”¹ MANUFACTURER çš„å€¼
 
 
 

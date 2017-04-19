@@ -1,4 +1,4 @@
-android ÏÂÔØÔ´Âë
+ï»¿android ä¸‹è½½æºç 
 git clone https://android.googlesource.com/platform/manifest.git
 
 http://jingyan.baidu.com/article/6d704a1329bf6a28da51ca6a.html
@@ -6,24 +6,24 @@ http://jingyan.baidu.com/article/6d704a1329bf6a28da51ca6a.html
 https://android.googlesource.com/platform/packages/apps/Browser
 -------------------------------------------------------------------------------------------------------
 
-±àÒëÃüÁî
+ç¼–è¯‘å‘½ä»¤
 source build/envsetup.sh 
-lunch                    -------------------------------Ñ¡ÔñÒ»¸ö°æ±¾
+lunch                    -------------------------------é€‰æ‹©ä¸€ä¸ªç‰ˆæœ¬
 make update-api -j16;make -j32
 
 ---------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------
-LinuxÄÚºËµÄ»ù´¡ÖªÊ¶
+Linuxå†…æ ¸çš„åŸºç¡€çŸ¥è¯†
 
-Android¹Ù·½APIÎÄµµ£ºhttp://developer.android.com/index.html
+Androidå®˜æ–¹APIæ–‡æ¡£ï¼šhttp://developer.android.com/index.html
 
-ubuntu¹Ù·½ÏÂÔØµØÖ·£ºhttp://www.ubuntu.com/
+ubuntuå®˜æ–¹ä¸‹è½½åœ°å€ï¼šhttp://www.ubuntu.com/
 
-ubuntu°²×°git£ºsudo apt-get install git-core gnupg
+ubuntuå®‰è£…gitï¼šsudo apt-get install git-core gnupg
 
-git¹¤¾ßµÄÊ¹ÓÃ·½·¨¹ÙÍø£ºhttps://git-scm.com/
+gitå·¥å…·çš„ä½¿ç”¨æ–¹æ³•å®˜ç½‘ï¼šhttps://git-scm.com/
 
-±àÒëandroidÔ´ÂëĞèÒªµÄÆäËû¹¤¾ß°ü°²×°£º
+ç¼–è¯‘androidæºç éœ€è¦çš„å…¶ä»–å·¥å…·åŒ…å®‰è£…ï¼š
 sudo apt-get install flex bison gperf libsdl-dev libesd0-dev libwxgtk2.6-dev build-essential zip curl valgrind
 
 -------------------------------------------------------------------------------------------------------------------
