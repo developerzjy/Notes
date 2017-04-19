@@ -19,6 +19,9 @@ find .|xargs grep -ri "要搜索的字符串" -l
 
 grep命令搜索包含 字符串QCOM-BTD的文件，过滤 */.git
 grep -rn --exclude-dir=*/.git 'QCOM-BTD' ./*
+grep -lr 'keyword' ./* | grep -v '.git'
+
+
 
 grep -rn "PRODUCT_POLICY := android.policy_phone | PRODUCT_POLICY:=android.policy_phone | PRODUCT_POLICY:=android.mid | PRODUCT_POLICY := android.mid" *
 
@@ -29,4 +32,3 @@ touch 文件名
 
 
  
-

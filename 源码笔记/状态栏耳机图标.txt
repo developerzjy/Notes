@@ -1,0 +1,76 @@
+frameworks\base\core\res\res\drawable-mdpi
+上面的路径下添加耳机图标  stat_sys_headset.png   (有这个图片，没有替换)
+
+frameworks\base\core\res\res\values\config.xml 中添加下面一行
+<item><xliff:g id="id">headset</xliff:g></item>
+
+
+修改 frameworks\base\packages\SystemUI\src\com\android\systemui\statusbar\phone\PhoneStatusBarPolicy.java
+
+
+*****************************************************************************************************************************
+修改涉及三个地方
+1.fameworks/base/core/res/res/values/config.xml  (正常是这个路径)
+2.frameworks\base\packages\SystemUI\res\drawable-mdpi  加图片
+3.frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarPolicy.java
+
+
+
+
+1.fameworks/base/core/res/res/values/config.xml 
+
+   在<string-array name="config_statusBarIcons">里面加入字段 <item><xliff:g id="id">headset</xliff:g></item> 
+   ------------------------------------------------------------------------------------------------------------
+   注(坑)：如果上面加了字段后报异常 java.lang.SecurityException: invalid status bar icon slot: headset，可以检查一下device目录下有没有config_statusBarIcons数组
+           下面是我的device目录下的config.xml路径
+          ./device/qcom/common/device/overlay/frameworks/base/core/res/res/values/config.xml
+   ------------------------------------------------------------------------------------------------------------
+
+2.frameworks\base\packages\SystemUI\res\drawable-mdpi
+
+   在这个路径下加入耳机图片 stat_sys_headset.png（可以用 frameworks\base\core\res\res\drawable-mdpi 这个路径下的图片stat_sys_headset.png）
+
+3. frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBarPolicy.java
+
+   一、
+   else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {  
+            updateHeadsetState(intent);  
+   }
+
+   二、
+   filter.addAction(Intent.ACTION_HEADSET_PLUG);
+
+   三、
+   mService.setIcon("headset", R.drawable.stat_sys_headset, 0, null);  
+   mService.setIconVisibility("headset", false);
+
+   四、
+   private final void updateHeadsetState(Intent intent) {  
+       boolean mIsHeadsetOn = (intent.getIntExtra("state", 0) == 1);  
+       Slog.v(TAG, "updateHeadsetState: HeadsetState: " + mIsHeadsetOn);  
+  
+       mService.setIconVisibility("headset", mIsHeadsetOn);  
+   }  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
