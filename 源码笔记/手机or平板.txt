@@ -1,0 +1,19 @@
+问题描述： 恢复出厂设置的选项中恢复手机出厂设置，需修改为恢复平板电脑出厂设置
+
+在packages/apps/Settings里面找到对应的字符串资源，部分如下：
+<string name="master_clear_button_text" product="tablet" msgid="3130786116528304116">"恢复平板电脑出厂设置"</string>
+<string name="master_clear_button_text" product="default" msgid="7550632653343157971">"恢复手机出厂设置"</string>
+
+以上是根据设备的定义取的字符串资源
+
+然后找到设备定义部分
+在devices目录下相应的产品的mk文件里面搜索 PRODUCT_CHARACTERISTICS  (我的路径是 device\qcom\HXB_PAD\HXB_PAD.mk)
+然后设值
+
+-----------------------------------------
+修改前
+PRODUCT_CHARACTERISTICS := nosdcard
+
+修改后
+PRODUCT_CHARACTERISTICS := nosdcard, tablet
+----------------------------------------

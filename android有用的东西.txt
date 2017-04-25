@@ -29,6 +29,5 @@ grep -rn "PRODUCT_POLICY := android.policy_phone | PRODUCT_POLICY:=android.polic
 创建文件
 touch 文件名
 
+grep -rn --exclude-dir=*/.git 'PRODUCT_CHARACTERISTICS' ./*
 
-
- 

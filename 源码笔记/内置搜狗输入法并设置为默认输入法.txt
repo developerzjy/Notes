@@ -1,0 +1,80 @@
+一、把搜狗输入法编译进系统system/app目录
+
+1.packages/apps 目录新建SogouInput目录并放入 SogouInput.apk ，然后新建Android.mk编写内容如下
+------------------------------------------------------------------------
+LOCAL_PATH := $(call my-dir)
+include $(CLEAR_VARS)
+# Module name should match apk name to be installed
+LOCAL_MODULE := SogouInput
+LOCAL_MODULE_TAGS := optional
+LOCAL_SRC_FILES := $(LOCAL_MODULE).apk
+LOCAL_MODULE_CLASS := APPS
+LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_PACKAGE_SUFFIX)
+LOCAL_CERTIFICATE := PRESIGNED
+
+LOCAL_PREBUILT_JNI_LIBS := \
+    @lib/armeabi/libNinepatch.so \
+    @lib/armeabi/libsogouupdcore.so \
+    @lib/armeabi/libwebp.so \
+    @lib/armeabi/libweibosdkcore.so
+
+include $(BUILD_PREBUILT)
+----------------------------------------------------------------------------
+注意：LOCAL_MODULE := SogouInput  （这里是apk的名称）
+      LOCAL_SRC_FILES := $(LOCAL_MODULE).apk （决定编译完成后system/app目录下apk的名称，未验证）
+      LOCAL_PREBUILT_JNI_LIBS （未验证，与apk使用的so库有关，加不加这个有什么影响未验证）
+      之前目录名是SogouInput,apk名是 sougou.apk(LOCAL_MODULE := sougou.apk)，编译完成后并没有把这个编译到系统里，之后改成同名了 -> 没有进一步研究这个问题
+
+2.修改 build/target/product/core.mk （注：是build目录，但不一定是core.mk这个文件，看具体情况）
+仿照其他应用的格式加入  SogouInput \
+
+***********************************************
+到这里已经可以把apk编译进系统了，可以在out目录下查看或者在手机的system/app目录下查看
+***********************************************
+
+3.使 搜狗输入法出现在设置目录下
+修改 frameworks/base/packages/SettingsProvider/res/values/defaults.xml
+
+<string name="def_enable_input_methods" translatable="false">com.iflytek.inputmethod/.FlyIME:com.android.inputmethod.latin/.LatinIME:com.sohu.inputmethod.sogou/.SogouIME</string>
+
+com.sohu.inputmethod.sogou/.SogouIME是新增进去的，以：(分号间隔)
+注：不一定是这个文件defaults.xml，主要看字段 def_enable_input_methods，网上还有说在 customize.xml里面的
+
+
+
+
+
+
+二、设置搜狗输入法为默认输入法
+
+修改 frameworks/base/packages/SettingsProvider/src/com/android/providers/settings/DatabaseHelper.java
+
+private void loadSecureSettings(SQLiteDatabase db) 方法里面加一行 loadStringSetting(stmt, Settings.Secure.DEFAULT_INPUT_METHOD, R.string.def_enable_input_methods);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

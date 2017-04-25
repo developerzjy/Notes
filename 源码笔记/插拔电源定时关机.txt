@@ -1,0 +1,134 @@
+实现拔掉充电线后定时关机
+
+*********************************************************************************************************************************************
+
+package com.android.settings.shutdown;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+
+public class PowerStateChangeReceiver extends BroadcastReceiver {
+
+	private static final String TAG = "PowerStateChangeReceiver";
+	private static final boolean IS_DEBUG = true;
+	private static final int SHUTDOWN_TIME = 5; // In seconds
+
+	private static boolean isPowerConnect = true;
+	private static int offSecond = 0;
+
+	private Context context;
+
+	@Override
+	public void onReceive(Context context, Intent intent) {
+
+		this.context = context;
+
+		if (Intent.ACTION_POWER_CONNECTED.equals(intent.getAction())) {
+			logD("BroadcastReceiver onReceive -> power connect.");
+			isPowerConnect = true;
+		} else if (Intent.ACTION_POWER_DISCONNECTED.equals(intent.getAction())) {
+			logD("BroadcastReceiver onReceive -> power disconnect.");
+			isPowerConnect = false;
+			new Thread(new shutdownThread()).start();
+		}
+	}
+
+	public void shutdown(Context context) {
+		try {
+			Intent intent = new Intent(Intent.ACTION_REQUEST_SHUTDOWN);
+
+			intent.putExtra(Intent.EXTRA_KEY_CONFIRM, false);
+
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			context.startActivity(intent);
+			logD("start shutdown.");
+		} catch (Exception e) {
+			Log.e(TAG, "::: Exception, shutdown exception: " + e);
+		}
+	}
+
+	public class shutdownThread implements Runnable {
+
+		@Override
+		public void run() {
+			while (!isPowerConnect) {
+				try {
+					Thread.sleep(1000);
+					offSecond++;
+					if (offSecond == SHUTDOWN_TIME) {
+						Message message = new Message();
+						message.what = 1;
+						shutdownHandler.sendMessage(message);
+					}
+				} catch (InterruptedException e) {
+					Log.e(TAG, "::: Exception, shutdown threat exception: " + e);
+				}
+			}
+			offSecond = 0;
+			logD("shutdown thread end.");
+		}
+	}
+
+	final Handler shutdownHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				logD("handler receive shutdown message.");
+				if (!isPowerConnect) {
+					shutdown(context);
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
+
+	private void logD(String msg) {
+		if (IS_DEBUG) {
+			Log.d(TAG, "::: " + msg);
+		}
+	}
+}
+
+***************************************************************************************************************************************************************
+
+<receiver android:name="com.android.settings.shutdown.PowerStateChangeReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+</receiver>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
