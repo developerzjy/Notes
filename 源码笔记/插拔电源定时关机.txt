@@ -157,11 +157,6 @@ public class PowerStateChangeReceiver extends BroadcastReceiver {
 			setAlarm();
 		}
 
-		if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
-			logD("-------------------- boot completed.");
-			cancelAlarm();
-		}
-
 		if (DO_SHUTDOWN.equals(intent.getAction())) {
 			logD("BroadcastReceiver onReceive -> do shutdown.");
 			shutdown();
@@ -242,6 +237,7 @@ public class PowerStateChangeReceiver extends BroadcastReceiver {
 3.分析framework源码
 ***************************************************************************************************************************************************************
 (1)首先找个切入口
+就从接收的ACTION_POWER_CONNECTED广播开始，看看这个广播是从哪发出的
 源码目录 cd 到frameworks
 grep命令搜索  grep -irn "Intent.ACTION_POWER_CONNECTED" *
 定位到代码 frameworks/base/services/core/java/com/android/server/BatteryService.java 的processValuesLocked(参数)方法
@@ -252,7 +248,7 @@ grep命令搜索  grep -irn "Intent.ACTION_POWER_CONNECTED" *
 -> 看日志输出的 Install: out/target/product/(这里是自己的产品名)/system/framework/services.jar 
 -> 将 out/目录下编出来的services.jar  push 到 设备的system/framework/services.jar (可能需要先adb root + adb remount) 
 -> adb reboot重启设备并看log 
--> 结论：是这里
+-> 结论：ACTION_POWER_CONNECTED广播是从这里发出的
 
 (2)看代码 + 打log
 
@@ -292,6 +288,10 @@ cd usb
 cat online
 
 非充电状态可以通过wifi连接adb查看
+
+
+---------》最终结果：状态记录的不对由驱动修改，步骤2用Alarm的代码基本满足功能需求
+
 
 
 
