@@ -1,0 +1,5 @@
+借助sdk工具 hierarchyviewer 找到显示号码的view位置
+packages/apps/IncallUI  项目的primary_call_info.xml   ->  id=name
+
+
+修改这个项目后编译（单独编译模块）packages/apps/Dialer 项目

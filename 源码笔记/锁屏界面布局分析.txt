@@ -1,0 +1,20 @@
+参考  http://blog.csdn.net/zrf1335348191/article/details/54377042
+
+
+-------------------------------------------
+
+需求：不现实左右下角的电话和相机图标
+
+修改：KeyguardBottomAreaView.java
+updateCameraVisibility 方法    隐藏相机
+updateLeftAffordanceIcon 方法  隐藏电话
+
+
+
+
+-------------------------------------
+frameworks/base/packages/SystemUI  项目
+
+布局在 keyguard_bottom_area.xml
+相机view的id = camera_button
+电话view的id = left_button 

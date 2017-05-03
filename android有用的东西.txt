@@ -3,7 +3,19 @@
 查看当前显示的activity
 adb shell dumpsys activity | grep "mFocusedActivity"
 
+----------------------------------------------------------------
+adb通过wifi连接设备
+电脑手机连接同一个wifi
+电脑ping手机能ping通（手机ip可通过wifi高级什么的查看）
 
+先通过USB先连接手机和电脑执行命令 adb tcpip 5555
+断开USB连接
+adb connect 手机ip
+adb devices 查看是否连接
+adb disconnect断开连接
+
+例如查看设备当前的充电状态可以通过wifi连接adb后查看 /sys/class/power_supply/路径下的相关文件 (cat命令查看文件的值)
+----------------------------------------------------------------
 
 看调用的类名和方法名(两种方法)
 Slog.d("",":::::类名:"+(new Throwable()).getStackTrace()[1].getClassName()+"  方法名:"+(new Throwable()).getStackTrace()[1].getMethodName());
@@ -29,5 +41,4 @@ grep -rn "PRODUCT_POLICY := android.policy_phone | PRODUCT_POLICY:=android.polic
 创建文件
 touch 文件名
 
-grep -rn --exclude-dir=*/.git 'PRODUCT_CHARACTERISTICS' ./*
 

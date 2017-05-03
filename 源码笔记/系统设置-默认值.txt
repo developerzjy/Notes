@@ -1,0 +1,15 @@
+
+
+网上资料
+--------------------------------------------
+
+在做Android系统时，每个公司对其都有其自己的定制，比如默认用什么输入法，用什么语言，是否开启ADB调试等，这些当你第一次开机的时候，都会获取这些默认值然后去设置。那么这些放在哪呢，如何去操作呢？
+msm8x12\frameworks\base\core\Java\android\provider下方的就是数据库操作封装，Android系统提供大量的SettingsProvider，除本处说的Settings，常用的还有管理联系人（ContactsContract）、多媒体数据（MediaStore）等。
+对于如何使用，就是在你封装的SettingsProvider中使用Settings.System.putXXX()；Settings.System.getXXX()来进行设置和查询。
+ 
+对于我们此处要说的Settings，它的默认值在frameworks/base/packages/SettingsProvider/res/values/defaults.xml
+这些默认值只是一些整数值或者字符串（第一次开机要用到的值用于初始化数据库，等数据库形成了，这些值就没用了）。
+如何将其存到数据库呢，在frameworks/base/packages/SettingsProvider/src/com/android/providers/settings/DatabaseHelper.java
+就是对defaults.xml所有初始值的进行初始化数据库，每一个值都存于一个对应的属性中。
+对于要设置的属性定义在哪？
+在frameworks/base/packages/SettingsProvider/src/com/android/providers/Settings.java定义，都是字符串常量。这样数据库中就形成了“属性--值”这样的映射存储。
