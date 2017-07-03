@@ -40,5 +40,10 @@ grep -rn "PRODUCT_POLICY := android.policy_phone | PRODUCT_POLICY:=android.polic
 
 创建文件
 touch 文件名
+--------------------------------------------------------------------
+命令释放内存（模拟内存不足app资源被回收:参考）
+adb shell am kill 包名  （注意：应用在后台的时候才有用）
+
+adb shell pm list packages查看设备安装的应用列表
 
 

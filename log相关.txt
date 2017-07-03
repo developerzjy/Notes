@@ -1,0 +1,11 @@
+手机的默认的日志目录：
+ /data/local/tmp/*
+/data/tmp/*
+/data/system/usagestats/*
+/data/system/appusagestates/*
+/data/system/dropbox/*
+/data/tombstones/*
+/data/anr/*
+logcat的日志在
+/dev/log/main
+有/data/local/log目录的，可以保存3-4天的log。
