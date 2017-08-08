@@ -1,0 +1,84 @@
+从 CSDN上面 AigeStudio 的博客学习做的一些笔记
+文章标题：论Android应用进程长存的可行性
+作者：AigeStudio
+地址：http://blog.csdn.net/aigestudio/article/details/51348408
+**********************************************************************************************************
+**********************************************************************************************************
+
+adb shell ps 命令查看进程，grep过滤
+
+上面的命令可以得到需要进程的PID，根据PID可以用下面的命令查看进程的adj值
+
+adb shell
+cat /proc/PID/oom_adj   // 注意这里的PID是上面的命令获取到的值
+--------------------------------------
+为什么要看adj值：
+android系统杀进程会遵循一套规则,系统在资源吃紧的情况下该杀掉哪些进程，具体的决定因素由进程的Importance等级以及adj值决定
+
+Importance等级与adj值在ActivityManagerService中被关联起来，相较于Importance等级而言adj值可以赋予我们更多的参考价值，
+从上述adj值的定义中我们可以看到，值越小优先级越高，比如native进程的adj值为－17，对于这个adj值的进程来说，系统根本不
+会动它一分一毫，实质上当进程的adj值取到2时系统就很少会因为其它原因而去杀死它。在平时的开发中，我们可以通过查看节点目
+录proc下的相关进程来获取其相应的adj值
+--------------------------------------
+
+
+
+
+
+进程常驻
+除了网上一些常见的（个人感觉都不是很靠谱的）方法外，这里记录一下AigeStudio的博客里面介绍的保活方法
+网上常见方法不靠谱的一些原因：深度定制化，代表厂商小米，魅族
+例如AlarmManager保活不靠谱的原因：某些手机可以在清理应用时将应用置为STOPPED状态而言，即便设置AlarmManager也是没卵
+用的（有些系统广播收不到也是因为STOPPED状态被重置，有些深度定制强行停止也会重置STOPPED状态值）
+
+
+1.提权保活
+
+需要知识点：Notification
+            在Android 4.3以前我们可以通过构造一个空的Notification，这时通知栏并不会显示我们发送的Notification
+            但是4.3以后谷歌不再允许构造空的Notification
+实现方法：通过Notification将服务至于前台可以实现保活（网上常见的方法），但是状态栏显示一条可见的通知。。。
+          博客里面给的优化方法，另起一个service根据Notification的标志值将通知取消
+验证：比较取消通知前后进程的adj值
+缺点：在一些手机上，发送前台通知会唤醒设备并点亮屏幕，这样会很耗电而且在电量管理界面系统还会统计到你的进程点亮屏幕的次数，不是很好。
+
+
+
+2.与系统service捆绑
+博客原文介绍：某些系统Service一旦绑定就像拥有开了挂一样的权限，这在大部分机型包括某些深度定制系统上简直就像BUG般存在
+
+实现方法：
+以最BUG的NotificationListenerService为例
+（1）定义一个继承NotificationListenerService的类（然后什么都不用做）
+（2）在AndroidManifest中声明，为了区别主进程，我将该Service置于一个单独的进程中（android:process=":service"）
+（3）完成步骤2之后是看不到这个进程的，NotificationListenerService是个特殊的系统Service，需要非常特别的权限，需要手
+动在“设置－提示音和通知－通知使用权限”中打开，注意这个“通知使用权限”选项，如果你设备里没有需要使用通知使用权限
+换句话说就是没有含有NotificationListenerService的应用的话，这个设置选项是不可见的
+（4）将需要保活的service弄到NotificationListenerService相同的进程下（android:process=":service"）
+
+
+
+3.（博客原文）以全家桶的方式去相互唤醒相互拉活是目前来说最稳定最安全的方式，各大牛逼点的应用都有类似行为，当然对于
+很多小应用来说，没有BAT那样的实力，不过你依然可以使用一些第三方的网络服务，比如XX推送，一旦设备上的某应用通过XX的推
+送获得消息时，是可以间接唤醒其它应用并推送与其相关的消息的。
+
+
+
+
+-------------------------------------------------------------------------------
+结合上面的记录分析bigbang项目笔记
+1.项目里面有个JobService的使用，百度一下能搜出一些进程保活相关的东西
+(1)JobService和JobScheduler，类似AlarmManager，网上有这样一段话
+      如果想在将来达到一定条件下执行某项任务时，可以在一个实现了JobService的子类的onStartJob方法中执行这项任务，
+      使用JobInfo的Builder方法来设定条件并和实现了JobService的子类的组件名绑定，然后调用系统服务JobScheduler的
+      schedule方法。这样，即便在执行任务之前应用程序进程被杀，也不会导致任务不会执行，因为系统服务JobScheduler
+      会使用bindServiceAsUser的方法把实现了JobService的子类服务启动起来，并执行它的onStartJob方法。
+(2)BigBang项目里面有个KeepAliveWatcher.java类里面有个keepAlive()方法估计就是这个项目的保活手段了
+
+2.
+
+
+
+
+
+

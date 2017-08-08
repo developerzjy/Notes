@@ -46,4 +46,36 @@ adb shell am kill 包名  （注意：应用在后台的时候才有用）
 
 adb shell pm list packages查看设备安装的应用列表
 
+---------------------------------------------------------------------
+查看应用程序最高可用内存是多少
+int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);  
+Log.d("TAG", "Max memory is " + maxMemory + "KB"); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

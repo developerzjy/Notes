@@ -1,0 +1,123 @@
+学习郭霖的博客的一些笔记，精简一下，方便自己查阅
+
+添加依赖  compile 'com.github.bumptech.glide:glide:3.7.0'
+网络权限  <uses-permission android:name="android.permission.INTERNET" />
+
+基本用法，with load into 三步走：Glide.with(this).load(url).into(imageView);
+     其中url可以是如下资源
+     --------------------------------------------------------------------
+     // 网络图片
+     String url = "http://cn.bing.com/az/hprichbg/rb/Dongdaemun_ZH-CN10736487148_1920x1080.jpg";
+     Glide.with(this).load(url).into(imageView);
+
+     // 加载本地图片
+     File file = new File(getExternalCacheDir() + "/image.jpg");
+     Glide.with(this).load(file).into(imageView);
+
+     // 加载应用资源
+     int resource = R.drawable.image;
+     Glide.with(this).load(resource).into(imageView);
+
+     // 加载二进制流
+     byte[] image = getImageBytes();
+     Glide.with(this).load(image).into(imageView);
+
+     // 加载Uri对象
+     Uri imageUri = getImageUri();
+     Glide.with(this).load(imageUri).into(imageView);
+     -------------------------------------------------------------------------
+在基本的三步走上的扩展
+Glide.with(this)
+     .load(url)
+	 .asBitmap() //只允许加载静态图片，对应的.asGif()为动态图片，什么都不加的话Glide会默认判断
+     .placeholder(R.drawable.loading) //占位图
+	 .error(R.drawable.error) //异常占位图
+	 .diskCacheStrategy(DiskCacheStrategy.NONE) //禁用缓存功能
+	 .override(100, 100) //将图片压缩至100x100像素，在绝大多数情况下我们都是不需要指定图片大小的，因为Glide会自动根据ImageView的大小来决定图片的大小
+     .into(imageView);
+	 
+	 // 其中override(100, 100)压缩图片的原理见：http://blog.csdn.net/guolin_blog/article/details/9316683
+	 
+	 
+	 
+========================================================================================================================================================
+预加载 preload()方法
+preload()方法有两个方法重载，一个不带参数，表示将会加载图片的原始尺寸，另一个可以通过参数指定加载图片的宽和高。
+=================================================================================================
+     Glide.with(this)
+          .load(url)
+          .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+          .preload();
+	 需要注意的是，我们如果使用了preload()方法，最好要将diskCacheStrategy的缓存策略指定成DiskCacheStrategy.SOURCE。因为preload()方法默认是预加载的原始图片大小，而into()方法则默认会根据ImageView控件的大小来动态决定加载图片的大小。因此，如果不将diskCacheStrategy的缓存策略指定成DiskCacheStrategy.SOURCE的话，很容易会造成我们在预加载完成之后再使用into()方法加载图片，却仍然还是要从网络上去请求图片这种现象。
+     调用了预加载之后，我们以后想再去加载这张图片就会非常快了，因为Glide会直接从缓存当中去读取图片并显示出来，代码如下所示
+	 
+     Glide.with(this)
+          .load(url)
+          .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+          .into(imageView);
+==================================================================================================	 
+	 	 
+downloadOnly()方法
+-------------------------------------------------------------
+public void downloadImage(View view) {
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                String url = "http://cn.bing.com/az/hprichbg/rb/TOAD_ZH-CN7336795473_1920x1080.jpg";
+                final Context context = getApplicationContext();
+                FutureTarget<File> target = Glide.with(context)
+                                                 .load(url)
+                                                 .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+                final File imageFile = target.get();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context, imageFile.getPath(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }).start();
+}	 
+	 
+==================================================================================================	 
+	  
+Glide更多用法
+
+     Glide默认是包含淡入淡出动画的时间为300ms(毫秒),我们可以修改这个动画的时间	 
+.crossFade(5000) //动画时间
+.dontAnimate() //取消动画
+
+----------------------------------------------------
+ 网络上很多文章上都是从一篇译文里面拷贝过来的,里面说Glide可以加载本地视频,但是那篇译文漏翻译一句了,Glide只会加载本地视频的第一帧,也就是缩略图,而且其实加载缩略图的时候也无需转化为Uri,直接把File丢进去就行了
+ mVideoFile = new File(Environment.getExternalStorageDirectory(), "xiayu.mp4");
+ Glide.with(this).load(mVideoFile).placeholder(R.mipmap.place).error(R.mipmap.icon_photo_error).into(mIv);
+	 
+----------------------------------------------------
+Glide的缓存资源分为两种:
+1.原图(SOURCE) :原始图片
+2.处理图(RESULT) :经过压缩和变形等处理后的图片	 
+	 
+Glide默认是会在内存中缓存处理图(RESULT)的.
+可以通过调用skipMemoryCache(true)来设置跳过内存缓存 
+	 
+Glide磁盘缓存策略分为四种,默认的是RESULT(默认值这一点网上很多文章都写错了,但是这一点很重要):
+1.ALL:缓存原图(SOURCE)和处理图(RESULT)
+2.NONE:什么都不缓存
+3.SOURCE:只缓存原图(SOURCE)
+4.RESULT:只缓存处理图(RESULT) —默认值	 
+	 
+	 
+更多缓存相关见 夏雨_ 博客：http://blog.csdn.net/yulyu/article/details/55096713 
+
+更多用法
+http://blog.csdn.net/yulyu/article/
+	 
+	 
+	 
+	 
+	 
+	 

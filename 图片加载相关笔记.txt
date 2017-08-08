@@ -1,0 +1,105 @@
+﻿Android高效加载大图、多图解决方案，有效避免程序OOM
+http://blog.csdn.net/guolin_blog/article/details/9316683
+
+
+---------------------------------------------------------------------
+获取图片大小的技巧
+     BitmapFactory.Options options = new BitmapFactory.Options();  
+     options.inJustDecodeBounds = true;  
+     BitmapFactory.decodeResource(getResources(), R.id.myimage, options);  
+     int imageHeight = options.outHeight;  
+     int imageWidth = options.outWidth;  
+     String imageType = options.outMimeType; 
+解释：为了避免OOM异常，最好在解析每张图片的时候都先检查一下图片的大小，除非你非常信任图片的来源，保证这些图片都不会超出你程序的可用内存。
+
+BitmapFactory这个类提供了多个解析方法(decodeByteArray, decodeFile, decodeResource等)用于创建Bitmap对象，我们应该根据图片的来源选择合适的方法。比如SD卡中的图片可以使用decodeFile方法，网络上的图片可以使用decodeStream方法，资源文件中的图片可以使用decodeResource方法。这些方法会尝试为已经构建的bitmap分配内存，这时就会很容易导致OOM出现。为此每一种解析方法都提供了一个可选的BitmapFactory.Options参数，将这个参数的inJustDecodeBounds属性设置为true就可以让解析方法禁止为bitmap分配内存，返回值也不再是一个Bitmap对象，而是null。虽然Bitmap是null了，但是BitmapFactory.Options的outWidth、outHeight和outMimeType属性都会被赋值。这个技巧让我们可以在加载图片之前就获取到图片的长宽值和MIME类型，从而根据情况对图片进行压缩。
+-----------------------------------------------------------------------
+加载图片
+    final BitmapFactory.Options options = new BitmapFactory.Options();  
+    options.inSampleSize = 4;  //一张2048*1536像素的图片，将inSampleSize的值设置为4，就可以把这张图片压缩成512*384像素
+    Bitmap bt = BitmapFactory.decodeResource(res, resId, options);  
+
+
+------------------------------------------------------------------------------
+****************图片缓存技术
+------------------------------------------------------------------------------
+
+内存缓存技术对那些大量占用应用程序宝贵内存的图片提供了快速访问的方法。其中最核心的类是LruCache (此类在android-support-v4的包中提供) 。这个类非常适合用来缓存图片，它的主要算法原理是把最近使用的对象用强引用存储在 LinkedHashMap 中，并且把最近最少使用的对象在缓存值达到预设定值之前从内存中移除。（不用自己考虑移除问题）
+
+代码示例
+----------------------------------------------------------------------------
+//缓存
+private LruCache<String, Bitmap> mMemoryCache;  
+  
+@Override  
+protected void onCreate(Bundle savedInstanceState) {  
+    // 获取到可用内存的最大值，使用内存超出这个值会引起OutOfMemory异常。  
+    // LruCache通过构造函数传入缓存值，以KB为单位。  
+    int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);  
+    // 使用最大可用内存值的1/8作为缓存的大小。  
+    int cacheSize = maxMemory / 8;  
+    mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {  
+        @Override  
+        protected int sizeOf(String key, Bitmap bitmap) {  
+            // 重写此方法来衡量每张图片的大小，默认返回图片数量。  
+            return bitmap.getByteCount() / 1024;  
+        }  
+    };  
+}  
+  
+public void addBitmapToMemoryCache(String key, Bitmap bitmap) {  
+    if (getBitmapFromMemCache(key) == null) {  
+        mMemoryCache.put(key, bitmap);  
+    }  
+}  
+  
+public Bitmap getBitmapFromMemCache(String key) {  
+    return mMemoryCache.get(key);  
+}  
+-----------------------------------------------------------
+
+//使用缓存
+public void loadBitmap(int resId, ImageView imageView) {  
+    final String imageKey = String.valueOf(resId);  
+    final Bitmap bitmap = getBitmapFromMemCache(imageKey);  
+    if (bitmap != null) {  //有缓存的时候
+        imageView.setImageBitmap(bitmap);  
+    } else {  
+        //没有缓存的情况
+    }  
+}  
+----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

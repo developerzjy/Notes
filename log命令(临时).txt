@@ -1,0 +1,6 @@
+adb logcat 每b radio
+adb logcat 每b system
+adb logcat 每b events
+adb logcat 每b main
+
+adb logcat -vtime 每b radio system events main > log.txt
