@@ -1,0 +1,241 @@
+
+这里分为三部分：网络相关的基础知识，android的HttpURLConnect的用法，Volley框架
+
+
+
+***********************************************************************************************************
+第一部分：相关的基础知识
+***********************************************************************************************************
+
+http，tcp，socket的概念
+--------------------------------------------------
+来自网上的一个总结
+我们在传输数据时，可以只使用（传输层）TCP/IP协议，但是那样的话，如果没有应用层，便无法识别数据内容，如果想要使传输的数据有意义，则必须使用到应用层协议，应用层协议有很多，比如HTTP、FTP、TELNET等，也可以自己定义应用层协议。WEB使用HTTP协议作应用层协议，以封装HTTP文本信息，然后使用TCP/IP做传输层协议将它发到网络上。
+1)Socket是一个针对TCP和UDP编程的接口，你可以借助它建立TCP连接等等。而TCP和UDP协议属于传输层 。
+  而http是个应用层的协议，它实际上也建立在TCP协议之上。 
+ (HTTP是轿车，提供了封装或者显示数据的具体形式；Socket是发动机，提供了网络通信的能力。)
+2）Socket是对TCP/IP协议的封装，Socket本身并不是协议，而是一个调用接口（API），通过Socket，我们才能使用TCP/IP协议。Socket的出现只是使得程序员更方便地使用TCP/IP协议栈而已，是对TCP/IP协议的抽象，从而形成了我们知道的一些最基本的函数接口。
+
+表示层和应用层--   HTTP协议
+会话层--
+传输层--           TCP协议
+网络层--           IP协议
+数据链路层--
+物理层--   
+
+----------------------------------------------------
+精简一下上面的总结：
+TCP是传输层协议，主要负责传输数据  （三次握手四次挥手在这一层）
+http是应用层协议，负责数据的包装处理，是在TCP基础上实现的  （HTTPS在HTTP的基础上加入了SSL协议，暂时理解为HTTP的安全版）
+Socket是一种实现TCP协议的接口，可以使用Socket通过编程实现TCP协议
+------------------------------------------------------
+
+
+
+
+
+
+
+***********************************************************************************************************
+第二部分：HttpURLConnect的用法
+***********************************************************************************************************
+HTTP协议最常用的有GET请求和POST请求，HttpURLConnect使用的基本步骤
+1.指定一个URL, GET请求可以在URL中带键值对参数，POST请求键值对在请求体中
+2.指定请求方式，conn.setRequestMethod("GET"); 或 conn.setRequestMethod("POST");  //get是默认方式，可以不写
+3.通过一系列set方法设置参数，POST需要设置请求体
+4.通过conn.connect();建立TCP连接，然后InputStream is = conn.getInputStream();获取返回数据（getInputStream里面会调用connect，所以之前的conn.connect()可以不写）
+5.conn.disconnect();断开连接
+
+网上的示例代码
+==================================================================
+==================================================================
+if (NETWORK_GET.equals(action)) {
+                    //发送GET请求
+                    url = new URL("http://192.168.31.200:8080/HttpServer/MyServlet?name=孙群&age=27");
+                    conn = (HttpURLConnection) url.openConnection();
+                    //HttpURLConnection默认就是用GET发送请求，所以下面的setRequestMethod可以省略
+                    conn.setRequestMethod("GET");
+                    //HttpURLConnection默认也支持从服务端读取结果流，所以下面的setDoInput也可以省略
+                    conn.setDoInput(true);
+                    //用setRequestProperty方法设置一个自定义的请求头:action，由于后端判断
+                    conn.setRequestProperty("action", NETWORK_GET);
+                    //禁用网络缓存
+                    conn.setUseCaches(false);
+                    //获取请求头
+                    requestHeader = getReqeustHeader(conn);
+                    //在对各种参数配置完成后，通过调用connect方法建立TCP连接，但是并未真正获取数据
+                    //conn.connect()方法不必显式调用，当调用conn.getInputStream()方法时内部也会自动调用connect方法
+                    conn.connect();
+                    //调用getInputStream方法后，服务端才会收到请求，并阻塞式地接收服务端返回的数据
+                    InputStream is = conn.getInputStream();
+                    //将InputStream转换成byte数组,getBytesByInputStream会关闭输入流
+                    responseBody = getBytesByInputStream(is);
+                    //获取响应头
+                    responseHeader = getResponseHeader(conn);
+                } else if (NETWORK_POST_KEY_VALUE.equals(action)) {
+                    //用POST发送键值对数据
+                    url = new URL("http://192.168.31.200:8080/HttpServer/MyServlet");
+                    conn = (HttpURLConnection) url.openConnection();
+                    //通过setRequestMethod将conn设置成POST方法
+                    conn.setRequestMethod("POST");
+                    //调用conn.setDoOutput()方法以显式开启请求体
+                    conn.setDoOutput(true);
+                    //用setRequestProperty方法设置一个自定义的请求头:action，由于后端判断
+                    conn.setRequestProperty("action", NETWORK_POST_KEY_VALUE);
+                    //获取请求头
+                    requestHeader = getReqeustHeader(conn);
+                    //获取conn的输出流
+                    OutputStream os = conn.getOutputStream();
+                    //获取两个键值对name=孙群和age=27的字节数组，将该字节数组作为请求体
+                    requestBody = new String("name=孙群&age=27").getBytes("UTF-8");
+                    //将请求体写入到conn的输出流中
+                    os.write(requestBody);
+                    //记得调用输出流的flush方法
+                    os.flush();
+                    //关闭输出流
+                    os.close();
+                    //当调用getInputStream方法时才真正将请求体数据上传至服务器
+                    InputStream is = conn.getInputStream();
+                    //获得响应体的字节数组
+                    responseBody = getBytesByInputStream(is);
+                    //获得响应头
+                    responseHeader = getResponseHeader(conn);
+                } else if (NETWORK_POST_XML.equals(action)) {
+                    //用POST发送XML数据
+                    url = new URL("http://192.168.31.200:8080/HttpServer/MyServlet");
+                    conn = (HttpURLConnection) url.openConnection();
+                    //通过setRequestMethod将conn设置成POST方法
+                    conn.setRequestMethod("POST");
+                    //调用conn.setDoOutput()方法以显式开启请求体
+                    conn.setDoOutput(true);
+                    //用setRequestProperty方法设置一个自定义的请求头:action，由于后端判断
+                    conn.setRequestProperty("action", NETWORK_POST_XML);
+                    //获取请求头
+                    requestHeader = getReqeustHeader(conn);
+                    //获取conn的输出流
+                    OutputStream os = conn.getOutputStream();
+                    //读取assets目录下的person.xml文件，将其字节数组作为请求体
+                    requestBody = getBytesFromAssets("person.xml");
+                    //将请求体写入到conn的输出流中
+                    os.write(requestBody);
+                    //记得调用输出流的flush方法
+                    os.flush();
+                    //关闭输出流
+                    os.close();
+                    //当调用getInputStream方法时才真正将请求体数据上传至服务器
+                    InputStream is = conn.getInputStream();
+                    //获得响应体的字节数组
+                    responseBody = getBytesByInputStream(is);
+                    //获得响应头
+                    responseHeader = getResponseHeader(conn);
+                } else if (NETWORK_POST_JSON.equals(action)) {
+                    //用POST发送JSON数据
+                    url = new URL("http://192.168.31.200:8080/HttpServer/MyServlet");
+                    conn = (HttpURLConnection) url.openConnection();
+                    //通过setRequestMethod将conn设置成POST方法
+                    conn.setRequestMethod("POST");
+                    //调用conn.setDoOutput()方法以显式开启请求体
+                    conn.setDoOutput(true);
+                    //用setRequestProperty方法设置一个自定义的请求头:action，由于后端判断
+                    conn.setRequestProperty("action", NETWORK_POST_JSON);
+                    //获取请求头
+                    requestHeader = getReqeustHeader(conn);
+                    //获取conn的输出流
+                    OutputStream os = conn.getOutputStream();
+                    //读取assets目录下的person.json文件，将其字节数组作为请求体
+                    requestBody = getBytesFromAssets("person.json");
+                    //将请求体写入到conn的输出流中
+                    os.write(requestBody);
+                    //记得调用输出流的flush方法
+                    os.flush();
+                    //关闭输出流
+                    os.close();
+                    //当调用getInputStream方法时才真正将请求体数据上传至服务器
+                    InputStream is = conn.getInputStream();
+                    //获得响应体的字节数组
+                    responseBody = getBytesByInputStream(is);
+                    //获得响应头
+                    responseHeader = getResponseHeader(conn);
+==================================================================
+==================================================================
+
+
+
+
+
+
+
+
+***********************************************************************************************************
+第三部分：Volley框架
+***********************************************************************************************************
+----------------------
+基本用法
+1. 创建一个RequestQueue对象。
+2. 创建一个Request对象。（StringRequest，JsonObjectRequest，JsonArrayRequest，ImageRequest）
+3. 将StringRequest对象添加到RequestQueue里面。
+--------------------------------------------------------------------------------------------------------------
+StringRequest的示例代码
+RequestQueue mQueue = Volley.newRequestQueue(context); 
+//get方式请求
+StringRequest stringRequest = new StringRequest("http://www.baidu.com",  
+                        new Response.Listener<String>() {  
+                            @Override  
+                            public void onResponse(String response) {  
+                                Log.d("TAG", response);  
+                            }  
+                        }, new Response.ErrorListener() {  
+                            @Override  
+                            public void onErrorResponse(VolleyError error) {  
+                                Log.e("TAG", error.getMessage(), error);  
+                            }  
+                        }); 
+mQueue.add(stringRequest); 
+
+
+//post请求
+StringRequest stringRequest = new StringRequest(Method.POST, url,  listener, errorListener) {  
+    @Override  
+    protected Map<String, String> getParams() throws AuthFailureError {  
+	    //这里配置参数
+        Map<String, String> map = new HashMap<String, String>();  
+        map.put("params1", "value1");  
+        map.put("params2", "value2");  
+        return map;  
+    }  
+};  
+-----------------------------------------------------------------------------------------------------------------------
+ImageLoader用法参考郭霖博客 http://blog.csdn.net/guolin_blog/article/details/17482165
+NetworkImageView控件同样参考上面的博客，使用这种方式加载图片会自动计算自身宽高来对图片进行压缩
+
+自定义Request见：http://blog.csdn.net/guolin_blog/article/details/17612763
+
+
+Volley的数据都是缓存在内存的，所以不适合大文件或者大图片的下载
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
