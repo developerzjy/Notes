@@ -1,0 +1,142 @@
+
+1.基本用法
+----------------------------------
+public class Person{
+
+　　　　private String name;  //属性都定义成String类型，并且属性名要和Json数据中的键值对的键名完全一样
+
+　　　　private String age;
+
+　　　　...//提供所有属性的getter和setter方法
+
+}
+
+String jsonData = "{'name':'John', 'age':20}";
+Gson gson = new Gson();
+Person person = gson.fromJson(jsonData,Person.class);
+--------------------------------------
+
+
+
+
+
+2.单条嵌套
+---------------------------------------
+{"name":"John", "age":20,"grade":{"course":"English","score":100,"level":"A"}}
+
+使用内部类(这里省略get和set等方法)
+class Student {
+     private String name;
+     private String age;
+ 
+     private Grade grade;
+ 
+     public class Grade { // 内部类要定义成public的
+         private String course;
+         private String score;
+         private String level;
+     }
+} 
+
+Gson gson = new Gson();
+Person person = gson.fromJson(jsonData,Student.class);
+-----------------------------------------
+
+
+
+
+3.多条json（也就是 jsonArray）
+-------------------------------------
+注：Json数组最外层一定要加"[]"
+方法一：    
+        List<Student> result = gson.fromJson(jsonData, new TypeToken<List<Student>>() {}.getType());
+
+方法二：
+           JsonParser parser = new JsonParser();
+           //将JSON的String 转成一个JsonArray对象
+           JsonArray jsonArray = parser.parse(strByJson).getAsJsonArray();
+
+           Gson gson = new Gson();
+           ArrayList<UserBean> userBeanList = new ArrayList<>();
+
+           //加强for循环遍历JsonArray
+           for (JsonElement user : jsonArray) {
+               //使用GSON，直接转成Bean对象
+               UserBean userBean = gson.fromJson(user, UserBean.class);
+               userBeanList.add(userBean);
+           }
+
+----------------------------------------
+
+
+
+
+
+一些技巧
+------------------------------------------------------
+封装工具类，提供泛型参数
+ class GsonUtil {
+     //将Json数据解析成相应的映射对象
+     public static <T> T parseJsonWithGson(String jsonData, Class<T> type) {
+         Gson gson = new Gson();
+         T result = gson.fromJson(jsonData, type);
+         return result;
+     }
+ 
+ }
+
+使用
+Person person = GsonUtil.parseJsonWithGson(jsonData, Person.class);
+--------------------------------------------------------
+Gson的一般使用要求本地的实体类的属性名一定要和Json的键一一对应，可以使用注解解决这个问题
+原文：http://www.jianshu.com/p/867798e8b627
+
+1.新建注解，就叫Map吧
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Map {
+    String value();
+}
+
+2.用法
+@Map("person_name") String name;
+@Map("person_age") String age;
+@Map("person_sex") String sex;
+***********************************
+Gson原来已经提供了注解 SerializedName
+@SerializedName("person_name") String name;
+@SerializedName("person_age") String age;
+@SerializedName("person_sex") String sex;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
