@@ -1,22 +1,24 @@
+ï»¿
+
+## æ–°å»ºè¿œç¨‹åˆ†æ”¯
+  1. git checkout -b test_branch     å…ˆå»ºç«‹ä¸€ä¸ªæœ¬åœ°åˆ†æ”¯
+  2. git push origin test_branch:test_branch    å°†æœ¬åœ°çš„åˆ†æ”¯æ¨é€åˆ°è¿œç¨‹
+  
+   è¿™æ ·å°±å¯ä»¥è¾¾åˆ°åœ¨è¿œç¨‹å»ºç«‹test_branchåˆ†æ”¯äº†
+
+## åˆ é™¤è¿œç¨‹åˆ†æ”¯
+å¯ä»¥pushä¸€ä¸ªç©ºåˆ†æ”¯åˆ°è¿œç¨‹ï¼šgit push origin :test_branch
+æ­£è§„åšæ³•æ˜¯ï¼šgit push origin --delete test_branch
 
 
-## ĞÂ½¨Ô¶³Ì·ÖÖ§
-  1.git checkout -b test_branch     ÏÈ½¨Á¢Ò»¸ö±¾µØ·ÖÖ§
-  2.git push origin test_branch:test_branch    ½«±¾µØµÄ·ÖÖ§ÍÆËÍµ½Ô¶³Ì
-    ÕâÑù¾Í¿ÉÒÔ´ïµ½ÔÚÔ¶³Ì½¨Á¢test_branch·ÖÖ§ÁË
-
-## É¾³ıÔ¶³Ì·ÖÖ§
-  ¿ÉÒÔpushÒ»¸ö¿Õ·ÖÖ§µ½Ô¶³Ì£ºgit push origin :test_branch
-  Õı¹æ×ö·¨ÊÇ£ºgit push origin --delete test_branch
-
-
-## Ìá½»±¾µØĞŞ¸Äµ½Ô¶³Ì·ÖÖ§
-    Õâ¸öÓĞÒ»Ğ©²»Í¬µÄÇé¿ö£¬ËùÒÔÏÈ²»¿´Ìá½»²Ù×÷
-### 1.µ±Ç°±¾µØºÍÔ¶³Ì×´Ì¬£º
-     Ô¶³ÌÓĞÁ½¸ö·ÖÖ§£ºremotes/origin/master
+## æäº¤æœ¬åœ°ä¿®æ”¹åˆ°è¿œç¨‹åˆ†æ”¯
+    è¿™ä¸ªæœ‰ä¸€äº›ä¸åŒçš„æƒ…å†µï¼Œæ‰€ä»¥å…ˆä¸çœ‹æäº¤æ“ä½œ
+	
+### 1.å½“å‰æœ¬åœ°å’Œè¿œç¨‹çŠ¶æ€ï¼š
+     è¿œç¨‹æœ‰ä¸¤ä¸ªåˆ†æ”¯ï¼šremotes/origin/master
                      remotes/origin/test_branch
-	 ±¾µØÓĞÒ»¸ö·ÖÖ§£ºlocal_branch
+	 æœ¬åœ°æœ‰ä¸€ä¸ªåˆ†æ”¯ï¼šlocal_branch
 	 
-### 2.½¨Á¢·ÖÖ§
-     »ùÓÚ±¾µØµÄ local_branch ·ÖÖ§´´½¨ĞÂ·ÖÖ§
-     git checkout -b branch_name
+### 2.å»ºç«‹åˆ†æ”¯
+     åŸºäºæœ¬åœ°çš„ local_branch åˆ†æ”¯åˆ›å»ºæ–°åˆ†æ”¯
+     `git checkout -b branch_name`
