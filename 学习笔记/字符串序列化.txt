@@ -1,0 +1,69 @@
+public static void main(String[] args) throws Exception {  
+        List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();  
+        HashMap<String, String> map = new HashMap<String, String>();  
+        map.put("number", "123");  
+        map.put("name", "test");  
+        list.add(map);  
+        HashMap<String, String> map2 = new HashMap<String, String>();  
+        map2.put("number", "1232");  
+        map2.put("name", "test2");  
+        list.add(map2);  
+          
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();  
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);  
+        objectOutputStream.writeObject(list);    
+        String serStr = byteArrayOutputStream.toString("ISO-8859-1");  
+        serStr = java.net.URLEncoder.encode(serStr, "UTF-8");  
+          
+        objectOutputStream.close();  
+        byteArrayOutputStream.close();  
+          
+        System.out.println(serStr);  
+                  
+        String redStr = java.net.URLDecoder.decode(serStr, "UTF-8");  
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(redStr.getBytes("ISO-8859-1"));  
+        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);   
+        List<HashMap<String, String>> newList = (List<HashMap<String, String>>)objectInputStream.readObject();   
+        objectInputStream.close();  
+        byteArrayInputStream.close();  
+          
+  
+        for(Map m : newList) {  
+            System.out.println(m.get("number") + " " + m.get("name"));  
+        }  
+    }  
+
+
+
+Ïû³ý¾¯¸æÓÃ
+@SuppressWarnings("unchecked")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

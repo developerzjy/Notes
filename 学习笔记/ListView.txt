@@ -1,0 +1,8 @@
+使用ConvertView和ViewHolder的优化是针对ListView的Adapter（BaseAdapter）的。这种优化的优点如下：
+1）重用了ConveertView，在很大程度上减少了内存的消耗。通过判断ConvertView是否为NULL，如果是NULL那么就
+需要生成一个新的View出来（通过LayoutInflater生成），绑定数据后显示给用户；如果ConvertView不是NULL，则
+我们需要做的就只有绑定数据并呈现给用户。
+2）由于ListView中的Item往往都是只有一个模板，即整个ListView的所有Item用的都是一套ID，所以我们可以把findViewById()方法
+提取出来，即全程之找一遍ID，这样可以避免让程序不停的做同样的事情。这样做的话通常需要用到另一个内部类（通常写成ViewHolder，在
+这个类中定义Item中需要用到的控件的名称），这样做也可以方便我们调用控件的onClick()事件等等。
+3）综上，这样做不仅减少了项目性能的消耗，也减少了内存的消耗。

@@ -1,0 +1,22 @@
+
+
+## 新建远程分支
+  1.git checkout -b test_branch     先建立一个本地分支
+  2.git push origin test_branch:test_branch    将本地的分支推送到远程
+    这样就可以达到在远程建立test_branch分支了
+
+## 删除远程分支
+  可以push一个空分支到远程：git push origin :test_branch
+  正规做法是：git push origin --delete test_branch
+
+
+## 提交本地修改到远程分支
+    这个有一些不同的情况，所以先不看提交操作
+### 1.当前本地和远程状态：
+     远程有两个分支：remotes/origin/master
+                     remotes/origin/test_branch
+	 本地有一个分支：local_branch
+	 
+### 2.建立分支
+     基于本地的 local_branch 分支创建新分支
+     git checkout -b branch_name

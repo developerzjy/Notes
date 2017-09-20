@@ -1,0 +1,32 @@
+public class MainActivity extends ListActivity {
+    String[] mActivityNames = {"com.zjy.androiddemo.test.TestActivity"};
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setListAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, getActivityName()));
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        String toActivity = mActivityNames[position];
+        try {
+            Class<?> activity = Class.forName(toActivity);
+            Intent intent = new Intent(this, activity);
+            startActivity(intent);
+        } catch (Exception e) {
+            Log.d("MainActivity", "Exception: " + e);
+        }
+    }
+
+    private String[] getActivityName() {
+        int length = mActivityNames.length;
+        String[] activities = new String[length];
+        for (int i = 0; i < length; i++) {
+            String[] temp = mActivityNames[i].split("\\.");
+            activities[i] = temp[temp.length - 1];
+        }
+        return activities;
+    }
