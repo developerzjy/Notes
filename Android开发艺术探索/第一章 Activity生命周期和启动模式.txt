@@ -1,0 +1,118 @@
+### 一、Activity生命周期
+
+#### 生命周期
+- onCreate()  创建
+- onStart() 可见，但是不能交互（界面被显示出来的时候执行的，用户可见，包括有一个activity在他上面，但没有将它完全覆盖，用户可以看到部分activity但不能与它交互）
+- onResume() 前台，可交互
+- onPause()
+- onStop()
+- onDestory()
+
+单纯的弹出Dialog不会回调任何周期，只有Activity才会触发
+
+
+#### Activity切换的时候生命周期的变化
+
+在显示Activity1的时候启动Activity2的log
+onPause: 111 
+onCreate: 222
+onStart: 222 
+onResume: 222
+onStop: 111
+
+然后按返回键的log
+onPause: 222
+onRestart: 111
+onStart: 111
+onResume: 111
+onStop: 222
+onDestroy: 222
+
+**总结：Activity切换的时候先执行当前Activity的onPause，然后执行另一个Activity的周期函数，最后执行当前Activity的其他周期函数。 所以为了让activity2尽快显示出来，在activity1中的一些回收操作放在onStop()里面比较好。**
+
+
+#### Activity异常终止的数据保存
+Activity异常终止，系统会调用onSaveInstanceState来保存当前状态，这个状态在onStop之前调用，当Activity被重新创建后系统会调用onRestoreInstanceState，并把销毁时保存的状态作为参数传递过来，onRestoreInstanceState在onStart之后调用。
+
+另外，系统会默认做一些恢复工作，比如文本框的输入数据，ListView滚动的位置等，这些View相关的状态的保存可以看每个View里面的onSaveInstanceState和onRestoreInstanceState这两个方法的实现。
+
+注：数据的恢复可以在onRestoreInstanceState和onCreate两个方法里面，onRestoreInstanceState的bundle参数不会是空，不用判空，onCreate需要判空（首次创建的时候bundle是空）
+
+#### 旋转屏幕后不让Activity重新创建
+（API 13以上）旋转屏幕如果要让activity不重新创建，需要设置activity的configChanges属性值：orientation和screenSize两个属性
+
+
+
+### 二、Activity启动模式
+
+4种模式：standard, singleTop, singleTask, singleInstance
+
+#### 1.standard 标准模式
+默认模式，**如果使用Application Context启动standard模式的activity会报错，因为新启动的standard模式的activity会默认进入启动它的activity栈中，而Application的Context并没有所谓的栈，所以有问题，Application Context可以指定FLAG_ACTIVITY_NEW_TASK标记位，相当于以singleTask模式启动**
+
+#### 2.singleTop 栈顶复用模式
+位于栈顶不被重新创建的时候会回调onNewIntent方法，通过此方法的参数可以取出当前请求的信息。
+
+#### 3.singleTask
+栈内复用模式，复用并销毁它上面的所有Activity，与singleTop一样回调onNewIntent
+
+#### 4.singleInstance 单实例模式
+会新建一个任务栈
+
+
+### 三、IntentFilter的匹配规则
+IntentFilter用于隐式启动Activity，大概的代码如下：
+
+```
+<activity android:name=".FirstActivity">
+    <intent-filter>
+        <action .../>
+        <category .../>
+        <data .../>
+    </intent-filter>
+</activity>
+```
+
+#### action
+Intent必须指定一个并且指定的必须存在于IntentFilter
+Intent如果指定多个的话只有后面的覆盖前面的设置，也就是只有最后一个进行匹配
+IntentFilter里面可以有多个action
+代码 intent.setAction()
+
+#### category
+可以指定，也可以不指定
+Intent是IntentFilter的子集
+Intent会默认添加一个 android.intent.category.DEFAULT，所以IntentFilter必须定义android.intent.category.DEFAULT
+代码 intent.addCategory()
+
+#### data
+类似action，如果过滤规则中定义了data，那么Intent中必须定义可匹配的data。
+
+#### 最后
+隐式启动activity的时候，可以做一下判断，看是否有activity能够匹配我们的隐式Intent。
+判断方法有两种：采用PackageManager的resolveActivity方法或者Intent的resolveActivity方法，如果它们找不到匹配的Activity就回返回null。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

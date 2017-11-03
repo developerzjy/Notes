@@ -1,0 +1,82 @@
+正常情况下，在Android中多进程是指**一个应用中**存在多个进程的情况，并不是两个应用之间的多进程。
+
+在Android中使用多进程只有一种方法，就是给四大组建指定android:process属性（JNI实现多进程除外）
+例如：
+android:process=":newprocess" 冒号开头，进程名是 包名:newprocess ， 应用私有进程，其他应用无法共享数据 
+android:process="newnew" 没有冒号，进程名是字符串内容，其他应用shareUID和签名相同的话可以共享数据
+
+多进程的问题：
+静态变量和单例对象失效
+线程同步失效
+sharedpreference不可靠，因为sharedpreference不支持两个进程同时进行写操作，所以可能数据丢失
+Application会多次创建等
+
+
+
+### 对象序列化
+两种方式：Serializable和Parcelable两种方式，前者是Java提供的，后者是android自带的。前者需要大量的I/O操作，开销比较大，后者使用比较麻烦，但是效率很高。
+将对象序列化之后存储到文件或者通过网络传输建议使用Serializable。
+
+#### Serializable
+实现Serializable接口即可，其他什么也不用做了（系统默认做了序列化操作）
+特殊情况：
+1. serialVersionUID属性的有无影响反序列化，一般情况不声明不会有问题
+2. 可以实现两个方法重写系统默认的序列化过程（大部分情况是不需要的）
+
+#### Parcelable
+继承接口并实现一些方法
+
+
+### Binder
+Binder运行在服务端进程
+
+Binder的两个很重要的方法：linkToDeath和unlinkToDeath，是设置死亡代理DeathRecipient用的。
+DeathRecipient与onServiceDisconnected的区别：onServiceDisconnected在UI线程运行，DeathRecipient在Binder线程池中运行（不能执行UI操作）
+
+
+### 进程间通信的方式
+Intent传递数据（四大组件都可以，ContentProvider就是做跨进程的，另外三个都可以通过Intent传递信息）
+共享文件
+SharedPreferences
+基于Binder的Messenger和AIDL
+Socket
+Binder（AIDL和Messenger，Messenger本质也是用AIDL实现的）
+
+
+
+### AIDL
+使用：新建一个AIDL文件，编译生成java代码，使用这个类完成Activity和Service的跨进程通信
+需要考虑两个问题：Binder意外死亡和权限验证
+
+### Messager
+使用Messenger进程间通信的问题
+1. 必须将要传递的数据组装成bundle传递
+2. 可以传递基本数据类型或者原生自带的实现序列化的对象
+3. 传递自定义的序列化对象的话需要在接收端加一行代码bundle.setClassLoader(getClass().getClassLoader());否则报异常
+
+>上面第三点还不知道原因，测试发现：
+>在接收端打印log发现bundle.getClassLoader()是null，发送端不是空，
+>如果是同一个进程的话发送端和接收端的bundle.getClassLoader()都不是空
+>（不是空的时候是log显示：java.lang.BootClassLoader@2cf4216）
+>后来发现，接收端是从Message中取的Bundle（代码msg.getData()），Message类的getData()方法注释已经明确说明，跨进程的时候需要为这个Bundle设置你自己的ClassLoader。
+>
+>ClassLoader（类加载器）只言片语的总结：
+>- 对于 Java 程序来说，编写程序就是编写类，运行程序也就是运行类（编译得到的 class 文件），其中起到关键作用的就是类加载器 ClassLoader
+>- ClassLoader 的作用简单来说就是加载 class 文件，提供给程序运行时使用
+>- Android和Java一样ClassLoader都是遵循委托机制（但是具体的加载细节不一样）
+>- 委托机制：当类加载器收到加载类或资源的请求时，通常都是先委托给父类加载器加载，也就是说只有当父类加载器找不到指定类或资源时，自身才会执行实际的类加载过程
+>- 在Android系统启动的时候会创建一个Boot类型的ClassLoader实例，用于加载一些系统Framework层级需要的类
+>- APP也有自己的类，这些类保存在APK的dex文件里面，所以APP启动的时候，也会创建一个自己的ClassLoader实例，用于加载自己dex文件中的类
+>- 一个Android应用至少要有以上两个ClassLoader: 一个是BootClassLoader（系统启动的时候创建的）,另一个是PathClassLoader（应用启动时创建的，用于加载“/data/app/me.kaede.anroidclassloadersample-1/base.apk”里面的类）
+>- 另一种类加载器DexClassLoader，与PathClassLoader的区别是：DexClassLoader可以加载jar/apk/dex，可以从SD卡中加载未安装的apk，PathClassLoader只能加载系统中已经安装过的apk
+>摘自 https://segmentfault.com/a/1190000004062880
+
+
+
+
+
+
+
+
+
+

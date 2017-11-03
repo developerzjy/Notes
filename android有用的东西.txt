@@ -53,7 +53,7 @@ Log.d("TAG", "Max memory is " + maxMemory + "KB");
 
 
 
-
+Process.killProcess(Process.myPid());杀掉当前进程
 
 
 
