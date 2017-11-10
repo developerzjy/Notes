@@ -1,0 +1,71 @@
+### MediaProjectionManager.java
+
+这个类是用来管理MediaProjection的，可以通过Context.getSystemService(Context.MEDIA_PROJECTION_SERVICE);来获取这个类的实例。
+
+#### createScreenCaptureIntent方法
+这个方法返回一个Intent，这个Intent必须通过startActivityForResult()来开启截图功能。
+返回的结果应该被传递给getMediaProjection()方法。
+
+#### getMediaProjection方法
+方法接收两个参数，参数就是上面的方法返回的结果 (int resultCode, Intent resultData)
+这两个参数是onActivityResult()回调里面返回的
+这个方法返回一个MediaProjection对象
+这个方法会弹窗提示用户选则是否允许截屏
+
+
+**总结：MediaProjectionManager类就是发送一个截屏请求，然后系统把返回的截屏结果转换成MediaProjection对象。**
+
+
+### MediaProjection.java类
+类的介绍：一个给应用提供捕获屏幕和录制系统音频的能力的令牌。被赋予什么能力取决于MediaProjection的种类。
+可以通过MediaProjectionManager.createScreenCaptureIntent()开启一个捕获屏幕的回话，但是这样只能捕获屏幕，而不能录制声音。
+
+#### registerCallback方法
+注册一个监听，当MediaProjection状态改变的时候用来接收通知。（MediaProjection都有什么状态？）
+看MediaProjection.Callback{}，当MediaProjection会话没有更长有效期的时候被回调，一旦MediaProjection被停止，就应该释放所有它可能持有的资源，比如VirtualDisplay。
+#### unregisterCallback方法
+解注册，对应上面的注册方法
+#### stop方法
+注释：Stops projection.
+
+#### createVirtualDisplay(8个参数)方法
+创建一个VirtualDisplay对象用来捕获屏幕内容，下面依次介绍参数
+1. name， The name of the virtual display, must be non-empty.
+2. width，The width of the virtual display in pixels. Must be greater than 0.
+3. height，The height of the virtual display in pixels. Must be greater than 0.
+4. dpi， The density of the virtual display in dpi. Must be greater than 0.
+5. flags，虚拟显示（virtual display）的标志的组合。所有标志都定义在DisplayManager类里面（需要看1：DisplayManager）
+6. surface，虚拟显示的内容呈现给哪个表面，如果没有可以是null。一个参数的例子是mImageReader.getSurface()（需要看2：ImageReader）
+7. callback，虚拟显示的状态改变的时候的回调，可以是空。看VirtualDisplay.Callbac{} （需要看3：VirtualDisplay）
+8. handler，可以是空
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

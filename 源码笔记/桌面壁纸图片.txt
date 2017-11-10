@@ -1,0 +1,9 @@
+存放路径  
+frameworks/base/core/res/res$ find -name default_wallpaper.jpg
+./drawable-sw600dp-nodpi/default_wallpaper.jpg
+./drawable-sw720dp-nodpi/default_wallpaper.jpg
+./drawable-nodpi/default_wallpaper.jpg
+./drawable-xhdpi/default_wallpaper.jpg
+
+缩略图路径
+Luncher2的资源里面，名字default_wallpaper_small.jpg
