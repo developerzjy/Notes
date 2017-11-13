@@ -1,4 +1,4 @@
-### MediaProjectionManager.java
+### 一、MediaProjectionManager.java
 
 这个类是用来管理MediaProjection的，可以通过Context.getSystemService(Context.MEDIA_PROJECTION_SERVICE);来获取这个类的实例。
 
@@ -16,7 +16,8 @@
 **总结：MediaProjectionManager类就是发送一个截屏请求，然后系统把返回的截屏结果转换成MediaProjection对象。**
 
 
-### MediaProjection.java类
+
+### 二、MediaProjection.java类
 类的介绍：一个给应用提供捕获屏幕和录制系统音频的能力的令牌。被赋予什么能力取决于MediaProjection的种类。
 可以通过MediaProjectionManager.createScreenCaptureIntent()开启一个捕获屏幕的回话，但是这样只能捕获屏幕，而不能录制声音。
 
@@ -39,6 +40,33 @@
 7. callback，虚拟显示的状态改变的时候的回调，可以是空。看VirtualDisplay.Callbac{} （需要看3：VirtualDisplay）
 8. handler，可以是空
 
+
+
+### 三、VirtualDisplay.java
+类介绍：代表一个虚拟显示，虚拟显示的内容被渲染到一个Surface，这个Surface是必须提供给DisplayManager的。
+由于虚拟显示是被渲染到应用提供的一个Surface上面的，所以当进程终止的时候，它将被释放，而且所有其余的窗口被强行移除。但是，当用完它的时候，也应该显示的调用release方法来释放它。
+（需要看4：Display）（需要看5：Surface）（需要看6：DisplayManagerGlobal）
+方法：
+getDisplay();
+getSurface();
+setSurface(Surface surface);
+resize(int width, int height, int densityDpi);
+release();
+
+### 四、DisplayManager
+类介绍：Manages the properties of attached displays.
+获取实例的方法：Context.getSystemService(Context.DISPLAY_SERVICE);
+
+
+
+
+
+（需要看1：DisplayManager）
+（需要看2：ImageReader）
+（需要看3：VirtualDisplay）
+（需要看4：Display）
+（需要看5：Surface）
+（需要看6：DisplayManagerGlobal）
 
 
 

@@ -1,0 +1,174 @@
+### View的位置参数
+View相对于父容器的坐标：left,right,top,bottom
+对应的方法：getLeft(),getRight(),getTop(),getBottom()
+
+从3.0开始增加了几个参数：x,y,translationX,translationY
+x,y 是View的左上角坐标
+translationX,translationY是View左上角相对于父容器的偏移量
+这四个参数都有对应的set/get方法
+
+
+几个参数的关系：x=left+translationX, y=top+translationY
+left,right,top,bottom是原始坐标，值不变
+x,y是当前坐标，View平移的时候会变
+translationX,translationY是偏移量，View平移的时候会变
+
+
+
+
+### MotionEvent和TouchSlop
+MotionEvent常用事件:
+ACTION_DOWN
+ACTION_MOVE
+ACTION_UP
+ACTION_CANCEL
+getX/getY返回相对于当前View左上角的x,y坐标
+getRawX/getRawY返回相对于屏幕左上角的x,y坐标
+
+TouchSlop是系统所能识别的最小滑动距离，是一个常量，和设备有关
+定义在：frameworks/base/core/res/res/values/config.xml里面，name="config_viewConfigurationTouchSlop"
+获取方法：ViewConfiguration.get(getContext()).getScaledTouchSlop();
+
+
+### VelocityTracker、GestureDetector、Scroller
+
+VelocityTracker 追踪手指滑动过程的速度，包括水平速度和竖直方向的速度。
+
+```
+private VelocityTracker mVelocityTracker = null;
+
+@Override
+public boolean onTouchEvent(MotionEvent event) {
+    if (event.getAction()==MotionEvent.ACTION_DOWN){
+        if (mVelocityTracker==null){
+            mVelocityTracker = VelocityTracker.obtain();
+        }
+    } else if (event.getAction()==MotionEvent.ACTION_MOVE){
+        mVelocityTracker.addMovement(event);
+		// 获取速度之前必须调用这个方法计算速度
+        mVelocityTracker.computeCurrentVelocity(1000);
+        int vx = (int) mVelocityTracker.getXVelocity();
+        int vy = (int) mVelocityTracker.getYVelocity();
+        Log.d(TAG, "onTouchEvent: x="+vx+"   y="+vy);
+    } else if (event.getAction()==MotionEvent.ACTION_UP){
+        mVelocityTracker.clear();
+    }
+    return true;
+}
+
+@Override
+protected void onDetachedFromWindow() {
+    //调用recycle之后不能再触摸对象
+	//或者在up事件里调用recycle，并且把mVelocityTracker置空
+    mVelocityTracker.recycle();
+    super.onDetachedFromWindow();
+}
+```
+
+
+GestureDetector手势检测
+常用手势：onSingleTapUp（单击），onFling（快速滑动），onScroll（拖动），onLongPress（长按），onDoubleTab（双击）
+其中滑动建议自己在onTouchEvent里面实现。
+用法：
+```
+GestureDetector mGestureDetector;
+GestureDetector.OnDoubleTapListener mDoubleTapListener;
+GestureDetector.OnGestureListener mGestureListener;
+private void initGestureDetector() {
+    //这里省略实现mDoubleTapListener和mGestureListener的代码
+    mGestureDetector = new GestureDetector(getContext(), mGestureListener);
+    mGestureDetector.setOnDoubleTapListener(mDoubleTapListener);
+    mGestureDetector.setIsLongpressEnabled(false);
+}
+
+@Override
+public boolean onTouchEvent(MotionEvent event) {
+    return mGestureDetector.onTouchEvent(event);
+}
+```
+
+
+Scroller弹性滚动，区别于scrollTo/scrollBy瞬间完成的滚动
+滚动是指滚动View内部的内容而不是View本身
+scrollBy相对于当前位置滚动一段距离
+scrollTo相对于初始位置滚动一段距离
+
+用法
+```
+//1.创建Scroller
+private Scroller mScroller = new Scroller(getContext());
+
+//2.调用startScroll()方法来初始化滚动数据并刷新界面
+mScroller.startScroll(0,0,0,-500,1000);
+
+//3.重写computeScroll()方法，并在其内部完成平滑滚动的逻辑
+@Override
+public void computeScroll() {
+    if (mScroller.computeScrollOffset()){
+        scrollTo(mScroller.getCurrX(),mScroller.getCurrY());
+    }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
