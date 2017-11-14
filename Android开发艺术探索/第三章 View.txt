@@ -112,6 +112,12 @@ public void computeScroll() {
 
 
 
+### View的滑动
+一般有三种方式：
+（1）View本身提供的scrollTo/scrollBy方法，滑动的是View中的内容而不是View本身
+（2）平移动画，注意View的交互需要额外处理
+（3）改变LayoutParams使View重新布局。
+弹性滑动可以使用延时策略，Handler或View的postDelayed方法，或者线程的sleep方法。
 
 
 
