@@ -3,7 +3,37 @@ dispatchTouchEvent()分发事件
 onInterceptTouchEvent()拦截事件，ViewGroup里面的方法
 onTouchEvent()处理事件
 
+
 事件序列：从down事件开始到up事件结束的过程的一系列事件。
+onInterceptTouchEvent用于拦截事件，onInterceptTouchEvent只会被调用一次，一旦拦截，整个事件序列都由拦截的View处理
+requestDisallowInterceptTouchEvent可以在子元素干预父元素的事件分发过程。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
