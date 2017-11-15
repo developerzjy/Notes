@@ -9,6 +9,10 @@ onInterceptTouchEvent用于拦截事件，onInterceptTouchEvent只会被调用�
 requestDisallowInterceptTouchEvent可以在子元素干预父元素的事件分发过程。
 
 ---------------------------------------
+dispatchTouchEvent() 返回true或false
+
+
+---------------------------------------
 
 View的事件分为两个过程，分发和处理，注意事件序列和Down事件。
 分发过程从下往上传递事件，传递的是Down事件，由dispatchTouchEvent()完成，可以用onInterceptTouchEvent()中断传递。
