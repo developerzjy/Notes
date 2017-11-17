@@ -1,0 +1,82 @@
+#### 总结1：默认情况
+
+ViewGroup默认不拦截事件，不处理事件，View默认不处理事件。log如下：
+
+```
+(26296): MainActivity->dispatchTouchEvent
+(26296): MyViewGroup1-->dispatchTouchEvent
+(26296): MyViewGroup1-->onInterceptTouchEvent
+(26296): MyViewGroup2--->dispatchTouchEvent
+(26296): MyViewGroup2--->onInterceptTouchEvent
+(26296): MyView--------------->dispatchTouchEvent
+(26296): MyView--------------->onTouchEvent0
+(26296): MyViewGroup2--->onTouchEvent
+(26296): MyViewGroup1-->onTouchEvent
+(26296): MainActivity->onTouchEvent
+
+(26296): MainActivity->dispatchTouchEvent
+(26296): MainActivity->onTouchEvent
+(26296): MainActivity->dispatchTouchEvent
+(26296): MainActivity->onTouchEvent
+
+(26296): MainActivity->dispatchTouchEvent
+(26296): MainActivity->onTouchEvent
+（上面的log用空行分为三部分，第一部分是down事件的，第二部分是move1和move2的，第三部分是up的）
+```
+
+事件序列中各个事件的传递流程如下描述：
+首先down事件从Activity开始传递，Activity -> ViewGroup1 -> ViewGroup2 -> View，这时候事件被分发到了顶层View，分发过程结束。事件分发到View的时候自动开始处理流程，由于View默认不处理事件（onTouchEvent()返回了false），所以事件被交给了它的父View也就是ViewGroup2处理，同理ViewGroup2也不处理.....所以处理流程是这样的，View -> ViewGroup2 -> ViewGroup1 -> Activity。down事件的处理到此结束。
+然后move1事件来了，由于每个View都没处理down事件，所以move1事件就不往各个子View分发了，直接交给Activity处理。move2和up同理。（这就是源码里面对down事件的处理，拒绝了头就等于拒绝了整个序列）
+
+#### 总结2：某个onInterceptTouchEvent()阻断down事件，其他默认
+比如ViewGroup1阻断down事件，将ViewGroup1的onInterceptTouchEvent()方法返回true。
+---------------------------->图
+
+
+#### 总结3：某个onTouchEvent()阻断down事件，其他默认
+---------------------------->图
+
+#### 总结4：某个onInterceptTouchEvent()从down事件之后开始阻断（与总结2区分）
+---------------------------->图
+
+#### 总结5：某个onTouchEvent()从down事件之后开始阻断（与总结3区分）
+---------------------------->图
+
+#### 总结6：onInterceptTouchEvent()阻断down之后的事件，onTouchEvent()阻断down事件
+---------------------------->图
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
