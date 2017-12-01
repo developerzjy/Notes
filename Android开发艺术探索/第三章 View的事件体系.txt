@@ -121,9 +121,15 @@ public void computeScroll() {
 
 
 
+=============================================================
+## View的事件机制
 
+事件分发涉及的三个重要方法：
+dispatchTouchEvent()分发事件
+onInterceptTouchEvent()拦截事件，ViewGroup里面的方法
+onTouchEvent()处理事件
 
-
+事件序列：从down事件开始到up事件结束的过程的一系列事件。
 
 
 

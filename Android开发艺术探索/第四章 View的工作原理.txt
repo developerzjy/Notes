@@ -1,0 +1,70 @@
+
+
+### ViewRoot和DecorView
+ViewRoot对应于ViewRootImpl类，它是连接WindowManager和DecorView的纽带，View的三大流程都是通过ViewRoot来完成的。
+View的绘制流程从ViewRoot的performTraversals方法开始的，它经过measure、layout、draw三个过程最终将一个View绘制出来。
+
+
+
+### MeasureSpec
+MeasureSpec是一个32位int值，高2位代表SpecMode，低30位代表SpecSize。
+SpecMode指测量模式，有三种模式，SpecSize指在某种测量模式下的规格大小。
+
+三种模式：
+1. UNSPECIFIED  父容器不对View有任何限制，要多大给多大
+2. EXACTLY  父容器已经检测出View所需的精确大小，大小就是SpecSize指定的值。对应于match_parent和具体数值两种情况。
+3. AT_MOST  父容器指定一个大小，View的大小不能大于这个值，具体值由View的具体实现决定。对应于wrap_content。
+
+
+> 为了操作简便，于是系统给我提供了一个MeasureSpec工具类。这个工具类有四个方法和三个常量供我们使用：
+> 
+> 三个常量：MeasureSpec.UNSPECIFIED、MeasureSpec.EXACTLY、MeasureSpec.AT_MOST
+> 
+> //这个是由我们给出的尺寸大小和模式生成一个包含这两个信息的int变量
+> //mode参数传三个常量中的一个
+> public static int makeMeasureSpec(int size, int mode)
+> 
+> //这个是得到这个变量中表示的模式信息，将得到的值与三个常量进行比较。
+> public static int getMode(int measureSpec)
+> 
+> //这个是得到这个变量中表示的尺寸大小的值。
+> public static int getSize(int measureSpec)
+> 
+> //把这个变量里面的模式和大小组成字符串返回来，方便打日志
+> public static String toString(int measureSpec)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
