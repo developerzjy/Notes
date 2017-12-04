@@ -35,12 +35,20 @@ SpecMode指测量模式，有三种模式，SpecSize指在某种测量模式下的规格大小。
 
 
 
+### 四种在Activity中获取View宽高的方法
+1. onWindowFocusChanged  会多次调用
+2. view.post(runnable)
+3. ViewTreeObserver  View树改变也会调用多次
+4. view.measure()  比较复杂而且有些情况无法使用
 
 
 
-
-
-
+### 自定义View注意的问题
+- 让View支持wrap_content  onMeasure中处理
+- 如果有必要，支持padding  onDraw的时候处理
+- 尽量不使用Handler  View里面已经有post系列方法
+- 及时停止线程动画  在onDetachedFromWindow里面做，对应的是onAttachedToWindow
+- 滑动冲突
 
 
 
