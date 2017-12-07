@@ -51,6 +51,14 @@ SpecMode指测量模式，有三种模式，SpecSize指在某种测量模式下的规格大小。
 - 滑动冲突
 
 
+### 扩展
+问题：自定义View的时候onMeasure为什么多次被调用
+原因：ViewGroup除了会完成自己的measure过程外，还会遍历去调用所有子View的measure方法，各个子View再递归去执行这个过程。ViewGroup是一个抽象类，没有重写View的onMeasure方法，但是它提供了一个measureChildren方法，通过这个方法会调用到每个子View的measure方法。调用子View的measure时的参数是通过获取子View的布局参数后用getChildMeasureSpec方法创建的。
+从ViewGroup的角度来看，比如LinearLayout，它要想测量自己宽高，必须知道子View的数量和每个子View的宽高，所以它必须要先测量子View，然后根据测量子View的结果和自身的一些情况来测量自身宽高，比如把子View的高加起来再加上自身的padding来确定自身的高。
+
+待解决的问题：
+1. 为什么要测量子View多次和每次测量的结果有什么不同？而且不同布局比如LinearLayout和RelativeLayout，它们对子View的测量次数是不同的。
+2. onLayout为什么被调用两次？
 
 
 
