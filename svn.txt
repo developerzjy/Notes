@@ -15,16 +15,16 @@ svn commit -m "Revert revision from r28 to r25,because of ..." packages/apps/Bro
 
 
 
+! 表示非svn命令删除的  提交需要 svn delete filename
+I svn st --no-ignore 可以看到忽略的文件，提交需要 svn add filename --no-ignore
+? 表示新加的文件，提交需要 svn add filename
+
+上面三种命令执行完后使用 svn st命令可以看到如下状态
+M 表示修改的文件，A 表示添加的文件，D 表示删除的文件
+之后使用svn commit -m "xxx" filename 提交
 
 
-
-
-
-
-
-
-
-
+目录下修改/添加/删除了一部分文件，可以提交这个目录而不需要一个个文件名提交（麻烦）
 
 
 
