@@ -1,0 +1,43 @@
+
+private MediaProjectionManager mMediaProjectionManager;
+private ScreenCapture mScreenCaptureService;
+
+mMediaProjectionManager = (MediaProjectionManager) getApplication().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+
+
+
+private void startShot(){
+    new Handler().post(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), 1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    });
+}
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == 1) {
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            mScreenCaptureService = new ScreenCapture(this, data, resultCode);
+            try {
+                Log.d("screenCapture", "onActivityResult: MainActivity start to capture.");
+                mScreenCaptureService.toCapture();
+            } catch (Throwable e) {
+                Log.d("screenCapture", "onActivityResult: Exception: " + e);
+            }
+        }
+    }
+}
+
+==================================================
+
+调用上面的startShot()方法开始截图
+
+ScreenCapture里面截完图自动保存到sd卡并调用系统分享（注意权限）
+
+
