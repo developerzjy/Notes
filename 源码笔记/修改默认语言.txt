@@ -1,0 +1,59 @@
+
+
+
+
+build/target/product/full_base.mk
+修改PRODUCT_LOCALES := zh_CN   
+本来就是这样但是没效果
+
+根据具体情况修改下面几个位置
+
+1.
+device/qcom/msm7627_qrd/system.prop 中加入：
+persist.sys.timezone=Asia/Shanghai
+persist.sys.language=zh
+persist.sys.country=CN
+本来就是这样但是没效果
+
+
+
+
+
+2.
+（应该是从3修改那读的）
+build/tools/buildinfo.sh
+echo "ro.product.locale.language=zh"
+echo "ro.product.locale.region=CN"
+
+
+
+3.
+（1）进入build/target/product目录，在languages_full.mk或languages_small.mk文件中，修改 PRODUCT_LOCALES的值，来定制语言,比如PRODUCT_LOCALES := en_US zh_CN zh_TW en_GB fr_FR it_IT de_DE es_ES；
+
+（2）相同目录下，修改full.mk文件的
+$(call inherit-product, build/target/product/languages_full.mk)语句来切换所使用的文件;
+
+（主要是修改 PRODUCT_LOCALES 字段，第一个值就是默认语言）
+
+
+
+
+
+验证
+/out/target/product/generic/system/build.prop
+
+ro.product.locale.language=zh
+ro.product.locale.region=CN
+persist.sys.timezone=Asia/Shanghai
+
+
+修改的目的最终都是在out目录下生成系统属性像上面这样
+如果上面没达到预期效果，可能是在代码中动态设置语言属性了
+
+比如frameworks\base\services\core\java\com\android\server\am\ActivityManagerService.java中（没准在哪）
+
+
+
+
+
+
