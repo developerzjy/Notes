@@ -3,13 +3,31 @@
 
 常见的Drawable种类
 
+BitmapDrawable
+ShapeDrawable
+LayerDrawable
+StateListDrawable
+LevelListDrawable
+TransitionDrawable
+InsetDrawable
+ScaleDrawable
+ClipDrawable
 
 
 
 
 
-
-
+Drawable类          |xml标签    |描述
+--------------------|-----------|--
+BitmapDrawable      |<bitmap/>
+ShapeDrawable       |
+LayerDrawable       |
+StateListDrawable   |
+LevelListDrawable   |
+TransitionDrawable  |
+InsetDrawable       |
+ScaleDrawable       |
+ClipDrawable        |
 
 
 
