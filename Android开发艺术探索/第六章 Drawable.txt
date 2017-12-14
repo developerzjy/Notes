@@ -1,38 +1,363 @@
 
 
 
-常见的Drawable种类
+###常见的Drawable种类介绍
 
-BitmapDrawable
-ShapeDrawable
-LayerDrawable
-StateListDrawable
-LevelListDrawable
-TransitionDrawable
-InsetDrawable
-ScaleDrawable
-ClipDrawable
-
-
-
-
-
-Drawable类          |xml标签    |描述
---------------------|-----------|--
-BitmapDrawable      |<bitmap/>
-ShapeDrawable       |
-LayerDrawable       |
-StateListDrawable   |
-LevelListDrawable   |
-TransitionDrawable  |
-InsetDrawable       |
-ScaleDrawable       |
-ClipDrawable        |
+Drawable类          |xml标签      |描述
+--------------------|-------------|--
+BitmapDrawable      |<bitmap/>    |表示一张图片，与直接引用原始图片相比可以设置一些效果
+ShapeDrawable       |<shape/>     |通过颜色构造各种形状的图形，标签对应的实体类实际是GradientDrawable
+LayerDrawable       |<layer-list/>|表示一种层次化的Drawable集合，可以将不同的Drawable放置在不同的层上达到叠加效果
+StateListDrawable   |<selector/>  |表示一种Drawable集合，集合中每个Drawable对应着View的一种状态，最常用于Button
+LevelListDrawable   |<level-list/>|表示一种Drawable集合,集合中每个Drawable（item）都有一个等级（level）的概念。可以根据不同的等级切换对应的Drawable。每个Drawable（item）对应一个等级范围，可以通过Drawable的setLevel方法来切换，如果用作ImageView的前景，还可以通过ImageView的setImageLevel方法来切换Drawable。level范围0-10000。
+TransitionDrawable  |<transition/>|用于实现两个Drawable之间的淡入淡出效果，通过该Drawable中的startTransition和reverseTransition方法实现淡入淡出和逆过程，两个方法接收一个时间参数。
+InsetDrawable       |<inset/>     |可以将其他Drawable内嵌到自己当中，并且可以在四周流出一定的距离。当一个View希望背景比自己实际区域小的时候，可以用这个Drawable。LayerDrawable可以实现相同的效果
+ScaleDrawable       |<scale/>     |可以根据自己的等级将指定的Drawable缩放到一定的比例。
+ClipDrawable        |<clip/>      |根据自己当前的等级来裁剪另一个Drawable，裁剪方向可以通过android:clipOrientation和android:gravity两个属性共同控制。
 
 
 
 
 
+###各Drawable的xml属性详解
+
+####1.<bitmap/>
+```
+<bitmap
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="图片资源id"
+    android:antialias="true|false" 
+    android:dither="true|false"
+    android:filter="true|false"
+    android:gravity="..."
+    android:mipMap="true|false"
+    android:tileMode="disabled|clamp|repeat|mirror" />
+```
+
+**antialias**抗锯齿，开启后会让图片变得平滑，同时也会在一定程度上降低图片的清晰度，但是降低的幅度低至可以忽略，所以应该开启；
+**dither**抖动效果，当图片的像素配置与手机屏幕的像素配置不一致时，开启这个选项可以让高质量图片在低质量的屏幕上还能保持较好的显示效果，比如图片的色彩模式为ARGB8888，但是设备屏幕所支持的色彩模式为RGB555，这时候开启抖动选项可以让图片显示不会过于失真，在Android中创建Bitmap一般会选用ARGB8888这个模式，在这种色彩模式下一个像素所占的大小为4个字节，一个像素的位数总和越高，图像也就越逼真。根据分析，抖动效果应该开启；
+**filter**过滤效果，当图片尺寸被拉伸或压缩时，过滤可以保持较好的显示效果，应该开启；
+**mipMap**一种图像处理技术，不常用，默认false即可；
+**titleMode**平铺模式。
+
+点9图片对应NinePatchDrawable，xml标签是<nine-patch/>
+
+
+
+
+####2.<shape/>
+```
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle|oval|line|ring">
+    <corners
+        android:radius="integer"
+        android:topLeftRadius="integer"
+        android:topRightRadius="integer"
+        android:bottomLeftRadius="integer"
+        android:bottomRightRadius="integer" />
+    <gradient
+        android:angle="integer"
+        android:centerX="integer"
+        android:centerY="integer"
+        android:centerColor="color"
+        android:endColor="color"
+        android:gradientRadius="integer"
+        android:startColor="color"
+        android:type="linear|radial|sweep"
+        android:useLevel="true|false" />
+    <padding
+        android:left="integer"
+        android:top="integer"
+        android:right="integer"
+        android:bottom="integer" />
+    <size
+        android:width="integer"
+        android:height="integer" />
+    <solid
+        android:color="color" />
+    <stroke
+        android:width="integer"
+        android:color="color"
+        android:dashWidth="integer"
+        android:dashGap="integer" />
+</shape>
+```
+
+**android:shape**图形形状，四个选项：rectangle（矩形）、oval（椭圆）、line（横线）、ring（圆环）。默认是矩形，line和ring必须通过<stroke>标签来指定线的宽度和颜色等信息，否则无法达到预期的显示效果。
+针对ring这个形状，有5个特殊属性：
+android:innerRadius  内环半径，与android:innerRadiusRatio同时存在时，以android:innerRadius为准
+android:thickness  圆环厚度，即外半径减去内半径的大小，与android:thicknessRatio同时存在时以android:thickness为准
+android:innerRadiusRatio  内半径占整个Drawable的宽度比例，默认值9。如果是n，那么内半径=宽度/n
+android:thicknessRatio  厚度占整个Drawable的宽度比例，默认值3。如果是n，那么厚度=宽度/n
+android:useLevel  一般都应该使用false，否则有可能无法达到预期效果，除非被当作LevelListDrawable来使用
+
+
+######<corners>
+表示四个角的角度，只适用于shape，这里的角度指的是圆角的程度，用px来表示，5个属性：
+android:radius  四个角同时设定相同的角度，优先级较低，会被其他4个属性覆盖。
+android:topLeftRadius  左上角
+android:topRightRadius  右上角
+android:bottomLeftRadius  左下角
+android:bottomRightRadius  右下角
+
+
+######<gradient>
+表示渐变色，与<solid>纯色标签互斥，属性如下：
+**android:angle**  渐变的角度，影响渐变方向，默认为0，值必须是45的倍数，比如0表示从左到右，90表示从上到下
+**android:centerX**  渐变中心点的横坐标
+**android:centerY**  渐变中心点的纵坐标，渐变的中心点影响渐变的具体效果
+**android:startColor**  渐变的起始色
+**android:centerColor**  渐变的中间色
+**android:endColor**  渐变的结束色
+**android:gradientRadius**  渐变半径，仅当type=radial时有效
+**android:type**  渐变类别，有三个值：linear（线性渐变）、radial（径向渐变）、sweep（扫描线渐变）。默认是线性渐变。
+**android:useLevel**  一般为false，当作为StateListDrawable使用时为true
+
+
+######<solid>
+纯色填充，属性android:color表示填充颜色
+
+
+######<stroke>
+Shape的描边，属性如下：
+**android:width**  描边的宽度，越大shape的边缘性看起来越粗
+**android:color**  描边的颜色
+**android:dashWidth**  组成虚线的线段的宽度
+**android:dashGap**  组成虚线的线段之间的间隔
+android:dashWidth和android:dashGap有一个为0，那么虚线效果不生效。
+
+
+######<padding>
+表示包含它的View的空白，有上下左右四个属性。
+
+
+######<size>
+shape的大小，但不是shape最终的大小因为shape一般会自适应View的宽高。
+
+
+
+
+####3.<layer-list/>
+
+```
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:drawable=""
+        android:id=""
+        android:top=""
+        android:right=""
+        android:bottom=""
+        android:left="" />
+</layer-list>
+```
+
+一个layer-list可以包含多个item，每个item表示一个Drawable。
+android:top android:right android:bottom android:left设置上下左右的偏移量。
+android:drawable 直接引用一个Drawable资源，也可以在item中自定义Drawable。
+默认情况layer-list中的所有Drawable都会被缩放至View的大小
+
+
+
+
+####4.<selector/>
+
+```
+<selector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:constantSize="true|false"
+    android:dither="true|false"
+    android:variablePadding="true|false"
+    >
+    <item
+        android:drawable=""
+        android:state_pressed="true|false"
+        android:state_focused="true|false"
+        android:state_hovered="true|false"
+        android:state_selected="true|false"
+        android:state_checkable="true|false"
+        android:state_checked="true|false"
+        android:state_enabled="true|false"
+        android:state_activated="true|false"
+        android:state_window_focused="true|false"
+        />
+</selector>
+```
+
+android:constantSize属性表示StateListDrawable的固有大小是否不随状态的改变而改变，因为状态的改变会导致切换到具体的Drawable，而不同状态的Drawable可能大小不同。true表示固有大小保持不变。dither表示抖动效果。android:variablePadding表示StateListDrawable的padding是否随状态的改变而改变，不建议开启。
+
+######<item>
+每个item都表示一种状态下的Drawable信息。常见状态如下：
+android:state_pressed  按下状态
+android:state_focused  获取焦点
+android:state_selected  用户选择了View
+android:state_checked  用户选中了View，一般用于CheckBox这类在选中和非选中状态之间切换的View
+android:state_enabled  View处于可用状态
+
+系统会根据View的状态从selector中选择对应的item，按照从上到下的顺序查找，直至查找到第一个匹配的item。一般默认的item都应该放在selector的最后一条并且不附带任何状态，这样当上面的item都无法匹配View的当前状态时，就会选择默认的item，因为默认的item不附带状态，所以它可以匹配View的任何状态。
+
+
+
+
+####5.<level-list/>
+
+```
+<level-list
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:drawable=""
+        android:minLevel=""
+        android:maxLevel="" />
+</level-list>
+```
+
+示例代码
+```
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/s1" android:minLevel="0" android:maxLevel="20"/>
+    <item android:drawable="@drawable/s2" android:minLevel="21" android:maxLevel="40"/>
+    <item android:drawable="@drawable/s3" android:minLevel="41" android:maxLevel="60"/>
+    <item android:drawable="@drawable/s4" android:minLevel="61" android:maxLevel="100"/>
+</level-list>
+```
+
+```
+//id是level_list_img的ImageView用上面的level-list做背景
+ImageView iv = (ImageView) findViewById(R.id.level_list_img); 
+LevelListDrawable levelListDrawable = (LevelListDrawable) iv.getDrawable(); 
+
+int level = ???; //业务逻辑得出一个level信息，比如当前电量
+levelListDrawable.setLevel(level); //根据得出的电量level信息显示level-list中的相应电量的图片
+```
+
+
+
+
+
+####6.<transition/>
+
+```
+<transition xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:drawable=""
+        android:id=""
+        android:left=""
+        android:top=""
+        android:right=""
+        android:bottom="" />
+</transition>
+```
+
+两个Drawable之间的淡入淡出效果，属性同前面的Drawable，示例代码：
+```
+<?xml version="1.0" encoding="utf-8"?>
+<transition xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/drawable1"/>
+    <item android:drawable="@drawable/drawable2"/>
+</transition>
+```
+
+```
+//id是text_view的TextView用上面的transition做背景
+TextView tv = (TextView) findViewById(R.id.text_view); 
+TransitionDrawable drawable = (TransitionDrawable) tv.getDrawable(); 
+
+drawable.startTransition(1000);
+//drawable.reverseTransition(1000);//逆过程
+```
+
+
+
+
+
+####7.<inset/>
+
+```
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable=""
+    android:insetLeft=""
+    android:insetTop=""
+    android:insetRight=""
+    android:insetBottom="" />
+```
+将其他drawable内嵌到inset中，并且可以在四周留出一定的间距，属性和前面的Drawable类似。下面的示例代码实现了inset中的shape距离View的边界为15dp，layer-list可以实现相同效果：
+```
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetBottom="15dp"
+    android:insetLeft="15dp"
+    android:insetRight="15dp"
+    android:insetTop="15dp">
+
+    <shape android:shape="rectangle">
+        <solid android:color="#ff0000"/>
+    </shape>
+    
+</inset>
+```
+
+
+
+
+
+####8.<scale/>
+
+```
+<scale xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable=""
+    android:scaleGravity=""
+    android:scaleHeight=""
+    android:scaleWidth="" />
+```
+android:scaleGravity等同于shape中的android:gravity，android:scaleWidth和android:scaleHeight分别表示对指定drawable宽和高的缩放比例，以**百分比的形式**表示（看下面的示例代码）。使用scale的时候需要考虑ScaleDrawable的level值，levle是0的时候表示ScaleDrawable不可见，0也是默认值，所以要想ScaleDrawable可见，level等级不能是0。示例代码如下：
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<scale xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/test_drawable"
+    android:scaleGravity="center"
+    android:scaleHeight="70%"
+    android:scaleWidth="70%" />
+```
+
+```
+View view = findViewById(R.id.test_view);
+ScaleDrawable drawable = (ScaleDrawable)view.getBackground();
+drawable.setLevel(1);
+```
+**代码中必须设置level值，否则默认值0是不可见的。level范围系统内部约定为0-10000，当然设置成20000也能正常工作但不推荐那样做。**
+
+
+
+
+
+####9.<clip/>
+
+```
+<clip xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable=""
+    android:clipOrientation=""
+    android:gravity="" />
+```
+
+clipOrientation表示裁剪方向，有水平和竖直两个方向。gravity和clipOrientation一起才能发挥作用，gravity的值如下：
+
+值                | 含义
+------------------|-------------------------------------
+top               |将内部Drawable放在容器顶部，不改变它的大小。如果竖直裁剪，那么从底部开始裁剪
+bottom            |将内部Drawable放在容器底部，不改变它的大小。如果竖直裁剪，那么从顶部开始裁剪
+left              |将内部Drawable放在容器左边，不改变它的大小。如果水平裁剪，那么从右边开始裁剪<br>这是默认值
+right             |将内部Drawable放在容器右边，不改变它的大小，如果水平裁剪，那么从左边开始裁剪
+center_vertical   |将内部Drawable在容器中竖直居中，不改变大小，如果竖直裁剪，那么从上下同时开始裁剪
+fill_vertical     |
+center_horizontal |
+fill_horizontal   |
+center            |
+fill              |
+clip_vertical     |
+clip_horizontal   |
 
 
 
@@ -57,3 +382,15 @@ ClipDrawable        |
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+  
