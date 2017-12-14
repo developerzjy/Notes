@@ -1,7 +1,7 @@
+±¾ÎÄÊÇÑ§Ï°¡¶Android¿ª·¢ÒÕÊõÌ½Ë÷¡·ÖÐDrawableÕÂ½ÚÖ®ºóµÄÒ»¸ö×Ü½á¡£
 
 
-
-###³£¼ûµÄDrawableÖÖÀà½éÉÜ
+###Ò»¡¢³£¼ûµÄDrawableÖÖÀà½éÉÜ
 
 DrawableÀà          |xml±êÇ©      |ÃèÊö
 --------------------|-------------|--
@@ -17,9 +17,9 @@ ClipDrawable        |<clip/>      |¸ù¾Ý×Ô¼ºµ±Ç°µÄµÈ¼¶À´²Ã¼ôÁíÒ»¸öDrawable£¬²Ã¼ô·
 
 
 
+<br><br>
 
-
-###¸÷DrawableµÄxmlÊôÐÔÏê½â
+###¶þ¡¢¸÷ÖÖDrawableµÄxmlÊôÐÔÏê½â
 
 ####1.<bitmap/>
 ```
@@ -348,47 +348,32 @@ clipOrientation±íÊ¾²Ã¼ô·½Ïò£¬ÓÐË®Æ½ºÍÊúÖ±Á½¸ö·½Ïò¡£gravityºÍclipOrientationÒ»Æð²
 ------------------|-------------------------------------
 top               |½«ÄÚ²¿Drawable·ÅÔÚÈÝÆ÷¶¥²¿£¬²»¸Ä±äËüµÄ´óÐ¡¡£Èç¹ûÊúÖ±²Ã¼ô£¬ÄÇÃ´´Óµ×²¿¿ªÊ¼²Ã¼ô
 bottom            |½«ÄÚ²¿Drawable·ÅÔÚÈÝÆ÷µ×²¿£¬²»¸Ä±äËüµÄ´óÐ¡¡£Èç¹ûÊúÖ±²Ã¼ô£¬ÄÇÃ´´Ó¶¥²¿¿ªÊ¼²Ã¼ô
-left              |½«ÄÚ²¿Drawable·ÅÔÚÈÝÆ÷×ó±ß£¬²»¸Ä±äËüµÄ´óÐ¡¡£Èç¹ûË®Æ½²Ã¼ô£¬ÄÇÃ´´ÓÓÒ±ß¿ªÊ¼²Ã¼ô<br>ÕâÊÇÄ¬ÈÏÖµ
+left              |½«ÄÚ²¿Drawable·ÅÔÚÈÝÆ÷×ó±ß£¬²»¸Ä±äËüµÄ´óÐ¡¡£Èç¹ûË®Æ½²Ã¼ô£¬ÄÇÃ´´ÓÓÒ±ß¿ªÊ¼²Ã¼ô<br>**ÕâÊÇÄ¬ÈÏÖµ**
 right             |½«ÄÚ²¿Drawable·ÅÔÚÈÝÆ÷ÓÒ±ß£¬²»¸Ä±äËüµÄ´óÐ¡£¬Èç¹ûË®Æ½²Ã¼ô£¬ÄÇÃ´´Ó×ó±ß¿ªÊ¼²Ã¼ô
 center_vertical   |½«ÄÚ²¿DrawableÔÚÈÝÆ÷ÖÐÊúÖ±¾ÓÖÐ£¬²»¸Ä±ä´óÐ¡£¬Èç¹ûÊúÖ±²Ã¼ô£¬ÄÇÃ´´ÓÉÏÏÂÍ¬Ê±¿ªÊ¼²Ã¼ô
-fill_vertical     |
-center_horizontal |
-fill_horizontal   |
-center            |
-fill              |
-clip_vertical     |
-clip_horizontal   |
+fill_vertical     |½«ÄÚ²¿DrawableÊúÖ±·½ÏòÌî³äÈÝÆ÷¡£Èç¹ûÎªÊúÖ±²Ã¼ô£¬ÄÇÃ´½öµ±ClipDrawableµÄµÈ¼¶Îª0Ê±£¨0±íÊ¾ClipDrawable±»ÍêÈ«²Ã¼ô£¬¼´²»¿É¼û£©£¬²ÅÄÜÓÐ²Ã¼ôÐÐÎª
+center_horizontal |ÀàËÆcenter_vertical£¬·½Ïò²»Í¬
+fill_horizontal   |ÀàËÆfill_vertical£¬·½Ïò²»Í¬
+center            |½«ÄÚ²¿DrawableË®Æ½ºÍÊúÖ±·½Ïò¶¼¾ÓÖÐ£¬²»¸Ä±ä´óÐ¡¡£Èç¹ûÊúÖ±²Ã¼ô£¬ÄÇÃ´´ÓÉÏÏÂÍ¬Ê±²Ã¼ô£¬Èç¹ûË®Æ½²Ã¼ô£¬ÄÇÃ´´Ó×óÓÒÍ¬Ê±²Ã¼ô
+fill              |½«ÄÚ²¿DrawableË®Æ½ºÍÊúÖ±·½ÏòÍ¬Ê±Ìî³ä£¬½öµ±ClipDrawableµÄµÈ¼¶Îª0Ê±£¬²ÅÓÐ²Ã¼ôÐÐÎª
+clip_vertical     |¸½¼ÓÑ¡Ïî£¬±íÊ¾ÊúÖ±·½Ïò²Ã¼ô£¬½ÏÉÙÊ¹ÓÃ
+clip_horizontal   |¸½¼ÓÑ¡Ïî£¬±íÊ¾Ë®Æ½·½Ïò²Ã¼ô£¬½ÏÉÙÊ¹ÓÃ
+
+DrawableµÈ¼¶ÊÇÓÐ·¶Î§µÄ£¬¼´0-10000£¬×îÐ¡Öµ0±íÊ¾ÍêÈ«²Ã¼ô£¬¼´Õû¸öDrawable¶¼²»¿É¼û¡£×î´óÖµ10000±íÊ¾²»²Ã¼ô¡£Èç¹ûÊúÖ±·½Ïò´ÓÉÏÏòÏÂ²Ã¼ô£¬levelÖµÊÇ8000±íÊ¾²Ã¼ôÁË2000£¬¼´ÔÚ¶¥²¿²Ã¼ôµô20%µÄÇøÓò£¬±»²Ã¼ôµÄÇøÓò¾ÍÏàµ±ÓÚ²»´æÔÚÁË¡£
 
 
+<br><br>
 
+###Èý¡¢DrawableµÄ level ×Ü½á
+ÉÏÃæxmlÊôÐÔ½éÉÜÖÐÓÐÐ©drawableÖÐlevelÊÇºÜÖØÒªµÄ£¬ÕâÀï×Ü½áÒ»ÏÂ£º
+- **<level-list/>** ÖÐÓÐ¶à¸öitem£¬Ã¿¸öitem¶ÔÓ¦Ò»¸ödrawable£¬Í¨¹ýÉèÖÃ**¾ßÌåµÄlevelÖµ**À´¾ö¶¨Ê¹ÓÃÄÄ¸öitem¼´drawable¡£
+- **<scale/>** ÓÃÓÚËõ·Å£¬levelÄ¬ÈÏÖµÊÇ0£¬0±íÊ¾ScaleDrawable²»¿É¼û£¬ËùÒÔÒªÏëScaleDrawable¿É¼û£¬±ØÐëÉèÖÃlevel²»Îª0£¬**¾ßÌåÊÇ¼¸ÎÞËùÎ½£¬²»Îª0¼´¿É**¡£
+- **<clip/>** ±íÊ¾²Ã¼ô£¬levelÖµ¾ö¶¨²Ã¼ô°Ù·Ö±È£¬**ÐèÒª¾ßÌåÖµ£¬ÒòÎª¾ö¶¨²Ã¼ô°Ù·Ö±È**¡£
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+levelÖµµÄ·¶Î§ÏµÍ³¹æ¶¨0-10000£¬ÉèÖÃlevelÖµµÄ·½·¨£º
+1. ½«ÏàÓ¦µÄDrawableÉèÖÃ³ÉÒ»¸öViewµÄ±³¾°
+2. ´ÓViewµÄ±³¾°ÖÐÈ¡µÃÏàÓ¦Drawable¶ÔÏó£¬´úÂëview.getDrawable() »ò view.getBackground()£¬Ç¿×ª³ÉÏàÓ¦µÄDrawableÀàÐÍ¼´¿É
+3. È¡µÃDrawable¶ÔÏóºóµ÷ÓÃsetLevel()·½·¨ÉèÖÃlevel¡£
 
 
 
