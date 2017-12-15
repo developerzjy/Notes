@@ -194,7 +194,7 @@ drawable.start();
 属性动画从 API 11 才有，属性动画可以对任意对象的属性进行动画而不仅仅是View，达到的效果是：在一个时间间隔内完成对象从一个属性值到另一个属性值的改变。属性动画常用的动画类：ValueAnimator、ObjectAnimator、AnimatorSet。ObjectAnimator继承自ValueAnimator，AnimatorSet是动画集合。
 属性动画也有对应的xml标签，但是建议使用代码来实现属性动画，因为使用代码比xml简单。而且很多时候一个属性的起始值无法提前确定。
 
-####一、通过几个例子看如何使用属性动画：
+####1、通过几个例子看如何使用属性动画：
 
 1. 改变对象myObject的translationY属性，让其沿着Y轴向上平移一段距离：它的高度。该动画在默认时间内完成
 ```
@@ -227,7 +227,7 @@ set.playTogether(
 set.setDuration(5*1000).start();
 ```
 
-####二、上面的代码总结
+####2、上面的代码总结
 上面代码用到一个主要的方法
 ObjectAnimator.ofFloat(target, propertyName, values...);
 
@@ -243,6 +243,7 @@ ObjectAnimator.ofFloat(mIv, "alpha", 0f,1f)
 .start();
 如果要实现其他效果，修改propertyName和values就行了。
 
+**属性动画的原理就是通过反射，以动画的效果多次调用set方法来改变属性值的。所以，使用属性动画时，相应的对象属性必须有set方法，get方法可以没有，但是如果使用动画的时候没有传递初始值，就必须提供get方法，因为系统要通过get方法获取属性的默认初始值。**
 
 ######在属性动画中，View的常用属性
 alpha          透明度
@@ -255,39 +256,163 @@ ScaleX         x轴缩放
 ScaleY         y轴缩放
 
 
-####三、插值器和估值器
+####3、插值器和估值器
+插值器（TimeInterpolator/Interpolator）用来修饰动画效果，定义动画的变化规率（变化趋势），比如平移动画，可以匀速平移也可以加速平移，这个由插值器决定。
+估值器（Evaluator）用来决定具体的数值变化，比如（匀）加速平移时，“加速度”是多少由估值器决定。
+>插值器TimeInterpolator和Interpolator，后者是继承前者的接口。
+>TimeInterpolator接口是属性动画中新增的，用于兼容Interpolator接口，这使得所有过去的Interpolator实现类都可以直接在属性动画使用。
+>出自：[http://blog.csdn.net/carson_ho/article/details/72863901](http://blog.csdn.net/carson_ho/article/details/72863901)
 
 
-Interpolator 被用来修饰动画效果，定义动画的变化率，可以使存在的动画效果accelerated(加速)，decelerated(减速),repeated(重复),bounced(弹跳)等。
-AccelerateDecelerateInterpolator 在动画开始与结束的地方速率改变比较慢，在中间的时候加速
-AccelerateInterpolator  在动画开始的地方速率改变比较慢，然后开始加速
-AnticipateInterpolator 开始的时候向后然后向前甩
-AnticipateOvershootInterpolator 开始的时候向后然后向前甩一定值后返回最后的值
-BounceInterpolator   动画结束的时候弹起
-CycleInterpolator 动画循环播放特定的次数，速率改变沿着正弦曲线
-DecelerateInterpolator 在动画开始的地方快然后慢
-LinearInterpolator   以常量速率改变
-OvershootInterpolator    向前甩一定值后再回到原来位置
+######系统内置的插值器有以下几种：
+- AccelerateInterpolator  加速
+- DecelerateInterpolator 减速
+- LinearInterpolator   匀速
+- AccelerateDecelerateInterpolator 先加速再减速（在动画开始与结束的地方速率改变比较慢，在中间的时候最快）
+- AnticipateInterpolator 开始的时候向后然后向前甩（先退后再加速前进）
+- AnticipateOvershootInterpolator 开始的时候向后然后向前甩一定值后返回最后的值（先退后再加速前进，超出终点后再回终点）
+- BounceInterpolator   动画结束的时候弹起（最后阶段弹球效果）
+- CycleInterpolator 动画循环播放特定的次数，速率改变沿着正弦曲线
+- OvershootInterpolator    向前甩一定值后再回到原来位置（快速完成动画，超出再回到结束时的位置）
+**以上每种插值器都有对应的xml资源，比如：@android:anim/linear_interpolator。**（注意资源名的规律）
 
-如果android定义的interpolators不符合你的效果也可以自定义interpolators
+######系统内置的估值器有以下三种：
+IntEvaluator  以整型的形式从初始值到结束值 进行过渡
+FloatEvaluator  以浮点型的形式从初始值到结束值 进行过渡
+ArgbEvaluator  以Argb类型的形式从初始值到结束值 进行过渡
+
+如果系统内置的插值器和估值器无法满足需求，也可以自定义。
+View动画的插值器实现Interpolator接口，View动画没有估值器
+属性动画的插值器实现实现TimeInterpolator接口，估值器实现TypeEvaluator接口
+自定义插值器和估值器参考系统内置的插值器和估值器即可。
+
+以下摘自[http://blog.csdn.net/carson_ho/article/details/72863901](http://blog.csdn.net/carson_ho/article/details/72863901)
+实现Interpolator接口自定义插值器的说明（TimeInterpolator接口相同）
+```
+public interface Interpolator {  
+    // 内部只有一个方法
+    float getInterpolation(float input) {  
+       // 参数说明
+       // input值值变化范围是0-1，且随着动画进度（0% - 100% ）均匀变化
+       // 即动画开始时，input值 = 0；动画结束时input = 1
+       // 而中间的值则是随着动画的进度（0% - 100%）在0到1之间均匀增加
+   
+       ...// 插值器的计算逻辑
+   
+       return xxx；
+       // 返回的值就是用于估值器继续计算的fraction值
+	}
+}  
+```
+实现TypeEvaluator接口自定义估值器的说明
+```
+public interface TypeEvaluator {  
+
+    public Object evaluate(float fraction, Object startValue, Object endValue) {  
+        // 参数说明
+        // fraction：插值器getInterpolation（）的返回值
+        // startValue：动画的初始值
+        // endValue：动画的结束值
+
+        ....// 估值器的计算逻辑
+
+        return xxx；
+        // 赋给动画属性的具体数值
+        // 使用反射机制改变属性变化
+
+        // 特别注意
+        // 插值器的input值 和 估值器fraction有什么关系呢？
+        // 答：input的值决定了fraction的值：input值经过计算后传入到插值器的getInterpolation()，然后通过实现getInterpolation()中的逻辑算法，根据input值来计算出一个返回值，而这个返回值就是fraction了
+    }  
+}  
+```
+
+
+######如何使用插值器和估值器
+View动画和属性动画都可以使用插值器，估值器只有属性动画可以用。
+
+插值器用法
+```
+// 步骤1:创建需要设置动画的视图View
+Button mButton = (Button) findViewById(R.id.Button);
+// 步骤2：创建透明度动画的对象 & 设置动画效果
+Animation alphaAnimation = new AlphaAnimation(1,0);     
+alphaAnimation.setDuration(3000);
+// 步骤3：创建对应的插值器类对象
+Interpolator overshootInterpolator = new OvershootInterpolator();
+// 步骤4：给动画设置插值器
+alphaAnimation.setInterpolator(overshootInterpolator);
+// 步骤5：播放动画
+mButton.startAnimation(alphaAnimation);
+```
+估值器用法
+```
+// 在第3个参数中传入对应估值器类的对象
+ObjectAnimator anim = ObjectAnimator.ofObject(myView2, "height", new Evaluator()，1，3);
+```
+
+
+
+####4、属性动画的监听
+有两个监听接口AnimatorListener和AnimatorUpdateListener。AnimatorListener和View动画的AnimationListener类似，可以监听动画的开始、结束等过程。AnimatorUpdateListener可以监听动画的每一帧变化，动画每变化一帧，接口里的方法被调用一次。
+
+
+###四、动画相关的其他问题、知识、技巧
+
+######对于没有set和get方法的对象如何使用属性动画：
+1. 给对象加上相应的set和get方法，如果有权限的话（对系统的View是没有权限改源码的）
+2. 用一个包装类包装原始对象，间接的提供set和get方法
+3. 使用ValueAnimator，监听动画过程，自己实现属性的改变。ValueAnimator本身不作用于任何对象，直接使用它是没有效果的。它可以对一个值做动画，可以监听其动画过程，在动画过程中自己实现修改对象的属性值，也就相当于对象做了动画，示例代码如下：
+```
+private void performAnimate(final View button, final int start, final int end) {
+
+    ValueAnimator valueAnimator = ValueAnimator.ofInt(1, 100);
+
+    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+        //持有一个IntEvaluator对象，方便下面估值的时候使用
+        private IntEvaluator mIntEvaluator = new IntEvaluator();
+
+        @Override
+        public void onAnimationUpdate(ValueAnimator animator) {
+            //获得当前动画的进度值，整型1-100之间
+            int currentValue = (int) animator.getAnimatedValue();
+
+            //获得当前进度占整个动画过程的比例，浮点型，0-1之间
+            float fraction = animator.getAnimatedFraction();
+            //直接调用整型估值器，通过比例计算出宽度，然后设给Button
+            button.getLayoutParams().width = mIntEvaluator.evaluate(fraction, start, end);
+            button.requestLayout();
+        }
+    });
+    valueAnimator.setDuration(5000).start();
+}
+
+@Override
+public void onClick(View v) {
+    if (v == mButton) {
+        performAnimate(mButton, mButton.getWidth(), 500);
+    }
+}
+```
+
+######通过源码可以看出，属性动画需要运行在有Looper的线程中
+
+######使用动画的注意事项
+1. OOM问题。主要是帧动画图片数量较多且图片较大时容易出现OOM。
+2. 内存泄漏。在属性动画中有一类无限循环的动画，这类动画需要在Activity退出时及时停止，否则将导致Activity无法释放从而造成内存泄漏。通过验证后发现View动画不存在此问题。
+3. 兼容性问题。动画在3.0以下的系统上有兼容性问题，需要做好适配。
+4. View动画问题。View动画是对View的影像做动画，并不会真正的改变View的状态。如果出现动画完成后View无法隐藏，即setVisibility(View.GONE)失效，这个时候只要调用view.clearAnimation()清除View动画即可解决。
+5. 不要使用px。尽量使用dp，使用px会导致在不同设备上有不同的效果。
+6. View平移后：在3.0以前的系统，View动画和属性动画都是新位置无法点击，老位置可以点击；3.0以后（包括3.0），属性动画的点击事件触发位置是位移后的位置，View动画是原位置。
+7. 开启硬件加速可以提高动画的流畅性。
 
 
 
 
+###五、补充属性动画
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+View动画可以设置ViewGroup的子View的出场动画，属性动画可以为ViewGroup的子View的显示和隐藏设置过渡动画。出场动画文中已经介绍，属性动画实现的过度动画详细见 [Android中的View动画和属性动画](http://www.jianshu.com/p/b117c974deaf) 中的相关部分。
 
 
 
