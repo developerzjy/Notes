@@ -7,6 +7,7 @@
 看源码的一些关键点：
 - 从启动组件的方法开始，比如startActivity方法
 - ContextWrapper包装类，包装的是一个Context对象，即里面的mBase，它的实现类是ContextImpl
+- ActivityManagerService.java 是一个Binder （很重要的一个类）
 
 
 
