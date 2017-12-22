@@ -1,21 +1,4 @@
 
-《Android开发艺术探索》
-
-ThreadLocal
-https://www.cnblogs.com/whoislcj/p/5811989.html
-
-知乎
-https://www.zhihu.com/question/34652589
-
-===========================================================
-去看下handler机制就明白了，网上一大把。 
-1.handler机制是使用pipe来实现的 
-2.主线程没有消息处理时阻塞在管道的读端 
-3.binder线程会往主线程消息队列里添加消息，然后往管道写端写一个字节，这样就能唤醒主线程从管道读端返回，也就是说queue.next()会调用返回
-4.dispatchMessage()中调用onCreate, onResume
-===========================================================
-
-
 Handler
 Looper
 MessageQueue
@@ -32,7 +15,12 @@ ThreadLocal
 
 上面就是Android中消息机制的一个整体流程，也是“Android中Handler，Looper，MessageQueue，Message有什么关系？”的答案。通过上面的流程可以发现Handler在消息机制中的地位，是作为辅助类或者工具类存在的，用来供开发者使用。关于这个流程中的一些疑问和常见的问题，会在后面统一总结，下面先来通过源码分析一下这个过程的具体细节。
 
-
+===================
+对于这个流程有两个疑问：
+Looper中是如何能调用到Handler的方法的？
+Handler是如何能往MessageQueue中插入消息的？
+这两个问题会在后面给出答案，下面先来通过源码，分析一下这个过程的具体细节：
+====================
 
 
 首先main()方法位于ActivityThread.java类里面，这是一个隐藏类，源码位置：frameworks/base/core/java/android/app/ActivityThread.java
@@ -215,6 +203,67 @@ new Thread() {
 
 
 
+
+源码分析完了，下面看一下文章开头的两个问题：
+- Looper中是如何能调用到Handler的方法的？
+- Handler是如何能往MessageQueue中插入消息的？
+
+这两个问题源码分析中已经给出答案，这里做一下总结，首先搞清楚以下对象在消息机制中的关系：
+- Looper，MessageQueue，Message，ThreadLocal，Handler
+Looper对象有一个成员MessageQueue，MessageQueue是一个消息队列，用来存储消息Message
+Message消息中带有一个handler对象，所以Looper取出消息后，可以很方便的调用到Handler的方法（问题1解决）
+Message是如何带有handler对象的？是handler在发送消息的时候把自己封装到消息里的。
+Handler是如何发送消息的？是通过获取Looper对象从而取得Looper里面的MessageQueue，然后Handler就可以直接往MessageQueue里面插入消息了。（问题2解决）
+Handler是如何获取Looper对象的？Looper在创建的时候同时把自己保存到ThreadLocal中，并提供一个public的静态方法可以从ThreadLocal中取出Looper，所以Handler的构造方法里可以直接调用静态方法取得Looper对象。
+
+带着上面的一系列问题看源码就很清晰了，下面是知乎上的一个问答：
+**Android中为什么主线程不会因为Looper.loop()里的死循环卡死？**
+原因很简单，循环里有阻塞，所以死循环并不会一直执行，相反的，大部分时间是没有消息的，所以主线程大多数时候都是处于休眠状态，也就不会销毁太多的CPU资源导致卡死。
+1. 阻塞的原理是使用Linux的管道机制实现的
+2. 主线程没有消息处理时阻塞在管道的读端
+3. binder线程会往主线程消息队列里添加消息，然后往管道写端写一个字节，这样就能唤醒主线程从管道读端返回，也就是说looper循环里queue.next()会调用返回...
+
+这里说到binder线程，具体的实现细节不必深究，考虑下面的问题：
+**主线程的死循环如何处理其它事务？**
+首先需要看懂这个问题，主线程进入Looper死循环后，如何处理其他事物，比如activity的各个生命周期的回调函数是如何被执行到的（注意这里是在同一个线程下，代码是按顺序执行的，如果在死循环这阻塞了，那么进入死循环后循环以外的代码是如何执行的）。
+首先再看main函数的源码
+```
+Looper.prepareMainLooper();
+
+ActivityThread thread = new ActivityThread();
+thread.attach(false);
+
+if (sMainThreadHandler == null) {
+    sMainThreadHandler = thread.getHandler();
+}
+
+Looper.loop();
+```
+在Looper.prepare和Looper.loop之间new了一个ActivityThread并调用了它的attach方法，这个方法就是开启binder线程的，另外new ActivityThread()的时候同时会初始化它的一个H类型的成员，H是一个继承了Handler的类。此时的结果就是：在主线程开启loop死循环之前，已经启动binder线程，并且准备好了一个名为H的Handler，那么接下来在主线程死循环之外做一些事物处理就很简单了，只需要通过binder线程向H发送消息即可，比如发送 H.LAUNCH_ACTIVITY 消息就是通知主线程调用Activity.onCreate() ，当然不是直接调用，H收到消息后会进行一系列复杂的函数调用最终调用到Activity.onCreate()。
+至于谁来控制binder线程来向H发消息就不深入研究了，下面是《Android开发艺术探索》里面的一段话：
+>ActivityThread 通过 ApplicationThread 和 AMS 进行进程间通讯，AMS 以进程间通信的方式完成 ActivityThread 的请求后会回调 ApplicationThread 中的 Binder 方法，然后 ApplicationThread 会向 H 发送消息，H 收到消息后会将 ApplicationThread 中的逻辑切换到 ActivityThread 中去执行，即切换到主线程中去执行，这个过程就是主线程的消息循环模型。
+这个问题就到这里，更多内容看[原文](https://www.zhihu.com/question/34652589)
+
+
+
+####文章参考
+
+《Android开发艺术探索》
+
+ThreadLocal
+https://www.cnblogs.com/whoislcj/p/5811989.html
+
+知乎
+https://www.zhihu.com/question/34652589
+
+Android Handler到底是什么
+http://blog.csdn.net/u012759878/article/details/52004547
+
+Android 消息机制——你真的了解Handler
+http://blog.csdn.net/qian520ao/article/details/78262289#2-主线程的消息循环机制是什么
+
+[Android 消息机制——你真的了解Handler](http://blog.csdn.net/qian520ao/article/details/78262289#2-主线程的消息循环机制是什么)
+[Android Handler到底是什么](http://blog.csdn.net/u012759878/article/details/52004547)
 
 
 
