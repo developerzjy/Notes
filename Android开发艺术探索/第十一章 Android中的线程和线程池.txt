@@ -13,6 +13,190 @@ IntentService
 
 
 线程池
+ThreadPoolExecutor是线程池的真正实现，他通过构造方法的一系列参数，来构成不同配置的线程池。常用的构造方法有下面四个：
+```
+ThreadPoolExecutor(int corePoolSize,
+                        int maximumPoolSize,
+                        long keepAliveTime,
+                        TimeUnit unit,
+                        BlockingQueue<Runnable> workQueue) 
+```
+```
+ThreadPoolExecutor(int corePoolSize,
+                        int maximumPoolSize,
+                        long keepAliveTime,
+                        TimeUnit unit,
+                        BlockingQueue<Runnable> workQueue,
+                        ThreadFactory threadFactory)
+```
+```
+ThreadPoolExecutor(int corePoolSize,
+                        int maximumPoolSize,
+                        long keepAliveTime,
+                        TimeUnit unit,
+                        BlockingQueue<Runnable> workQueue,
+                        RejectedExecutionHandler handler)
+```
+```
+ThreadPoolExecutor(int corePoolSize,
+                        int maximumPoolSize,
+                        long keepAliveTime,
+                        TimeUnit unit,
+                        BlockingQueue<Runnable> workQueue,
+                        ThreadFactory threadFactory,
+                        RejectedExecutionHandler handler)
+```
+参数说明
+- corePoolSize
+核心线程数，默认情况核心线程会一直存活，即使处于闲置状态也不会受keepAliveTime限制。除非将allowCoreThreadTimeOut设置为true。
+- maximumPoolSize
+线程池所能容纳的最大线程数。
+- keepAliveTime
+非核心线程的闲置超时时间，超过这个时间就会被回收。如果allowCoreThreadTimeOut设置为true，核心线程也会被回收。
+- unit
+keepAliveTime的单位
+- workQueue
+线程池中的任务队列。常用的有三种队列：SynchronousQueue, LinkedBlockingDeque, ArrayBlockingQueue
+- threadFactory
+线程工厂，提供创建新线程的功能。通过线程工厂可以对线程的一些属性进行定制。
+- RejectedExecutionHandler
+当线程池中的资源已经全部使用，添加新线程被拒绝时，会调用RejectedExecutionHandler的rejectedExecution方法。
+
+
+线程队列
+介绍上面说到的常用的三种队列
+
+######SynchronousQueue
+收到新任务时，直接交给线程处理，如果所有线程都在工作，那么新建线程来处理这个任务。所以为了保证不出现"线程数达到了 maximumPoolSize而不能新建线程"的错误，使用这个类型队列的时候，maximumPoolSize 一般指定成 Integer.MAX_VALUE，即无限大。
+（有核心线程和非核心线程，队列不存在的）
+
+######LinkedBlockingDeque
+这个队列没有大小限制。当接收到新任务时，如果当前线程小于核心线程数，则新建核心线程处理任务。如果当前线程数等于核心线程数，则进入队列等待。由于队列没有大小限制，也就导致了 maximumPoolSize 的设定失效，因为这时最大线程数不会超过核心线程数。
+（有核心线程和队列，非核心线程不存在）
+
+######ArrayBlockingQueue
+可以限定队列长度，收到任务的时候，如果没有达到corePoolSize的值，则新建核心线程执行任务，如果达到了，入队等候。如果队列已满，则新建非核心线程执行任务。如果达到了maximumPoolSize，就会发生错误。
+
+######DelayQueue
+队列内元素必须实现 Delayed 接口，这就意味着你传进去的任务必须先实现 Delayed 接口。这个队列接收到任务时，首先先入队，只有达到了指定的延时时间，才会执行任务。
+
+
+
+
+
+
+Android/Java线程池总结
+============================================================================
+线程池的优点：
+- 重用线程，减少线程创建和销毁的性能开销。
+- 管理线程，并提供定时执行以及指定间隔循环执行等功能。
+
+Android中的线程来源于Java中的Executor，实现类是ThreadPoolExecutor，ThreadPoolExecutor通过构造方法的一系列参数，来构成不同配置的线程池。常用的构造方法有下面四个：
+
+```
+ThreadPoolExecutor(int corePoolSize,
+                        int maximumPoolSize,
+                        long keepAliveTime,
+                        TimeUnit unit,
+                        BlockingQueue<Runnable> workQueue) 
+```
+```
+ThreadPoolExecutor(int corePoolSize,
+                        int maximumPoolSize,
+                        long keepAliveTime,
+                        TimeUnit unit,
+                        BlockingQueue<Runnable> workQueue,
+                        ThreadFactory threadFactory)
+```
+```
+ThreadPoolExecutor(int corePoolSize,
+                        int maximumPoolSize,
+                        long keepAliveTime,
+                        TimeUnit unit,
+                        BlockingQueue<Runnable> workQueue,
+                        RejectedExecutionHandler handler)
+```
+```
+ThreadPoolExecutor(int corePoolSize,
+                        int maximumPoolSize,
+                        long keepAliveTime,
+                        TimeUnit unit,
+                        BlockingQueue<Runnable> workQueue,
+                        ThreadFactory threadFactory,
+                        RejectedExecutionHandler handler)
+```
+
+####参数说明
+- corePoolSize
+核心线程数，默认情况核心线程会一直存活，即使处于闲置状态也不会受keepAliveTime限制。除非将allowCoreThreadTimeOut设置为true。
+- maximumPoolSize
+线程池所能容纳的最大线程数。
+- keepAliveTime
+非核心线程的闲置超时时间，超过这个时间就会被回收。如果allowCoreThreadTimeOut设置为true，核心线程也会被回收。
+- unit
+keepAliveTime的单位
+- workQueue
+线程池中的任务队列。常用的有四种队列：SynchronousQueue, LinkedBlockingDeque, ArrayBlockingQueue, DelayQueue。
+- threadFactory
+线程工厂，提供创建新线程的功能。通过线程工厂可以对线程的一些属性进行定制。
+- RejectedExecutionHandler
+当线程池中的资源已经全部使用，添加新线程被拒绝时，会调用RejectedExecutionHandler的rejectedExecution方法。
+
+
+
+####线程队列
+下面介绍上面说到的常用的四种队列，首先我的理解是：有核心线程、非核心线程、任务队列三个角色，他们可以根据当前配置，对每个新来的任务做出处理（处理就是要么分配线程去执行任务，要么把任务存到任务队列里等待分配线程）。
+
+可以设计如下几种情况：
+1. 有限个核心线程+无限个非核心线程，那么来一个新任务就能给它分配一个线程去执行，这个时候也就没必要用任务队列了。
+2. 有限个核心线程+任务队列（队列没有大小限制），那么来一个新任务可以给它分配线程去执行，无线程分配可以存到队列里，这个时候就没必要使用非核心线程了。
+3. 上面两种是比较极端的情况，如果三个角色配合使用能达到更好的效果。
+
+
+
+
+######SynchronousQueue
+收到新任务时，直接交给线程处理，如果所有线程都在工作，那么新建线程来处理这个任务。所以为了保证不出现"线程数达到了 maximumPoolSize而不能新建线程"的错误，使用这个类型队列的时候，maximumPoolSize 一般指定成 Integer.MAX_VALUE，即无限大。
+（有核心线程和非核心线程，队列不存在的）
+
+######LinkedBlockingDeque
+这个队列没有大小限制。当接收到新任务时，如果当前线程小于核心线程数，则新建核心线程处理任务。如果当前线程数等于核心线程数，则进入队列等待。由于队列没有大小限制，也就导致了 maximumPoolSize 的设定失效，因为这时最大线程数不会超过核心线程数。
+（有核心线程和队列，非核心线程不存在）
+
+######ArrayBlockingQueue
+可以限定队列长度，收到任务的时候，如果没有达到corePoolSize的值，则新建核心线程执行任务，如果达到了，入队等候。如果队列已满，则新建非核心线程执行任务。如果达到了maximumPoolSize，就会发生错误。
+
+######DelayQueue
+队列内元素必须实现 Delayed 接口，这就意味着你传进去的任务必须先实现 Delayed 接口。这个队列接收到任务时，首先先入队，只有达到了指定的延时时间，才会执行任务。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
