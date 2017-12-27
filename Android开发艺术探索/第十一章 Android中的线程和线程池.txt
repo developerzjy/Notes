@@ -87,6 +87,7 @@ keepAliveTime的单位
 
 Android/Java线程池总结
 ============================================================================
+
 线程池的优点：
 - 重用线程，减少线程创建和销毁的性能开销。
 - 管理线程，并提供定时执行以及指定间隔循环执行等功能。
@@ -126,6 +127,8 @@ ThreadPoolExecutor(int corePoolSize,
                         RejectedExecutionHandler handler)
 ```
 
+-------------------------
+
 ####参数说明
 - corePoolSize
 核心线程数，默认情况核心线程会一直存活，即使处于闲置状态也不会受keepAliveTime限制。除非将allowCoreThreadTimeOut设置为true。
@@ -142,50 +145,113 @@ keepAliveTime的单位
 - RejectedExecutionHandler
 当线程池中的资源已经全部使用，添加新线程被拒绝时，会调用RejectedExecutionHandler的rejectedExecution方法。
 
+--------------------------
 
+####线程池的任务队列（重要）
+下面介绍上面说到的常用的四种队列，在这之前先根据上面的参数分析一下帮助理解：有核心线程、非核心线程、任务队列三个角色，他们可以根据当前配置，对每个新来的任务做出处理（处理就是要么分配线程去执行任务，要么把任务存到任务队列里等待分配线程）。那么，三个角色可以设计如下：
+**有限个核心线程+任务队列（队列大小可配置）+无限个非核心线程**
+（确切的说是corePoolSize个核心线程，maximumPoolSize-corePoolSize个非核心线程）
 
-####线程队列
-下面介绍上面说到的常用的四种队列，首先我的理解是：有核心线程、非核心线程、任务队列三个角色，他们可以根据当前配置，对每个新来的任务做出处理（处理就是要么分配线程去执行任务，要么把任务存到任务队列里等待分配线程）。
+不难理解，任务很多的时候，核心线程不够用了就存到任务队列里，队列存满了，就创建非核心线程执行任务（就像节假日客运站临时加车一样）。这样设计包含了两种极端情况，就是队列大小是0和队列无限大，所以具体设计如下三种情况：
+1. 有限个核心线程+无限个非核心线程，那么来一个新任务就能给它分配一个线程去执行，这个时候任务队列大小是0。
+2. 有限个核心线程+任务队列（队列无限大），那么来一个新任务可以给它分配线程去执行，无线程分配可以存到队列里。
+3. 有限个核心线程+任务队列（队列大小有限且不是0）+无限个非核心线程。
 
-可以设计如下几种情况：
-1. 有限个核心线程+无限个非核心线程，那么来一个新任务就能给它分配一个线程去执行，这个时候也就没必要用任务队列了。
-2. 有限个核心线程+任务队列（队列没有大小限制），那么来一个新任务可以给它分配线程去执行，无线程分配可以存到队列里，这个时候就没必要使用非核心线程了。
-3. 上面两种是比较极端的情况，如果三个角色配合使用能达到更好的效果。
-
-
-
+这三种设计，就对应了workQueue参数的三种队列：SynchronousQueue, LinkedBlockingDeque, ArrayBlockingQueue
 
 ######SynchronousQueue
-收到新任务时，直接交给线程处理，如果所有线程都在工作，那么新建线程来处理这个任务。所以为了保证不出现"线程数达到了 maximumPoolSize而不能新建线程"的错误，使用这个类型队列的时候，maximumPoolSize 一般指定成 Integer.MAX_VALUE，即无限大。
-（有核心线程和非核心线程，队列不存在的）
+收到新任务时，直接交给线程处理，如果所有线程都在工作，那么新建线程来处理这个任务。如果将maximumPoolSize指定成Integer.MAX_VALUE，就是无限个线程。
+（对应上面的第1种设计）
 
 ######LinkedBlockingDeque
 这个队列没有大小限制。当接收到新任务时，如果当前线程小于核心线程数，则新建核心线程处理任务。如果当前线程数等于核心线程数，则进入队列等待。由于队列没有大小限制，也就导致了 maximumPoolSize 的设定失效，因为这时最大线程数不会超过核心线程数。
-（有核心线程和队列，非核心线程不存在）
+（对应上面第2种设计）
 
 ######ArrayBlockingQueue
 可以限定队列长度，收到任务的时候，如果没有达到corePoolSize的值，则新建核心线程执行任务，如果达到了，入队等候。如果队列已满，则新建非核心线程执行任务。如果达到了maximumPoolSize，就会发生错误。
+（对应上面第3种设计）
 
 ######DelayQueue
 队列内元素必须实现 Delayed 接口，这就意味着你传进去的任务必须先实现 Delayed 接口。这个队列接收到任务时，首先先入队，只有达到了指定的延时时间，才会执行任务。
 
 
+_现实中，队列不可能无限大，非核心线程不可能有无数个，那么上面几种队列就有超出线程总数的情况，这种情况只需要配置ThreadPoolExecutor的第7个参数RejectedExecutionHandler即可（可以翻到上面重新看下参数说明）。_
+
+
+--------------------------
+
+####4种常见的线程池
+下面介绍4种系统提供的配置好的线程池，当然，如果理解了上面的任务队列，自己配置出相同的线程池是很简单的。这4种线程池使用系统的工具类Executors来创建，如下：
+```
+//下面加了参数1的是因为没有无参数的重载方法。
+Executors.newFixedThreadPool(1);
+Executors.newCachedThreadPool();
+Executors.newScheduledThreadPool(1);
+Executors.newSingleThreadExecutor();
+```
+
+######FixedThreadPool
+对应：有限个核心线程+任务队列（队列无限大） --> LinkedBlockingQueue
+它的创建方法需要传入参数来指定核心线程数。功能特点很好理解，下面是艺术探索中对它的描述：
+>它是一种线程数量固定的线程池，当线程处于空闲状态时，它们并不会被回收，除非线程池被关闭。当所有线程都处于活动状态时，新任务就会处于等待状态，直到有线程空闲出来。由于FixedThreadPool只有核心线程并且这些核心线程不会被回收，这意味着它能够更加快速地响应外界请求。通过newFixedThreadPool方法的源码可以发现FixedThreadPool中只有核心线程没有超时机制，另外任务队列也是没有大小限制的。
+
+
+######CachedThreadPool
+对应：有限个核心线程+无限个非核心线程  --> SynchronousQueue
+它的核心线程数是0，所以它的创建方法不需要参数，下面是艺术探索中对它的描述：
+>它是一种线程数量不定的线程池，它只有非核心线程，并且最大线程数为Integer.MAX_VALUE。由于Integer.MAX_VALUE是一个很大的数，实际上就相当于最大线程数可以任意大。当线程池中的线程都处于活动状态时，线程池会创建新的线程来处理新任务，否则就会利用空闲线程来处理新任务。线程池中的空闲线程都有超时机制，超时时长是60秒，超过60秒闲置的线程就会被回收。和FixedThreadPool不同的是，CachedThreadPool的任务队列其实相当于一个空集合，这将导致任何任务都会被立即执行。这类线程池比较适合执行大量的耗时较少的任务。当整个线程池处于闲置状态时，所有线程都会超时而被停止，这个时候CachedThreadPool中实际上是没有任何线程的，它几乎是不占任何系统资源的。
+
+
+######ScheduledThreadPool
+对应：DelayQueue
+它的创建方法需要参数来指定核心线程数，描述如下：
+>它的核心线程数是固定的，而非核心线程数是没有限制的。这个线程池主要用于执行定时任务和有固定周期的重复任务。
+
+
+######SingleThreadExecutor
+对应：有限个核心线程+任务队列（队列无限大） --> LinkedBlockingQueue
+与FixedThreadPool的区别在于，SingleThreadExecutor只有一个核心线程，所以它的创建方法无需参数。描述如下：
+>这类线程池内部只有一个核心线程，它确保所有的任务都在同一个线程中按顺序执行。意义在于统一所有外界任务到一个线程中，这使得在这些任务之间不需要处理线程同步的问题。
+
+
+<br>
+最后是使用线程池的几个示例：
+```
+Runnable myRunnable = new Runnable() {
+    @Override
+    public void run() {
+        SystemClock.sleep(2000);
+    }
+};
+
+//自己配置的线程池
+ThreadPoolExecutor myExecutor = new ThreadPoolExecutor(2, 10, 5, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+//执行myRunnable任务
+myExecutor.execute(myRunnable);
+
+//系统提供的线程池
+ExecutorService fixedExecutor = Executors.newFixedThreadPool(1);
+//执行myRunnable任务
+fixedExecutor.execute(myRunnable);
+
+//系统提供的线程池
+ScheduledExecutorService sExecutor = Executors.newScheduledThreadPool(1);
+//2000ms后执行myRunnable
+sExecutor.schedule(myRunnable, 2000, TimeUnit.MILLISECONDS);
+//10ms后，每隔1000ms执行一次myRunnable
+sExecutor.scheduleAtFixedRate(myRunnable, 10, 1000, TimeUnit.MILLISECONDS);
+```
 
 
 
+<br><br>
+#####文章参考
+《Android开发艺术探索》
+[Java多线程-线程池ThreadPoolExecutor构造方法和规则](http://blog.csdn.net/qq_25806863/article/details/71126867)
+[线程池，这一篇或许就够了](http://blog.csdn.net/lift_class/article/details/70216690)
 
 
-
-
-
-
-
-
-
-
-
-
-
+<br><br>
 
 
 
