@@ -1,0 +1,65 @@
+
+
+
+
+###一、图片的高效加载
+
+######如何加载图片？
+使用BitmapFactory类加载图片，根据图片的不同来源，BitmapFactory类提供了4种加载图片的方法：
+- decodeFile  从文件系统加载图片
+- decodeResource  从资源中加载图片
+- decodeStream  从输入流中加载图片
+- decodeByteArray  从字节数组中加载图片
+4个方法都返回一个Bitmap对象。4个方法都有一个重载方法可以接收 BitmapFactory.Options 参数。可以通过设置Options参数的inSampleSize值来缩放图片，规则如下：
+
+- inSampleSize=1 图片是原图大小
+- inSampleSize=2 图片缩放1/4
+- inSampleSize=4 图片缩放1/16
+- ..........（规律）
+
+inSampleSize的值应该是2的指数，小于1的话当作1来处理。
+>如果不是2的指数，系统会向下取整选择一个最接近2的指数的数来代替，但是并不是在所有Android版本上都是这样。
+
+
+######如何高效加载图片？
+
+```
+BitmapFactory.Options options = new BitmapFactory.Options();  
+options.inJustDecodeBounds = true;  
+BitmapFactory.decodeResource(getResources(), R.id.myimage, options); 
+//这时options就记录了图片的原始宽高
+//但是图片并没有加载到内存
+//接下来用得到的原图宽高来计算缩放比例
+int imageHeight = options.outHeight;  
+int imageWidth = options.outWidth;
+//计算规则自己定，比如缩放到view的大小
+//将计算的结果
+options.inSampleSize = 计算的结果;
+options.inJustDecodeBounds = false; 
+//这时加载图片就会将缩放后的图片加载到内存了
+BitmapFactory.decodeResource(getResources(), R.id.myimage, options);
+```
+
+
+
+
+###而、图片的缓存
+
+LruCache内存缓存
+DiskLruCache磁盘缓存
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
