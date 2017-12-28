@@ -43,20 +43,31 @@ BitmapFactory.decodeResource(getResources(), R.id.myimage, options);
 
 
 
-###而、图片的缓存
+###二、图片的缓存
 
 LruCache内存缓存
 DiskLruCache磁盘缓存
 
+#####LruCache
+- LruCache是一个泛型类，内部采用LinkedHashMap以强引用的方式存储外界的缓存对象，并提供了get和put方法来完成缓存的获取与添加操作。
+- LruCache是线程安全的
+- 使用LruCache需要指定缓存的总容量大小并重写sizeOf方法。sizeOf方法是用来计算缓存对象大小的，单位必须和总容量单位一致。
+- LruCache移除旧缓存的时候会调用entyrRemoved方法，所以有需要的话也可以重写entyrRemoved方法
 
 
+#####DiskLruCache
+- DiskLruCache非Google官方编写，但获得官方认证
+
+- 存储位置：DiskLruCache并没有限制数据的缓存位置，可以自由地进行设定。但是通常情况下多数应用程序都会将缓存的位置选择为 /sdcard/Android/data/<application package>/cache 这个路径。选择在这个位置有两点好处：第一，这是存储在SD卡上的，因此即使缓存再多的数据也不会对手机的内置存储空间有任何影响，只要SD卡空间足够就行。第二，这个路径被Android系统认定为应用程序的缓存路径，当程序被卸载的时候，这里的数据也会一起被清除掉，这样就不会出现删除程序之后手机上还有很多残留数据的问题。
+
+- 由于DiskLruCache并不是由Google官方编写的，所以这个类并没有被包含在Android API当中，我们需要将这个类从网上下载下来，下载好了源码之后，只需要在项目中新建一个libcore.io包，然后将DiskLruCache.java文件复制到这个包中即可。（Glide开源库封装有了DiskLruCache这个类，所以添加Glide依赖后也可以直接使用这个类）
+
+- DiskLruCache是不能new出实例的，需要调用它的open()方法
+`public static DiskLruCache open(File directory, int appVersion, int valueCount, long maxSize)`
+open()方法接收四个参数，第一个参数指定的是数据的缓存地址，第二个参数指定当前应用程序的版本号，第三个参数指定同一个key可以对应多少个缓存文件，基本都是传1，第四个参数指定最多可以缓存多少字节的数据。
 
 
-
-
-
-
-
+详细：http://blog.csdn.net/guolin_blog/article/details/28863651
 
 
 

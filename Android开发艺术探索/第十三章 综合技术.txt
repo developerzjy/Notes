@@ -1,0 +1,67 @@
+
+
+
+CrashHandler捕获应用的crash信息
+
+
+最大方法数65536的问题
+Android中dex文件所能包含的最大方法数为65536
+
+1. 使用插件化的机制来动态加载部分dex，通过将一个dex拆分成两个或多个dex，这就可以在一定程度上解决方法数越界的问题。但是插件化是一套重量级的技术方案，而且兼容性问题往往较多，从单纯解决方法数越界的角度来说，插件化并不是一个非常适合的方案。
+2. 通过官方提供的multidex来解决，5.0以前需要引入android-support-multide.jar这个jar包，这个jar包可以在SDK目录下的extras/android/support/multide/library/libs下面找到。5.0开始，Android默认支持了multidex。
+
+在AndroidStudio中使用multidex，
+首先要使用Android SDK Build Tools 21.1及以上版本，
+然后修改工程的app目录下的build.gradle文件，在defaultConfig中添加multiDexEnabled true这个配置项，
+然后在dependencies中添加multidex的依赖：compile 'com.android.support:multidex:1.0.0'
+最后在代码中加入支持multidex的功能，有三种方法：
+1. 在manifest文件中指定Application为MultiDexApplication，也就是设置name属性为：android:name="android.support.multidex.MultiDexApplication"
+2. 让应用的Application继承MultiDexApplication
+3. 如果不想让应用的Application继承MultiDexApplication，可以重写Application的attachBaseContext方法，这个方法比Application的onCreate要先执行。如下：
+```
+public class MyApplication extends Application {
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+}
+```
+
+multidex的更多配置看艺术探索第十三章，比如指定主dex文件中所要包含的类等。
+
+
+multidex带来的问题：
+1. 应用启动速度会降低。由于应用启动时会加载额外的dex文件，这将导致应用的启动速度降低，甚至出现ANR，尤其是其他的dex文件较大的时候，所以要避免生成较大的dex文件。
+2. 由于Dalvik linearAlloc的bug，这可能导致使用multidex的应用无法在Android4.0以前的手机上运行，因此要做大量的兼容性测试。同时由于Dalvik linearAlloc的bug，multidex可能产生大量的内存消耗，这回导致应用崩溃。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
