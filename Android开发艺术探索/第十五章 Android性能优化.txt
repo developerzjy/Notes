@@ -1,0 +1,80 @@
+
+
+
+#####布局优化
+- 减少布局文件的层级；
+- 使用性能好的ViewGroup，比如LinearLayout和RelativeLayout都可以的时候优先使用LinearLayout；
+- <include>标签，<merge>标签，ViewStub
+include标签只支持android:layout_开头的属性，id属性是特例，如果include指定了id属性，同时被包含的布局文件的跟元素也指定了id属性，那么以include的id为准。指定layout_*属性的时候，layout_width和layout_height必须存在，否则其他layout_*属性无效。
+ViewStub是按需加载，id属性是自身id，inflatedId属性是需要加载的布局的id。加载ViewStub有如下两种方式：
+```
+((ViewStub) findViewById(R.id.stub_id)).setVisibility(View.VISIBLE);
+View importPanel = ((ViewStub) findViewById(R.id.stub_id)).inflate();
+```
+
+
+#####绘制优化
+
+
+#####内存泄漏
+1. 静态变量（比如静态变量引用Activity的Context导致Activity无法回收）
+2. 单例模式
+3. 属性动画（比如无限循环动画在Activity退出的时候没有停止，会导致动画持有View，而View持有了Activity，所以Activity无法回收）
+
+
+
+#####响应速度优化和ANR日志分析
+
+当一个进程发生ANR之后，系统会在data/anr目录下创建一个文件traces.txt，可以通过分析这个文件来定位ANR的原因。
+
+
+#####ListView优化
+ViewHolder、硬件加速等
+
+#####线程优化
+尽量使用线程池
+
+#####其他性能优化
+- 避免创建过多对象
+- 不要过多使用枚举
+- 常量用static final来修饰
+- 适当的使用软引用和弱引用
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
