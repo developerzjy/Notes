@@ -43,6 +43,7 @@ ViewHolder、硬件加速等
 
 #####MAT内存分析工具
 
+mat工具下载地址：http://www.eclipse.org/mat/downloads.php
 
 
 
