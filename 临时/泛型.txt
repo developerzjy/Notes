@@ -1,0 +1,155 @@
+
+
+## 一、基本概念和用法
+
+>在Java语言处于还没有出现泛型的版本时，只能通过Object是所有类型的父类和类型强制转换两个特点的配合来实现类型泛化。例如在哈希表的存取中，JDK1.5之前使用HashMap的get()方法，返回值就是一个Object对象，由于Java语言里面所有的类型都继承于java.lang.Object，那Object转型为任何对象成都是有可能的。但是也因为有无限的可能性，就只有程序员和运行期的虚拟机才知道这个Object到底是个什么类型的对象。在编译期间，编译器无法检查这个Object的强制转型是否成功，如果仅仅依赖程序员去保障这项操作的正确性，许多ClassCastException的风险就会被转嫁到程序运行期之中。
+
+泛型是JDK1.5的一项新特性，它的本质是将类型参数化，简单的说就是将所操作的数据类型指定为一个参数，在用到的时候通过传参来指定具体的类型。在Java中，这种参数类型可以用在类、接口和方法的创建中，分别称为泛型类、泛型接口和泛型方法。一个泛型类的例子如下：
+
+```
+//将要操作的数据类型指定为参数T
+public class Box<T> {
+    private T t;
+	
+	public void add(T t) {
+	    this.t = t;
+	}
+	
+	public T get() {
+	    return this.t;
+	}
+}
+```
+```
+//使用的时候指定具体的类型为Integer
+//那么Box类里面的所有T都相当于Integer了
+Box<Integer> integerBox = new Box<Integer>();
+```
+
+上面代码，Box类引入了一个类型变量T，用尖括号<>括起来，并放在类名的后面。泛型类可以有多个类型变量，例如Box<T, U>，但是类型变量名不能重复，例如Box<T, T>是错误的。另外，类型变量名一般使用大写形式，且比较短（不强制，只是一种命名规约），下面是一些常用的类型变量：
+- E：元素（Element），多用于java集合框架  
+- K：关键字（Key）  
+- N：数字（Number）  
+- T：类型（Type）  
+- V：值（Value）  
+- S：第二类型  
+- U：第三类型
+
+
+泛型接口和泛型方法的定义和使用示例如下：
+```
+//泛型接口
+interface Show<T,U> {
+    void show(T t,U u);
+}
+
+class ShowTest implements Show<String,Date> {
+    @Override  
+    public void show(String str,Date date) {
+        System.out.println(str);
+        System.out.println(date);
+    }
+}
+
+public static void main(String[] args) {  
+    ShowTest showTest = new ShowTest();
+    showTest.show("Hello",new Date());
+}
+```
+```
+//泛型方法
+public <T, U> T get(T t, U u) {
+    if (u != null)
+        return t;
+    else
+        return null;
+}
+
+String str = get("Hello", "World");
+```
+
+
+
+## 二、泛型变量的类型限定
+上面的例子都是直接使用<T>这样的形式来完成泛型类型的声明，有的时候，类、接口或方法需要对类型变量加以约束。看下面的例子：
+
+```
+public <T> T test(T t1,T t2) {
+    if(t1.compareTo(t2)>=0);//编译错误
+    return t1;
+}
+```
+
+在编译之前，我们并不知道这个泛型类型T，到底是什么类型，所以，只能默认T为原始类型Object。所以它只能调用来自于Object的那几个方法，而不能调用compareTo方法。我们知道，所有实现Comparable接口的类，都会有compareTo方法。所以，可以对<T>做如下限定：
+```
+public <T extends Comparable> T test(T t1,T t2) {
+    if(t1.compareTo(t2)>=0);
+    return t1;
+}
+```
+限定之后，只有实现了Comparable接口的类才能作为test方法的实际类型参数。类似的<U extends Number>限定泛型参数只接受Number类或者子类Integer、Float等。
+注意点：
+1. 不管限定是类还是接口，统一都使用extends关键字
+2. 可以使用&符号给出多个限定，例如：<U extends Number & MyInterface1 & MyInterface1>
+3. 多个限制只能有一个类名，其他都是接口名，且类名在最前面。
+
+
+
+
+
+
+
+
+
+
+## 三、通配符
+
+
+## 四、Java泛型的原理-类型擦除
+
+
+
+
+对文章内容进行提炼，加入自己的思想
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
