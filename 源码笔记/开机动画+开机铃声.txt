@@ -1,0 +1,135 @@
+
+
+参考 http://blog.csdn.net/u011006622/article/details/50779779
+
+================================
+
+开机动画和开机log：直接替换动画文件bootanimation.zip和log图片即可
+
+开机声音系统默认是没有的，可以仿照开机动画的
+涉及的文件主要是三个，在frameworks/base/cmds/bootanimation目录下：
+- bootanimation_main.cpp
+- BootAnimation.h
+- BootAnimation.cpp
+除此之外需要其他的文件，下面步骤中给出
+
+1. 首先在BootAnimation.h添加方法的声明和头文件的引用
+```
+//头文件引用
+#include <media/AudioSystem.h>
+#include <media/mediaplayer.h>
+
+public:
+                BootAnimation();
+    virtual     ~BootAnimation();
+
+    sp<SurfaceComposerClient> session() const;
+	//在这里声明方法
+	void bootMusic();
+
+private:
+    virtual bool        threadLoop();
+    virtual status_t    readyToRun();
+```
+2. 在BootAnimation.cpp中实现这个方法
+```
+void BootAnimation::bootMusic()
+{
+	ALOGD("::::1.into bootMusic");
+    int index;
+    MediaPlayer* mp= new MediaPlayer();
+    if (mp->setDataSource(NULL, "/system/etc/bootaudio.mp3", NULL) == NO_ERROR)
+    {
+		ALOGD("::::2.MediaPlayer prepare");
+        mp->setAudioStreamType(AUDIO_STREAM_ENFORCED_AUDIBLE);
+        mp->prepare();
+    }
+	
+	audio_devices_t device = AudioSystem::getDevicesForStream(AUDIO_STREAM_ENFORCED_AUDIBLE);
+    AudioSystem::initStreamVolume(AUDIO_STREAM_ENFORCED_AUDIBLE,0,7);
+    AudioSystem::setStreamVolumeIndex(AUDIO_STREAM_ENFORCED_AUDIBLE, 7, device);
+		
+    AudioSystem::getStreamVolumeIndex(AUDIO_STREAM_ENFORCED_AUDIBLE, &index, device);
+    if (index != 0)
+    {
+		ALOGD("::::3.start play boot music");
+        mp->seekTo(0);
+        mp->start();
+    }
+	ALOGD("::::4.bootMusic method end");
+}
+```
+这个方法是用来播放音乐的，正好BootAnimation.cpp里面有一个playMusic()方法，上面代码的一些细节就参考了playMusic()方法。
+
+
+3.在bootanimation_main.cpp里面调用bootMusic方法
+```
+// create the boot animation object
+sp<BootAnimation> boot = new BootAnimation();
+
+//在这里调用bootMusic方法
+BootAnimation *animation= new BootAnimation();
+animation->bootMusic();
+
+IPCThreadState::self()->joinThreadPool();
+```
+
+#####一、
+整个流程就是上面这样，但是播放声音需要引入库，所以还需要修改Android.mk文件（与BootAnimation.h等在同一个目录下的）
+```
+LOCAL_SHARED_LIBRARIES := \
+    libcutils \
+    libutils \
+    libbinder \
+    libui \
+    libskia \
+    libEGL \
+    libGLESv1_CM \
+    libgui \
+    libmedia
+```
+libmedia是新添加的（我的源码里直接就有这个库）
+
+
+#####二、
+上面第2步的 setDataSource(NULL, "/system/etc/bootaudio.mp3", NULL) ，其中bootaudio.mp3就是开机要播放的音乐文件，文件放到哪里，setDataSource中的路径就设为哪里，这个路径不是源码路径，是编译出来的out下的路径。
+比如开机动画文件，源码路径放在了device/qcom/产品名/boot路径下，然后编译出来的路径是out/target/product/产品名/system/media，编译出来的路径可以通过相应的mk文件来配置，所以音乐文件放到device/qcom/产品名/boot目录下的话还需要参考动画文件的mk配置，让音乐文件编译到out/target/product/产品名/system/media目录，然后setDataSource里面传的路径就是"/system/media/bootaudio.mp3"。
+第2步的代码是参考系统一些声音文件来做的，系统的声音文件在源码framworks/base/data/sounds路径下，编译完成后放到什么地方是在mk文件上配置的，在这个路径下的AllAudio.mk里面，参考其他系统声音文件的配置，添加如下代码：
+$(LOCAL_PATH)/bootaudio.mp3:system/etc/bootaudio.mp3 \
+这样，编译后bootaudio.mp3文件就在out目录的out/target/product/产品名/system/etc路径下了，然后代码就是setDataSource(NULL, "/system/etc/bootaudio.mp3", NULL)
+
+总的来说，就是把bootaudio.mp3编译到out的哪个路径下，给setDataSource传参设置的就是哪个路径。编译到哪个路径可以随意配置（但不熟悉的路径尽量不要太浪）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
