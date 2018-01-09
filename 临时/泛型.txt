@@ -26,16 +26,6 @@ public class Box<T> {
 Box<Integer> integerBox = new Box<Integer>();
 ```
 
-上面代码，Box类引入了一个类型变量T，用尖括号<>括起来，并放在类名的后面。泛型类可以有多个类型变量，例如Box<T, U>，但是类型变量名不能重复，例如Box<T, T>是错误的。另外，类型变量名一般使用大写形式，且比较短（不强制，只是一种命名规约），下面是一些常用的类型变量：
-- E：元素（Element），多用于java集合框架  
-- K：关键字（Key）  
-- N：数字（Number）  
-- T：类型（Type）  
-- V：值（Value）  
-- S：第二类型  
-- U：第三类型
-
-
 泛型接口和泛型方法的定义和使用示例如下：
 ```
 //泛型接口
@@ -68,41 +58,93 @@ public <T, U> T get(T t, U u) {
 String str = get("Hello", "World");
 ```
 
+从上面的例子可以看出，用尖括号<>来声明泛型变量，可以有多个类型变量，例如Show<T, U>，但是类型变量名不能重复，例如Show<T, T>是错误的。另外，类型变量名一般使用大写形式，且比较短（不强制，只是一种命名规约），下面是一些常用的类型变量：
+- E：元素（Element），多用于java集合框架  
+- K：关键字（Key）  
+- N：数字（Number）  
+- T：类型（Type）  
+- V：值（Value）  
+- S：第二类型  
+- U：第三类型
+
 
 
 ## 二、泛型变量的类型限定
-上面的例子都是直接使用<T>这样的形式来完成泛型类型的声明，有的时候，类、接口或方法需要对类型变量加以约束。看下面的例子：
 
+类型限定就是使用extends关键字对类型变量加以约束，看下面的例子：
 ```
-public <T> T test(T t1,T t2) {
-    if(t1.compareTo(t2)>=0);//编译错误
-    return t1;
+//定义一个水果类
+//里面有一个示例方法getWeight()可以获取水果重量
+public class Fruit {
+    public int getWeight() {
+        return 10; //这里假设所有水果重量都是10
+    }
+}
+public class Apple extends Fruit {}
+
+
+//定义泛型类Box，并限定类型参数
+public class Box<T extends Fruit> {}
+
+
+//由于Box限定了类型参数，实际类型参数只能是Fruit或者Fruit的子类
+Box<Fruit> integerBox = new Box<Fruit>();//编译通过
+Box<Apple> integerBox = new Box<Apple>();//编译通过
+Box<Integer> integerBox = new Box<Integer>();//编译器报错
+```
+
+通过限定，箱子Box就只能装水果了。限定类型参数的好处，举个例子，比如Box里面有一个getBigFruit()方法可以比较两个水果大小，然后返回大的水果，代码如下：
+```
+public class Box<T extends Fruit>{
+
+    public T getBigFruit(T t1, T t2) {
+	
+	    // if (!(t1 instanceof Fruit) || !(t2 instanceof Fruit)) {
+        //    throw new RuntimeException("T不是水果");
+        // }
+		
+        if (t1.getWeight() > t2.getWeight()) {
+            return t1;
+        }
+        return t2;
+    }
 }
 ```
+代码中需要注意两个地方：一个是注释的三行，参数限定之后，没必要判断t1和t2的类型了，如果类型不对，在Box实例化的时候就报错了；另一个是t1.getWeight()，在Box类里面，t1是T类型，T类型限定为Fruit，所以这里可以直接调用Fruit里面的方法getWeight()_（确切的说是可以调用Fruit里面可以被子类继承的方法，因为限定之后，实参也可以是Fruit的子类）_，如果不加限定，那么T就默认是Object类型，t1.getWeight()就会报错因为Object里面没有这个方法（调用Object里面的方法是可以的）。这就是是类型限定的两个好处。
 
-在编译之前，我们并不知道这个泛型类型T，到底是什么类型，所以，只能默认T为原始类型Object。所以它只能调用来自于Object的那几个方法，而不能调用compareTo方法。我们知道，所有实现Comparable接口的类，都会有compareTo方法。所以，可以对<T>做如下限定：
-```
-public <T extends Comparable> T test(T t1,T t2) {
-    if(t1.compareTo(t2)>=0);
-    return t1;
-}
-```
-限定之后，只有实现了Comparable接口的类才能作为test方法的实际类型参数。类似的<U extends Number>限定泛型参数只接受Number类或者子类Integer、Float等。
-注意点：
+类型也可以使用接口限定，比如<T extends MyInterface>，这样的话，只有实现了MyInterface接口的类才能作为实际类型参数。下面是类型限定的几个注意点：
 1. 不管限定是类还是接口，统一都使用extends关键字
 2. 可以使用&符号给出多个限定，例如：<U extends Number & MyInterface1 & MyInterface1>
 3. 多个限制只能有一个类名，其他都是接口名，且类名在最前面。
 
 
 
-
-
-
-
-
-
-
 ## 三、通配符
+
+先看两行代码
+```
+Fruit[] farray = new Apple[10];
+ArrayList<Fruit> flist = new ArrayList<Apple>();
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## 四、Java泛型的原理-类型擦除
