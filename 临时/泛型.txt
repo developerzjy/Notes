@@ -121,25 +121,68 @@ public class Box<T extends Fruit>{
 
 ## 三、通配符
 
-先看两行代码
+先看三行代码
 ```
+Fruit f = new Apple();
 Fruit[] farray = new Apple[10];
 ArrayList<Fruit> flist = new ArrayList<Apple>();
 ```
+第一行的写法是很常见的，父类引用指向子类对象，这是java多态的表现。类似的，第二行父类数组的引用指向子类数组对象在java中也是可以的，这称为**数组的协变**。Java把数组设计为协变的，对此是有争议的，有人认为这是一种缺陷。
+
+>虽然Apple[]可以“向上转型”为Fruit[]，但数组元素的实际类型还是Apple，所以只能向数组中放入Apple或者Apple的子类。在上面的代码中，向数组中放入了Fruit对象和Orange对象。对于编译器来说，这是可以通过编译的，但是在运行时期，JVM能够知道数组的实际类型是Apple[]，所以当其它对象加入数组的时候在运行期会抛出异常。
+
+协变的缺陷在于可能的异常发生在运行期，而编译期间无法检查，泛型设计的目的之一就是避免这种问题，**所以泛型是不支持协变的，也就是说，上面的第三行代码是编译不通过的。**但是，有时候是需要建立这种“向上转型”的关系的，比如定义一个方法，打印出任意类型的List中的所有数据，示例如下：
+
+```
+public void printCollection(List<Object> collection) {
+    for (Object obj : collection) {
+        System.out.println(obj);
+    }
+}
+```
+
+这个方法其实是没有什么实用意义的，因为泛型不支持协变，所以下面代码是无法通过编译的：
+```
+List<Integer> listInteger =new ArrayList<Integer>();
+List<String> listString =new ArrayList<String>();
+
+printCollection(listInteger); //编译错误
+printCollection(listString); //编译错误
+```
+
+上面这个问题，就可以使用通配符来解决了，printCollection()方法改成下面这样即可：
+```
+public void printCollection(List<?> collection) {
+    for (Object obj : collection) {
+        System.out.println(obj);
+    }
+}
+```
+
+通配符"?"表示某种特定的类型，但是不知道这个类型到底是什么。因为不知道类型到底是什么，所以`List<?> collection`中的collection不能调用带泛型参数的方法，但是可以调用与泛型参数类型无关的方法，如下：
+```
+collection.add("a"); //错误，因为add方法参数是泛型E
+collection.size(); //正确，因为无参即与泛型参数类型E无关
+collection.contains("a"); //正确，因为contains参数是Object类型，与泛型参数类型E无关
+```
+
+注：collection.add(null);是可以的，其他任何类型都不可以。
 
 
+####通配符的边界
+通配符可以使用extends和super关键字来限制：
+- List<? extends Number> 表示不确定参数类型，但必须是Number类型或者Number子类类型
+- List<? super Number> 表示不确定参数类型，但必须是Number类型或者Number的父类类型
+- List<?> 表示未受限的通配符，相当于 List<? extends Object>
 
 
-
-
-
-
-
-
-
-
-
-
+>注意区分 **泛型变量的类型限定** 和 **通配符的边界限定**：
+>1. 泛型变量的类型限定，是在定义泛型类的时候对声明的泛型参数进行限定
+>public class Box<T extends Fruit>{}
+>2. 通配符的边界限定，是在定义化泛型类的引用的时候对实际泛型参数进行限定
+>List<? extends Number> listInteger =new ArrayList<Integer>();
+>
+>泛型变量的类型限定只能使用extends关键字，通配符的边界限定可以使用extends或super来限定上边界或下边界。
 
 
 
