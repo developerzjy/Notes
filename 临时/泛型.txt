@@ -196,7 +196,7 @@ collection.contains("a"); //ÕýÈ·£¬ÒòÎªcontains²ÎÊýÊÇObjectÀàÐÍ£¬Óë·ºÐÍ²ÎÊýÀàÐÍEÎ
 
 
 ## ËÄ¡¢Java·ºÐÍµÄÔ­Àí-ÀàÐÍ²Á³ý
-JavaÖÐµÄ·ºÐÍÊÇÍ¨¹ýÀàÐÍ²Á³ýÀ´ÊµÏÖµÄÎ±·ºÐÍ¡£ÀàÐÍ²Á³ýÖ¸µÄÊÇ´Ó·ºÐÍÀàÐÍÖÐÇå³ýÀàÐÍ²ÎÊýµÄÏà¹ØÐÅÏ¢£¬²¢ÇÒÔÙ±ØÒªµÄÊ±ºòÌí¼ÓÀàÐÍ¼ì²éºÍÀàÐÍ×ª»»µÄ·½·¨¡£ÀàÐÍ²Á³ý¿ÉÒÔ¼òµ¥µÄÀí½âÎª½«·ºÐÍjava´úÂë×ª»»ÎªÆÕÍ¨java´úÂë£¬Ö»²»¹ý±àÒëÆ÷¸üÖ±½Óµã£¬½«·ºÐÍjava´úÂëÖ±½Ó×ª»»³ÉÆÕÍ¨java×Ö½ÚÂë£¬¿´ÏÂÃæµÄÀý×Ó£º
+JavaÖÐµÄ·ºÐÍÊÇÍ¨¹ýÀàÐÍ²Á³ýÀ´ÊµÏÖµÄÎ±·ºÐÍ¡£ÀàÐÍ²Á³ýÖ¸µÄÊÇ´Ó·ºÐÍÀàÐÍÖÐÇå³ýÀàÐÍ²ÎÊýµÄÏà¹ØÐÅÏ¢£¬²¢ÇÒÔÚ±ØÒªµÄÊ±ºòÌí¼ÓÀàÐÍ¼ì²éºÍÀàÐÍ×ª»»µÄ·½·¨¡£ÀàÐÍ²Á³ý¿ÉÒÔ¼òµ¥µÄÀí½âÎª½«·ºÐÍjava´úÂë×ª»»ÎªÆÕÍ¨java´úÂë£¬Ö»²»¹ý±àÒëÆ÷¸üÖ±½Óµã£¬½«·ºÐÍjava´úÂëÖ±½Ó×ª»»³ÉÆÕÍ¨µÄjava×Ö½ÚÂë£¬¿´ÏÂÃæµÄÀý×Ó£º
 
 ·ºÐÍµÄJava´úÂëÈçÏÂ£º
 ```
@@ -222,18 +222,18 @@ class Pair {
     }
 }
 ```
-ÓÉÉÏÃæµÄÀý×Ó¿ÉÖª£¬·ºÐÍ²Á³ýµÄ½á¹û¾ÍÊÇÓÃObjectÌæ»»T£¨ÔÚÕâÀïÌæ»»TµÄObject³ÆÎªÔ­Ê¼ÀàÐÍ£©£¬×îÖÕÉú³ÉÒ»¸öÆÕÍ¨µÄÀà¡£ÉÏÃæµÄÀý×ÓµÄÔ­Ê¼ÀàÐÍObejctÊÇÒòÎªÔÚPair<T>ÖÐ£¬TÊÇÒ»¸öÎÞÏÞ¶¨µÄÀàÐÍ±äÁ¿£¬ËùÒÔÓÃObjectÌæ»»¡£Èç¹ûT±»ÏÞ¶¨ÁË£¬±ÈÈç<T extends Number>£¬ÄÇÃ´Ô­Ê¼ÀàÐÍ¾ÍÊÇNumber£¬²Á³ýºóÓÃNumberÌæ»»·ºÐÍÀàÀïÃæµÄT¡£¶à¸öÏÞ¶¨µÄ»°£¬ÄÇÃ´Ê¹ÓÃµÚÒ»¸ö±ß½çµÄÀàÐÍ±äÁ¿À´×÷ÎªÔ­Ê¼ÀàÐÍ¡£
+ÓÉÉÏÃæµÄÀý×Ó¿ÉÖª£¬·ºÐÍ²Á³ýµÄ½á¹û¾ÍÊÇÓÃObjectÌæ»»T£¬×îÖÕÉú³ÉÒ»¸öÆÕÍ¨µÄÀà¡£ÉÏÃæµÄÀý×ÓÌæ»»³ÉObejctÊÇÒòÎªÔÚPair<T>ÖÐ£¬TÊÇÒ»¸öÎÞÏÞ¶¨µÄÀàÐÍ±äÁ¿£¬ËùÒÔÓÃObjectÌæ»»¡£Èç¹ûT±»ÏÞ¶¨ÁË£¬±ÈÈç<T extends Number>£¬ÄÇÃ´²Á³ýºó¾ÍÓÃNumberÌæ»»·ºÐÍÀàÀïÃæµÄT¡£¶à¸öÏÞ¶¨µÄ»°£¬Ê¹ÓÃµÚÒ»¸ö±ß½çµÄÀàÐÍ±äÁ¿À´×÷ÎªÔ­Ê¼ÀàÐÍ¡£
 ÖÁ´Ë¿ÉÒÔÖªµÀ£¬ÀàÐÍ²Á³ýµÄ¹ý³Ì£º
 1. ÒÆ³ýËùÓÐµÄÀàÐÍ²ÎÊý¡£
-2. ½«ËùÓÐÒÆ³ýµÄ·ºÐÍ²ÎÊýÓÃÆä×î×ó±ß½ç£¨×î¶¥¼¶µÄ¸¸ÀàÐÍ£©ÀàÐÍÌæ»»¡£
+2. ½«ËùÓÐÒÆ³ýµÄ·ºÐÍ²ÎÊýÓÃÆäÏÞ¶¨µÄ×î×ó±ß½ç£¨×î¶¥¼¶µÄ¸¸ÀàÐÍ£©ÀàÐÍÌæ»»¡£
 
-**·ºÐÍÖ»´æÔÚÓÚ´úÂëÖÐ£¬·ºÐÍÀàµÄÀàÐÍ²ÎÊýÔÚ±àÒëÊ±¶¼»á±»²Á³ý£¬ÐéÄâ»úÖÐÃ»ÓÐ·ºÐÍ£¬Ö»ÓÐÆÕÍ¨ÀàºÍÆÕÍ¨·½·¨¡£**
+**·ºÐÍÖ»´æÔÚÓÚ´úÂëÖÐ£¬·ºÐÍÐÅÏ¢ÔÚ±àÒëÊ±¶¼»á±»²Á³ý£¬ËùÒÔÐéÄâ»úÖÐÃ»ÓÐ·ºÐÍ£¬Ö»ÓÐÆÕÍ¨ÀàºÍÆÕÍ¨·½·¨¡£**
 
 -------------------------------------
 
-####·ºÐÍ²Á³ý£¨Î±·ºÐÍ£©´øÀ´µÄÒ»Ð©ÎÊÌâ
+####·ºÐÍ²Á³ý´øÀ´µÄÒ»Ð©ÎÊÌâ
 
-Ê×ÏÈÊÇ·½·¨Ç©ÃûµÄÎÊÌâ£º
+1.·½·¨Ç©ÃûµÄÎÊÌâ
 ```
 public void test(List<String> ls){
     System.out.println("Sting");
@@ -242,9 +242,14 @@ public void test(List<Integer> li){
     System.out.println("Integer");
 }
 ```
-ÉÏÃæµÄÁ½¸ö·½·¨£¬±àÒëºó·ºÐÍ±»²Á³ý£¬²ÎÊýÀàÐÍ¶¼ÊÇList£¬ËùÒÔËüÃÇ²»ÊÇÖØÔØ¶øÊÇÍ¬Ò»¸ö·½·¨£¬Èç¹ûÍ¬Ê±´æÔÚÓÚÒ»¸öÀàÖÐÊÇÎÞ·¨Í¨¹ý±àÒëµÄ¡£
+ÉÏÃæµÄÁ½¸ö·½·¨£¬±àÒëºó·ºÐÍ±»²Á³ý£¬²ÎÊý¶¼ÊÇList£¨¶ø²»ÊÇList<String>»òList<Integer>£©£¬ËùÒÔÔÚ±àÒëÆ÷¿´À´£¬ËüÃÇ²»ÊÇÖØÔØ¶øÊÇÍ¬Ò»¸ö·½·¨£¬Èç¹ûÕâÁ½¸ö·½·¨Í¬Ê±´æÔÚÓÚÒ»¸öÀàÖÐÊÇÎÞ·¨Í¨¹ý±àÒëµÄ¡£
 
 
+1. ²»ÄÜÓÃ»ù±¾ÀàÐÍÊµÀý»¯ÀàÐÍ²ÎÊý
+ÀýÈç£¬Ã»ÓÐPair<double>£¬Ö»ÓÐPair<Double>¡£ÒòÎª²Á³ýºóPairÀàº¬ÓÐObjectÀàÐÍµÄÓò£¬¶øObject²»ÄÜ´æ´¢doubleÖµ£¬ÄÜÒýÓÃDoubleµÄÖµ¡£
+
+2. ÔËÐÐÊ±ÀàÐÍ²éÑ¯Ö»ÊÊÓÃÓÚÔ­Ê¼ÀàÐÍ
+ÀýÈç£¬if(a instanceof Pair<String>)
 
 
 
