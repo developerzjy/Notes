@@ -236,18 +236,39 @@ class Pair {
 
 -------------------------------------
 
-####泛型擦除带来的一些问题
+####Java泛型的一些注意问题
+使用泛型时会有一些问题和限制，大部分是由类型擦除引起的，所以只要记住：泛型擦除后留下的只有原始类型。那么大部分问题都是很容易理解的。比如下面的例子：
+```
+public void test(List<String> list){
 
-1. 不能用基本类型实例化类型参数
-例如，没有Pair<double>，只有Pair<Double>。因为擦除后Pair类含有Object类型的域，而Object不能存储double值，能引用Double的值。
+}
 
-2. 运行时类型查询只适用于原始类型
-例如，if(a instanceof Pair<String>)相当于if(a instanceof Pair)，前者是编译不通过的。
+public void test(List<Integer> list){
+
+}
+```
+两个方法经过泛型擦除后，都只留下原始类型List，所以它们是同一个方法而不是方法的重载，如果这两个方法在同一个类中同时存在，编译器是会报错的。
+
+其他更多问题如下：
+1. 先检查，在编译，以及检查编译的对象和引用传递的问题
+2. 自动类型转换
+3. 类型擦除与多态的冲突和解决方法
+4. 泛型类型变量不能是基本数据类型
+5. 运行时类型查询
+6. 异常中使用泛型的问题
+7. 数组（这个不属于类型擦除引起的问题）
+9. 类型擦除后的冲突
+10. 泛型在静态方法和静态类中的问题
+
+这些问题的答案在：[java泛型（二）、泛型的内部原理：类型擦除以及类型擦除带来的问题](http://blog.csdn.net/lonelyroamer/article/details/7868820)，本文也是学习这篇博客和一些其他博客后的一个总结。
 
 
 
-
-
+参考文章：
+[Java泛型－类型擦除](http://blog.csdn.net/caihaijiang/article/details/6403349)
+[java泛型（一）、泛型的基本介绍和使用](http://blog.csdn.net/lonelyroamer/article/details/7864531)
+[java泛型（二）、泛型的内部原理：类型擦除以及类型擦除带来的问题](http://blog.csdn.net/lonelyroamer/article/details/7868820)
+[Java 泛型总结（三）：通配符的使用](https://segmentfault.com/a/1190000005337789)
 
 
 
