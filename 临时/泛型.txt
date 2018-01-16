@@ -71,7 +71,8 @@ String str = get("Hello", "World");
 
 ## ¶þ¡¢·ºÐÍ±äÁ¿µÄÀàÐÍÏÞ¶¨
 
-ÀàÐÍÏÞ¶¨¾ÍÊÇÊ¹ÓÃextends¹Ø¼ü×Ö¶ÔÀàÐÍ±äÁ¿¼ÓÒÔÔ¼Êø£¬¿´ÏÂÃæµÄÀý×Ó£º
+ÀàÐÍÏÞ¶¨¾ÍÊÇÊ¹ÓÃextends¹Ø¼ü×Ö¶ÔÀàÐÍ±äÁ¿¼ÓÒÔÔ¼Êø¡£±ÈÈçÏÞ¶¨·ºÐÍ²ÎÊýÖ»½ÓÊÜNumberÀà»òÕß×ÓÀàInteger¡¢FloatµÈ£¬¿ÉÒÔÊ¹ÓÃextends¹Ø¼ü×Ö<T extends Number>£¬ÕâÑùÏÞ¶¨Ö®ºó£¬Êµ¼Ê²ÎÊýÖ»ÄÜÊÇNumberÀà»òÕßNumberµÄ×ÓÀà¡£ÏÂÃæ¾ÙÀýÏêÏ¸ËµÃ÷£º
+  
 ```
 //¶¨ÒåÒ»¸öË®¹ûÀà
 //ÀïÃæÓÐÒ»¸öÊ¾Àý·½·¨getWeight()¿ÉÒÔ»ñÈ¡Ë®¹ûÖØÁ¿
@@ -94,7 +95,8 @@ Box<Fruit> integerBox = new Box<Fruit>();//±àÒëÍ¨¹ý
 Box<Apple> integerBox = new Box<Apple>();//±àÒëÍ¨¹ý
 Box<Integer> integerBox = new Box<Integer>();//±àÒëÆ÷±¨´í
 ```
-ÉÏÃæ´úÂëÓÃÐéÏß·ÖÎªÈý¸ö²¿·Ö£¬µÚÒ»¸ö²¿·ÖÊÇ×¼±¸¹¤×÷£¬¶¨ÒåÒ»¸öË®¹ûÀàFruitºÍËüµÄ×ÓÀàApple£»µÚ¶þ²¿·Ö¶¨ÒåÒ»¸ö·ºÐÍÀàBox£¬²¢ÇÒÏÞ¶¨ÁË·ºÐÍ²ÎÊýÎªFruit£¬ÏÞ¶¨Ö®ºó£¬Êµ¼ÊÀàÐÍÖ»ÄÜÊÇFruit»òÕßFruitµÄ×ÓÀà£¬ËùÒÔµÚÈý²¿·Ö£¬Êµ¼Ê·ºÐÍ²ÎÊýÊÇInteger¾Í»á±¨´í¡£
+ÉÏÃæ´úÂëÓÃÐéÏß·ÖÎªÈý¸ö²¿·Ö£¬µÚÒ»¸ö²¿·ÖÊÇ¾ÙÀýÓÃµÄ£¬¶¨ÒåÒ»¸öË®¹ûÀàFruitºÍËüµÄ×ÓÀàApple£»µÚ¶þ²¿·Ö¶¨ÒåÒ»¸ö·ºÐÍÀàBox£¬**²¢ÇÒÏÞ¶¨ÁË·ºÐÍ²ÎÊýÎªFruit**£¬ÏÞ¶¨Ö®ºó£¬Êµ¼ÊÀàÐÍÖ»ÄÜÊÇFruit»òÕßFruitµÄ×ÓÀà£¬ËùÒÔµÚÈý²¿·Ö£¬Êµ¼Ê·ºÐÍ²ÎÊýÊÇInteger¾Í»á±¨´í¡£
+
 Í¨¹ýÏÞ¶¨£¬Ïä×ÓBox¾ÍÖ»ÄÜ×°Ë®¹ûÁË£¬ÕâÊÇÓÐºÃ´¦µÄ£¬¾Ù¸öÀý×Ó£¬±ÈÈçBoxÀïÃæÓÐÒ»¸ögetBigFruit()·½·¨¿ÉÒÔ±È½ÏÁ½¸öË®¹û´óÐ¡£¬È»ºó·µ»Ø´óµÄË®¹û£¬´úÂëÈçÏÂ£º
 ```
 public class Box<T extends Fruit>{
@@ -116,7 +118,7 @@ public class Box<T extends Fruit>{
 
 ÀàÐÍÒ²¿ÉÒÔÊ¹ÓÃ½Ó¿ÚÏÞ¶¨£¬±ÈÈç<T extends MyInterface>£¬ÕâÑùµÄ»°£¬Ö»ÓÐÊµÏÖÁËMyInterface½Ó¿ÚµÄÀà²ÅÄÜ×÷ÎªÊµ¼ÊÀàÐÍ²ÎÊý¡£ÏÂÃæÊÇÀàÐÍÏÞ¶¨µÄ¼¸¸ö×¢Òâµã£º
 1. ²»¹ÜÏÞ¶¨ÊÇÀà»¹ÊÇ½Ó¿Ú£¬Í³Ò»¶¼Ê¹ÓÃextends¹Ø¼ü×Ö
-2. ¿ÉÒÔÊ¹ÓÃ&·ûºÅ¸ø³ö¶à¸öÏÞ¶¨£¬ÀýÈç£º<U extends Number & MyInterface1 & MyInterface1>
+2. ¿ÉÒÔÊ¹ÓÃ&·ûºÅ¸ø³ö¶à¸öÏÞ¶¨£¬ÀýÈç£º<U extends Number & MyInterface1 & MyInterface2>
 3. ¶à¸öÏÞÖÆÖ»ÄÜÓÐÒ»¸öÀàÃû£¬ÆäËû¶¼ÊÇ½Ó¿ÚÃû£¬ÇÒÀàÃûÔÚ×îÇ°Ãæ¡£
 
 
@@ -133,7 +135,7 @@ ArrayList<Fruit> flist = new ArrayList<Apple>();
 
 >ËäÈ»Apple[]¿ÉÒÔ¡°ÏòÉÏ×ªÐÍ¡±ÎªFruit[]£¬µ«Êý×éÔªËØµÄÊµ¼ÊÀàÐÍ»¹ÊÇApple£¬ËùÒÔÖ»ÄÜÏòÊý×éÖÐ·ÅÈëApple»òÕßAppleµÄ×ÓÀà¡£ÔÚÉÏÃæµÄ´úÂëÖÐ£¬ÏòÊý×éÖÐ·ÅÈëÁËFruit¶ÔÏóºÍOrange¶ÔÏó£¬¶ÔÓÚ±àÒëÆ÷À´Ëµ£¬ÕâÊÇ¿ÉÒÔÍ¨¹ý±àÒëµÄ£¬µ«ÊÇÔÚÔËÐÐÊ±ÆÚ£¬JVMÄÜ¹»ÖªµÀÊý×éµÄÊµ¼ÊÀàÐÍÊÇApple[]£¬ËùÒÔµ±ÆäËü¶ÔÏó¼ÓÈëÊý×éµÄÊ±ºòÔÚÔËÐÐÆÚ»áÅ×³öÒì³£¡£
 
-Ð­±äµÄÈ±ÏÝÔÚÓÚ¿ÉÄÜµÄÒì³£·¢ÉúÔÚÔËÐÐÆÚ£¬¶ø±àÒëÆÚ¼äÎÞ·¨¼ì²é£¬·ºÐÍÉè¼ÆµÄÄ¿µÄÖ®Ò»¾ÍÊÇ±ÜÃâÕâÖÖÎÊÌâ£¬**ËùÒÔ·ºÐÍÊÇ²»Ö§³ÖÐ­±äµÄ£¬Ò²¾ÍÊÇËµ£¬ÉÏÃæµÄµÚÈýÐÐ´úÂëÊÇ±àÒë²»Í¨¹ýµÄ¡£**µ«ÊÇ£¬ÓÐÊ±ºòÊÇÐèÒª½¨Á¢ÕâÖÖ¡°ÏòÉÏ×ªÐÍ¡±µÄ¹ØÏµµÄ£¬±ÈÈç¶¨ÒåÒ»¸ö·½·¨£¬´òÓ¡³öÈÎÒâÀàÐÍµÄListÖÐµÄËùÓÐÊý¾Ý£¬Ê¾ÀýÈçÏÂ£º
+ÓÉÉÏ¿ÉÖª£¬Ð­±äµÄÈ±ÏÝÔÚÓÚ¿ÉÄÜµÄÒì³£·¢ÉúÔÚÔËÐÐÆÚ£¬¶ø±àÒëÆÚ¼äÎÞ·¨¼ì²é£¬·ºÐÍÉè¼ÆµÄÄ¿µÄÖ®Ò»¾ÍÊÇ±ÜÃâÕâÖÖÎÊÌâ£¬**ËùÒÔ·ºÐÍÊÇ²»Ö§³ÖÐ­±äµÄ£¬Ò²¾ÍÊÇËµ£¬ÉÏÃæµÄµÚÈýÐÐ´úÂëÊÇ±àÒë²»Í¨¹ýµÄ¡£**µ«ÊÇ£¬ÓÐÊ±ºòÊÇÐèÒª½¨Á¢ÕâÖÖ¡°ÏòÉÏ×ªÐÍ¡±µÄ¹ØÏµµÄ£¬±ÈÈç¶¨ÒåÒ»¸ö·½·¨£¬´òÓ¡³öÈÎÒâÀàÐÍµÄListÖÐµÄËùÓÐÊý¾Ý£¬Ê¾ÀýÈçÏÂ£º
 
 ```
 public void printCollection(List<Object> collection) {
@@ -158,6 +160,7 @@ List<?> collection3 = new ArrayList<String>();
 List<?> collection4 = new ArrayList<ÈÎÒâÀàÐÍ>();
 // ¶Ô±È²»ºÏ·¨µÄ List<Fruit> flist = new ArrayList<Apple>();
 ```
+
 ËùÒÔprintCollection()·½·¨¸Ä³ÉÏÂÃæÕâÑù¼´¿É£º
 ```
 public void printCollection(List<?> collection) {
@@ -173,7 +176,7 @@ collection.size(); //ÕýÈ·£¬ÒòÎªÎÞ²Î¼´Óë·ºÐÍ²ÎÊýÀàÐÍEÎÞ¹Ø
 collection.contains("a"); //ÕýÈ·£¬ÒòÎªcontains²ÎÊýÊÇObjectÀàÐÍ£¬Óë·ºÐÍ²ÎÊýÀàÐÍEÎÞ¹Ø
 ```
 
-×¢£ºcollection.add(null);ÊÇ¿ÉÒÔµÄ£¬³ýÁËnullÆäËûÈÎºÎÀàÐÍ¶¼²»¿ÉÒÔ¡£
+×¢£ºcollection.add(null);ÊÇ¿ÉÒÔµÄ£¬³ýÁËnullÆäËûÈÎºÎÀàÐÍ¶¼²»¿ÉÒÔ£¬ObjectÒ²²»ÐÐ¡£
 
 
 ####Í¨Åä·ûµÄ±ß½ç
@@ -183,15 +186,17 @@ collection.contains("a"); //ÕýÈ·£¬ÒòÎªcontains²ÎÊýÊÇObjectÀàÐÍ£¬Óë·ºÐÍ²ÎÊýÀàÐÍEÎ
 - List<?> ±íÊ¾Î´ÊÜÏÞµÄÍ¨Åä·û£¬Ïàµ±ÓÚ List<? extends Object>
 
 
->×¢ÒâÇø·Ö **·ºÐÍ±äÁ¿µÄÀàÐÍÏÞ¶¨** ºÍ **Í¨Åä·ûµÄ±ß½çÏÞ¶¨**£º
->1. ·ºÐÍ±äÁ¿µÄÀàÐÍÏÞ¶¨£¬ÊÇÔÚ¶¨Òå·ºÐÍÀàµÄÊ±ºò¶ÔÉùÃ÷µÄ·ºÐÍ²ÎÊý½øÐÐÏÞ¶¨
->public class Box<T extends Fruit>{}
->2. Í¨Åä·ûµÄ±ß½çÏÞ¶¨£¬ÊÇÔÚ¶¨Òå»¯·ºÐÍÀàµÄÒýÓÃµÄÊ±ºò¶ÔÊµ¼Ê·ºÐÍ²ÎÊý½øÐÐÏÞ¶¨
->List<? extends Number> listInteger =new ArrayList<Integer>();
->
->·ºÐÍ±äÁ¿µÄÀàÐÍÏÞ¶¨Ö»ÄÜÊ¹ÓÃextends¹Ø¼ü×Ö£¬Í¨Åä·ûµÄ±ß½çÏÞ¶¨¿ÉÒÔÊ¹ÓÃextends»òsuperÀ´ÏÞ¶¨ÉÏ±ß½ç»òÏÂ±ß½ç¡£
+-------------------------------------
 
+×¢ÒâÇø·Ö **·ºÐÍ±äÁ¿µÄÀàÐÍÏÞ¶¨** ºÍ **Í¨Åä·ûµÄ±ß½çÏÞ¶¨**£º
+1. ·ºÐÍ±äÁ¿µÄÀàÐÍÏÞ¶¨£¬ÊÇÔÚ¶¨Òå·ºÐÍÀàµÄÊ±ºò¶ÔÉùÃ÷µÄ·ºÐÍ²ÎÊý½øÐÐÏÞ¶¨£¨ÏÞ¶¨µÄÊÇÐÎÊ½²ÎÊý£©
+public class Box<T extends Fruit>{}
+2. Í¨Åä·ûµÄ±ß½çÏÞ¶¨£¬ÊÇÔÚ¶¨Òå»¯·ºÐÍÀàµÄÒýÓÃµÄÊ±ºò¶ÔÊµ¼Ê·ºÐÍ²ÎÊý½øÐÐÏÞ¶¨£¨ÏÞ¶¨µÄÊÇÊµ¼Ê²ÎÊý£©
+List<? extends Number> listInteger =new ArrayList<Integer>();
 
+·ºÐÍ±äÁ¿µÄÀàÐÍÏÞ¶¨Ö»ÄÜÊ¹ÓÃextends¹Ø¼ü×Ö£¬Í¨Åä·ûµÄ±ß½çÏÞ¶¨¿ÉÒÔÊ¹ÓÃextends»òsuperÀ´ÏÞ¶¨ÉÏ±ß½ç»òÏÂ±ß½ç¡£
+
+--------------------------------------
 
 
 
@@ -225,7 +230,7 @@ class Pair {
 ÓÉÉÏÃæµÄÀý×Ó¿ÉÖª£¬·ºÐÍ²Á³ýµÄ½á¹û¾ÍÊÇÓÃObjectÌæ»»T£¬×îÖÕÉú³ÉÒ»¸öÆÕÍ¨µÄÀà¡£ÉÏÃæµÄÀý×ÓÌæ»»³ÉObejctÊÇÒòÎªÔÚPair<T>ÖÐ£¬TÊÇÒ»¸öÎÞÏÞ¶¨µÄÀàÐÍ±äÁ¿£¬ËùÒÔÓÃObjectÌæ»»¡£Èç¹ûT±»ÏÞ¶¨ÁË£¬±ÈÈç<T extends Number>£¬ÄÇÃ´²Á³ýºó¾ÍÓÃNumberÌæ»»·ºÐÍÀàÀïÃæµÄT¡£¶à¸öÏÞ¶¨µÄ»°£¬Ê¹ÓÃµÚÒ»¸ö±ß½çµÄÀàÐÍ±äÁ¿À´×÷ÎªÔ­Ê¼ÀàÐÍ¡£
 ÖÁ´Ë¿ÉÒÔÖªµÀ£¬ÀàÐÍ²Á³ýµÄ¹ý³Ì£º
 1. ÒÆ³ýËùÓÐµÄÀàÐÍ²ÎÊý¡£
-2. ½«ËùÓÐÒÆ³ýµÄ·ºÐÍ²ÎÊýÓÃÆäÏÞ¶¨µÄ×î×ó±ß½ç£¨×î¶¥¼¶µÄ¸¸ÀàÐÍ£©ÀàÐÍÌæ»»¡£
+2. ½«ËùÓÐÒÆ³ýµÄ·ºÐÍ²ÎÊýÓÃÆäÏÞ¶¨µÄ×î×ó±ß½çÀàÐÍÌæ»»¡££¨¶à¸öÏÞ¶¨µÄ»°£¬ÆäËûÏÞ¶¨Ò»¶¨ÊÇ½Ó¿Ú£¬¶øÇÒÊµ¼Ê²ÎÊýÒ»¶¨ÊµÏÖÁËÕâÐ©½Ó¿Ú£¬·ñÔò²»ºÏ·¨£¬±àÒë²»Í¨¹ý£¬ËùÒÔÓÃ×î×ó±ß½çÀàÐÍÌæ»»£©
 
 **·ºÐÍÖ»´æÔÚÓÚ´úÂëÖÐ£¬·ºÐÍÐÅÏ¢ÔÚ±àÒëÊ±¶¼»á±»²Á³ý£¬ËùÒÔÐéÄâ»úÖÐÃ»ÓÐ·ºÐÍ£¬Ö»ÓÐÆÕÍ¨ÀàºÍÆÕÍ¨·½·¨¡£**
 
@@ -233,23 +238,11 @@ class Pair {
 
 ####·ºÐÍ²Á³ý´øÀ´µÄÒ»Ð©ÎÊÌâ
 
-1.·½·¨Ç©ÃûµÄÎÊÌâ
-```
-public void test(List<String> ls){
-    System.out.println("Sting");
-}
-public void test(List<Integer> li){
-    System.out.println("Integer");
-}
-```
-ÉÏÃæµÄÁ½¸ö·½·¨£¬±àÒëºó·ºÐÍ±»²Á³ý£¬²ÎÊý¶¼ÊÇList£¨¶ø²»ÊÇList<String>»òList<Integer>£©£¬ËùÒÔÔÚ±àÒëÆ÷¿´À´£¬ËüÃÇ²»ÊÇÖØÔØ¶øÊÇÍ¬Ò»¸ö·½·¨£¬Èç¹ûÕâÁ½¸ö·½·¨Í¬Ê±´æÔÚÓÚÒ»¸öÀàÖÐÊÇÎÞ·¨Í¨¹ý±àÒëµÄ¡£
-
-
 1. ²»ÄÜÓÃ»ù±¾ÀàÐÍÊµÀý»¯ÀàÐÍ²ÎÊý
 ÀýÈç£¬Ã»ÓÐPair<double>£¬Ö»ÓÐPair<Double>¡£ÒòÎª²Á³ýºóPairÀàº¬ÓÐObjectÀàÐÍµÄÓò£¬¶øObject²»ÄÜ´æ´¢doubleÖµ£¬ÄÜÒýÓÃDoubleµÄÖµ¡£
 
 2. ÔËÐÐÊ±ÀàÐÍ²éÑ¯Ö»ÊÊÓÃÓÚÔ­Ê¼ÀàÐÍ
-ÀýÈç£¬if(a instanceof Pair<String>)
+ÀýÈç£¬if(a instanceof Pair<String>)Ïàµ±ÓÚif(a instanceof Pair)£¬Ç°ÕßÊÇ±àÒë²»Í¨¹ýµÄ¡£
 
 
 
