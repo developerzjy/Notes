@@ -1,0 +1,130 @@
+https://www.cnblogs.com/wader2011/archive/2011/11/29/2267490.html
+
+https://segmentfault.com/a/1190000011152798
+
+
+华为 5.15英寸
+
+
+屏幕尺寸
+分辨率
+dpi
+
+dp
+px
+
+
+
+dp和px的换算都知道是用dpi换算，但是这个dpi的值并不是物理定义的，而是系统文件写进去的，所以这个值是可以被修改的，想得到实际的ppi，可以先获取宽高像素大小之后进行计算得出。
+
+
+
+
+
+
+
+
+---------------------------------------------------
+heightPixels = 1920
+widthPixels = 1080
+densityDpi = 480
+density = 3.0
+xdpi = 422.03    //x方向准确的物理像素密度（值应该不会变）
+ydpi = 424.069
+scaledDensity = 3.0
+
+
+修改 heightPixels 和 widthPixels之后，其他都不变
+
+修改 densityDpi 之后 density 和 scaledDensity 变了
+densityDpi = 320 -> density = 2.0 和 scaledDensity = 2.0
+
+
+
+像素密度 = 分辨率 / 尺寸
+
+
+
+densityDpi不是计算得出，可以手动设置，这个值是用来计算px的
+density = densityDpi/160，设置好densityDpi之后density的值就确定了
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
