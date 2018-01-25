@@ -64,12 +64,12 @@ http://stormzhang.com/android/2014/05/16/android-screen-adaptation/
 
 |名词      |含义
 |----------|--------------------
-|屏幕尺寸  |
-|分辨率    |
-|dpi       |
-|ppi       |
-|px        |
-|dp        |
+|屏幕尺寸  |屏幕对角线的物理尺寸，单位是英寸
+|分辨率    |屏幕横向、纵向上的像素点数总和，一般用“宽x高”的形式表示，例如1080x1920
+|dpi       |dots per ich的缩写，表示像素密度
+|ppi       |pixel per inch的缩写，在android中和dpi一样
+|px        |像素单位
+|dp        |也叫dip，都是device independent pixels的缩写，表示密度无关像素
 |sp        |
 
 
