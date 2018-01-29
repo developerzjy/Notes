@@ -19,13 +19,13 @@ dp和px的换算都知道是用dpi换算，但是这个dpi的值并不是物理定义的，而是系统文件写进
 
 
 ---------------------------------------------------
-heightPixels = 1920
-widthPixels = 1080
-densityDpi = 480
-density = 3.0
-xdpi = 422.03    //x方向准确的物理像素密度（值应该不会变）
-ydpi = 424.069
-scaledDensity = 3.0
+metrics.heightPixels = 1920
+metrics.widthPixels = 1080
+metrics.densityDpi = 480
+metrics.density = 3.0
+metrics.xdpi = 422.03    //x方向准确的物理像素密度（值应该不会变）
+metrics.ydpi = 424.069
+metrics.scaledDensity = 3.0
 
 
 修改 heightPixels 和 widthPixels之后，其他都不变
