@@ -150,12 +150,44 @@ wm density reset
 
 ###五、drawable下的图片适配
 
+这里介绍**drawable下的图片资源的读取和缩放的规则，也可以这样说，如何使用一套图片资源适配多种dpi。**郭神的一篇博客[ Android drawable微技巧，你所不知道的drawable的那些细节](http://blog.csdn.net/guolin_blog/article/details/50727753)讲的很清晰，这里取其精华做一个总结。
+
+#####图片资源的读取规则
+>当我们使用资源id来去引用一张图片时，Android会使用一些规则来帮我们匹配**最适合的图片**。什么叫最适合的图片？比如我的手机屏幕密度是xxhdpi，那么drawable-xxhdpi文件夹下的图片就是**最适合的图片**。因此，当我引用一张图片时，如果drawable-xxhdpi文件夹下有这张图就会优先被使用，在这种情况下，图片是不会被缩放的。但是，如果drawable-xxhdpi文件夹下没有这张图时， 系统就会自动去其它文件夹下找这张图了，优先会去更高密度的文件夹下找这张图片，也就是drawable-xxxhdpi文件夹，然后发现这里也没有android_logo这张图，接下来会尝试再找更高密度的文件夹，发现没有更高密度的了，这个时候会去drawable-nodpi文件夹找这张图，发现也没有，那么就会去更低密度的文件夹下面找，依次是drawable-xhdpi -> drawable-hdpi -> drawable-mdpi -> drawable-ldpi。 
+>
+>android项目资源下的drawable（不带任何限定符）目录默认就是drawable-mdpi的意思
+>
+>作者：郭霖
+>链接：http://blog.csdn.net/guolin_blog/article/details/50727753
+
+#####图片资源的缩放规则
+根据上面的读取规则，如果最终没有读取到**最适合的图片**，而是读取了低密度或高密度的图片，那么系统会自动做一个缩放操作（低密度的图片放大，高密度的图片缩小）。具体的缩放比例就是dpi的比例：
+|     |ldpi | mdpi | hdpi | xhdpi | xxhdpi |
+|-----|-----|------|------|-------|--------|
+|dpi  |120  | 160  | 240  | 320   | 480    |
+|比例 |3    | 4    | 6    | 8     | 12     |
+
+比如当前手机的mdpi，如果读取了drawable-ldpi下的图片大小是48x48，那么显示到屏幕上的图片大小是36x36（48/36 = 4/3），如果读取的是drawable-xhdpi下的图大小也是48x48，那么显示到屏幕上的图片大小是96x96。
+
+#####一套图片资源适配多种dpi
+根据Android的开发建议，我们在准备图片资源时尽量应该给每种密度的设备都准备一套，这样程序的适配性就可以达到最好，比如AndroidStudio中新建项目的时候，AS会默认给我们生成不同规格的ic_launcher.png作为默认的app图标，如下：
+
+- mipmap-mdpi/ic_launcher.png (48x48)
+- mipmap-hdpi/ic_launcher.png (72x72)
+- mipmap-xhdpi/ic_launcher.png (96x96)
+- mipmap-xxhdpi/ic_launcher.png (144x144)
+
+_括号中是图片大小，mipmap看成drawable即可。_
+
+上面的4个资源，通过计算可知，完全符合前面的**图片资源的缩放规则**的比例关系，所以，上面的资源只保留一个的话同样可以适配另外3种dpi。
+类似的，项目中，UI设计师只需要给我们提供一种dpi下的一套图片即可适配所有dpi，原理就是图片资源的读取缩放规则。那么，我们希望UI给我们哪种dpi的图片呢？当然是高dpi下的图片了，因为高dpi目录下的图片，显示到低dpi的设备下，由缩放规则可以知道图片会被缩小。相反的，低dpi图片显示到高dpi的设备上，图片会被放大。图片缩小几乎没有什么副作用，而放大可能会影响图片质量，所以，尽量使用高dpi目录下的图片，比如ic_launcher.png只保留一个的话，选择保留 mipmap-xxhdpi/ic_launcher.png (144x144)。当然，也不是越高越好，因为当前手机市场有更高密度的手机xxxhdpi，但那是极少数，为了这极少数增加软件包的大小是不划算的。当然如果以后xxxhdpi的手机普及了，针对这种级别的屏幕密度来设计图片就是首选了。
+
+
+
+
 
 
 <br><br><br><br><br><br><br><br><br><br><br><br><><><><><>
-
-
-
 
 
 
