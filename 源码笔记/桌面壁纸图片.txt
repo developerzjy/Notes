@@ -7,3 +7,12 @@ frameworks/base/core/res/res$ find -name default_wallpaper.jpg
 
 缩略图路径
 Luncher2的资源里面，名字default_wallpaper_small.jpg
+
+
+
+
+
+修改res资源后
+编译frameworks/base/core/res 生成一个apk
+编译frameworks/base 生成一个jar
+将生成的apk和jar push到设备上重启即可
