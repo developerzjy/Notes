@@ -1,0 +1,58 @@
+
+
+使用步骤：
+1. 手机进入待操作界面
+
+2. 在sdk的platform-tools/systrace目录下使用如下命令
+   ./systrace.py -t 10 sched gfx view wm am app webview -a <package-name>
+   
+//上面命令从执行开始收集10秒内的数据，所以在10秒内操作手机界面
+
+3. 上面的命令生成一个trace.html文件在platform-tools/systrace目录下，直接用谷歌浏览器打开，开始分析数据
+
+详细说明：
+上面命令的一般用法是 systrace.py [options] [category1 [category2 ...]]
+`[options]` 是一些命令参数，`[category]` 等是你感兴趣的系统模块，比如view代表view系统（包含绘制流程），am代表ActivityManager（包含Activity创建过程等）；分析不同问题的时候，可以选择不同你感兴趣的模块。需要重复的是，尽可能缩小需要Trace的模块，其一是数据量小易与分析；其二，虽然systrace本身开销很小，但是缩小需要Trace的模块也能减少运行时开销。比如你分析卡顿的时候，`power`,  `webview` 就几乎是无用的。
+
+
+====================================================================
+`[option]` 中比较重要的几个参数如下：
+
+-a <package_name>：这个选项可以开启指定包名App中自定义Trace Label的Trace功能。也就是说，如果你在代码中使用了`Trace.beginSection("tag")`, `Trace.endSection`；默认情况下，你的这些代码是不会生效的，因此，这个选项一定要开启！
+-t N：用来指定Trace运行的时间，取决于你需要分析过程的时间；还是那句话，在需要的时候尽可能缩小时间；当然，绝对不要把时间设的太短导致你操作没完Trace就跑完了，这样会出现`Did not finish` 的标签，分析数据就基本无效了。
+ -l：这个用来列出你分析的那个手机系统支持的Trace模块；也就是上面命令中 `[category1]`能使用的部分；不同版本的系统能支持的模块是不同的，一般来说，高版本的支持的模块更多。
+-o FILE：指定trace数据文件的输出路径，如果不指定就是当前目录的`trace.html`。
+
+
+`systrace.py -l` 可以输出手机能支持的Trace模块，而且输出还给出了此模块的用途；常用的模块如下：
+
+
+`sched`: CPU调度的信息，非常重要；你能看到CPU在每个时间段在运行什么线程；线程调度情况，比如锁信息。
+`gfx`：Graphic系统的相关信息，包括SerfaceFlinger，VSYNC消息，Texture，RenderThread等；分析卡顿非常依赖这个。
+`view`: View绘制系统的相关信息，比如onMeasure，onLayout等；对分析卡顿比较有帮助。
+`am`：ActivityManager调用的相关信息；用来分析Activity的启动过程比较有效。
+`dalvik`: 虚拟机相关信息，比如GC停顿等。
+`binder_driver`: Binder驱动的相关信息，如果你怀疑是Binder IPC的问题，不妨打开这个。
+`core_services`: SystemServer中系统核心Service的相关信息，分析特定问题用。
+// 更多在 https://blog.csdn.net/lamp_zy/article/details/53375521
+
+======================================================================
+./systrace.py -t 10 sched gfx view -a <package-name>
+
+代码中加入如下代码：
+Trace.beginSection("Fragement_onCreateView");
+//怀疑的地方
+Trace.endSection();
+
+
+图分析：https://blog.csdn.net/lamp_zy/article/details/53375521   （重要）
+//其中一个分析  Scheduling delay（调度延迟）的意思就是一个线程在处理一块运算的时候，在很长一段时间都没有被分配到CPU上面做运算，从而导致这个线程在很长一段时间都没有完成工作
+
+
+
+
+
+
+
+
+
